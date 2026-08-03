@@ -1,6 +1,6 @@
 {
-  "appId": "com.blessed.portemonnaie",
-  "appName": "Mon Porte-Monnaie",
+  "appId": "com.blessed.portemonnaie.dev",
+  "appName": "Mon Porte-Monnaie Dev",
   "webDir": "www",
   "server": {
     "androidScheme": "https"

@@ -892,13 +892,34 @@
         }
 
         // Exporter en JSON
-        function exportData() {
+        async function exportData() {
             const data = { sorties, entrees, soldesInitiaux, exportDate: new Date().toISOString() };
-            const blob = new Blob([JSON.stringify(data, null, 4)], { type: 'application/json' });
+            const json = JSON.stringify(data, null, 4);
+            const fileName = `porte-monnaie-${new Date().toISOString().split('T')[0]}.json`;
+            const blob = new Blob([json], { type: 'application/json' });
+
+            try {
+                const file = new File([blob], fileName, { type: 'application/json' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Export Porte-Monnaie',
+                        text: 'Sauvegarde JSON des données',
+                    });
+                    return;
+                }
+            } catch (err) {
+                console.log('Partage natif indisponible, bascule vers téléchargement', err);
+            }
+
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `porte-monnaie-${new Date().toISOString().split('T')[0]}.json`;
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
             a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
 
         // Effacer toutes les données
@@ -1331,13 +1352,34 @@
             }
         }
 
-        function exportData() {
+        async function exportData() {
             const data = { sorties, entrees, soldesInitiaux, exportDate: new Date().toISOString() };
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const json = JSON.stringify(data, null, 2);
+            const fileName = `porte-monnaie-${new Date().toISOString().split('T')[0]}.json`;
+            const blob = new Blob([json], { type: 'application/json' });
+
+            try {
+                const file = new File([blob], fileName, { type: 'application/json' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Export Porte-Monnaie',
+                        text: 'Sauvegarde JSON des données',
+                    });
+                    return;
+                }
+            } catch (err) {
+                console.log('Partage natif indisponible, bascule vers téléchargement', err);
+            }
+
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `porte-monnaie-${new Date().toISOString().split('T')[0]}.json`;
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
             a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
 
         document.getElementById('edit-modal').addEventListener('click', (e) => {

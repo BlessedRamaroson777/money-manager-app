@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Mon Porte-Monnaie</string>
-    <string name="title_activity_main">Mon Porte-Monnaie</string>
-    <string name="package_name">com.blessed.portemonnaie</string>
-    <string name="custom_url_scheme">com.blessed.portemonnaie</string>
+    <string name="app_name">Mon Porte-Monnaie Dev</string>
+    <string name="title_activity_main">Mon Porte-Monnaie Dev</string>
+    <string name="package_name">com.blessed.portemonnaie.dev</string>
+    <string name="custom_url_scheme">com.blessed.portemonnaie.dev</string>
 </resources>
