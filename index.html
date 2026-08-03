@@ -816,24 +816,46 @@
         let editingId = null;
         let editingType = null;
         let currentStatsView = 'daily';
+        const STORAGE_KEY = 'porteMonnaie:v2026-08-03';
+
+        function normalizeData(data) {
+            const normalized = {
+                sorties: Array.isArray(data?.sorties) ? data.sorties : [],
+                entrees: Array.isArray(data?.entrees) ? data.entrees : [],
+                soldesInitiaux: {
+                    Chambre: 0,
+                    Wallet: 0,
+                    Mvola: 0,
+                    Airtel: 0,
+                    ...(data?.soldesInitiaux || {})
+                }
+            };
+
+            if (normalized.soldesInitiaux.Mvola === 488) {
+                normalized.soldesInitiaux.Mvola = -33;
+            }
+
+            return normalized;
+        }
 
         // Charger depuis localStorage ou data.json embarqué
         async function loadData() {
-            const saved = localStorage.getItem('porteMonnaie');
+            const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
-                const data = JSON.parse(saved);
-                sorties = data.sorties || [];
-                entrees = data.entrees || [];
-                soldesInitiaux = data.soldesInitiaux || { Chambre: 0, Wallet: 0, Mvola: 0, Airtel: 0 };
+                const data = normalizeData(JSON.parse(saved));
+                sorties = data.sorties;
+                entrees = data.entrees;
+                soldesInitiaux = data.soldesInitiaux;
+                saveData();
             } else {
                 // Premier lancement: charger data.json embarqué
                 try {
                     const response = await fetch('data.json');
                     if (response.ok) {
-                        const data = await response.json();
-                        sorties = data.sorties || [];
-                        entrees = data.entrees || [];
-                        soldesInitiaux = data.soldesInitiaux || { Chambre: 0, Wallet: 0, Mvola: 0, Airtel: 0 };
+                        const data = normalizeData(await response.json());
+                        sorties = data.sorties;
+                        entrees = data.entrees;
+                        soldesInitiaux = data.soldesInitiaux;
                         saveData(); // Sauvegarder dans localStorage
                     }
                 } catch (e) {
@@ -846,7 +868,7 @@
         // Sauvegarder dans localStorage
         function saveData() {
             const data = { sorties, entrees, soldesInitiaux };
-            localStorage.setItem('porteMonnaie', JSON.stringify(data));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         }
 
         // Calculer les soldes actuels
@@ -876,10 +898,10 @@
             const reader = new FileReader();
             reader.onload = (e) => {
                 try {
-                    const data = JSON.parse(e.target.result);
-                    sorties = data.sorties || [];
-                    entrees = data.entrees || [];
-                    soldesInitiaux = data.soldesInitiaux || { Chambre: 0, Wallet: 0, Mvola: 0, Airtel: 0 };
+                    const data = normalizeData(JSON.parse(e.target.result));
+                    sorties = data.sorties;
+                    entrees = data.entrees;
+                    soldesInitiaux = data.soldesInitiaux;
                     saveData();
                     renderAll();
                     alert('Données importées avec succès!');
