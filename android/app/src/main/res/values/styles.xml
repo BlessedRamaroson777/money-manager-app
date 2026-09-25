@@ -18,5 +18,8 @@
 
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
         <item name="android:background">@drawable/splash</item>
+        <!-- Android 12+: fond rose pâle + icône BM pendant le démarrage -->
+        <item name="windowSplashScreenBackground">#FFF0F5</item>
+        <item name="windowSplashScreenIconBackgroundColor">#EC407A</item>
     </style>
 </resources>

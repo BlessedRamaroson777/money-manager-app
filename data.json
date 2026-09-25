@@ -7202,6 +7202,13 @@
             "description": "Sandwich",
             "montant": 1000,
             "source": "Wallet"
+        },
+        {
+            "id": 1790326131955,
+            "date": "2026-09-25",
+            "description": "Sandwich",
+            "montant": 2000,
+            "source": "Wallet"
         }
     ],
     "entrees": [
@@ -8135,5 +8142,12 @@
         "Wallet": -4000,
         "Mvola": -33,
         "Airtel": 4025
-    }
+    },
+    "plan": {
+        "revenus": {},
+        "budgets": {},
+        "objectifs": [],
+        "activites": []
+    },
+    "exportDate": "2026-09-25T08:50:58.415Z"
 }

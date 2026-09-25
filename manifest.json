@@ -1,11 +1,11 @@
 {
-    "name": "Mon Porte-Monnaie",
-    "short_name": "Porte-Monnaie",
+    "name": "Blessed Money",
+    "short_name": "Blessed Money",
     "description": "Gérer mes dépenses et entrées d'argent",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#FFE5B4",
-    "theme_color": "#FFB6C1",
+    "background_color": "#FFF0F5",
+    "theme_color": "#E91E63",
     "orientation": "portrait-primary",
     "icons": [
         {

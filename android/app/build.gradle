@@ -22,6 +22,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    // Nom du fichier généré: BlessedMoney.apk (dans app/build/outputs/apk/<debug|release>/)
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "BlessedMoney.apk"
+        }
+    }
 }
 
 repositories {

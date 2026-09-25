@@ -3,20 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mon Porte-Monnaie</title>
+    <title>Blessed Money</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#FFB6C1">
+    <meta name="theme-color" content="#E91E63">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Porte-Monnaie">
+    <meta name="apple-mobile-web-app-title" content="Blessed Money">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon.svg">
     <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <!-- Polices chargées sans bloquer l'affichage (hors ligne: police cursive du système) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
+        /* Police du logo embarquée: le logo s'affiche même sans internet */
+        @font-face {
+            font-family: 'Dancing Script';
+            src: url('DancingScript.ttf') format('truetype');
+            font-weight: 400 700;
+            font-display: swap;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -278,6 +288,182 @@
         .insight.bad { border-color: #FF6B6B; background: #FFF0F0; }
         .insight strong { display: block; margin-bottom: 2px; }
         .analyse-note { font-size: 0.75em; color: #888; margin-top: 8px; }
+
+        /* ===== Marque Blessed Money ===== */
+        .brand-logo {
+            font-family: 'Dancing Script', 'Segoe Script', 'Brush Script MT', cursive;
+            font-weight: 700;
+            color: #E91E63;
+            font-size: 2.6em;
+            line-height: 1.1;
+            text-align: center;
+        }
+        .brand-logo.small { font-size: 1.7em; text-align: left; }
+
+        /* Écran de chargement: le logo s'écrit */
+        .splash {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFF0F5 50%, #F5F0FF 100%);
+            transition: opacity 0.5s;
+        }
+        .splash.fade { opacity: 0; pointer-events: none; }
+        .splash svg { width: min(90vw, 560px); height: auto; overflow: visible; }
+        .splash-text {
+            font-family: 'Dancing Script', 'Segoe Script', 'Brush Script MT', cursive;
+            font-weight: 700;
+            font-size: 96px;
+            text-anchor: middle;
+            fill: transparent;
+            stroke: #E91E63;
+            stroke-width: 2;
+            stroke-dasharray: 900;
+            stroke-dashoffset: 900;
+            animation: write 1.6s ease forwards, fillIn 0.5s ease 1.3s forwards;
+        }
+        .splash-sub { color: #E91E63; opacity: 0.7; margin-top: 6px; font-size: 0.95em; letter-spacing: 1px; }
+        .splash-sub::after { content: ''; animation: dots 1.2s steps(4) infinite; }
+        @keyframes write { to { stroke-dashoffset: 0; } }
+        @keyframes fillIn { to { fill: #E91E63; stroke-width: 0.5; } }
+        @keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+
+        /* Connexion */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-card {
+            background: white;
+            border-radius: 25px;
+            padding: 30px 26px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 8px 8px 0 rgba(233, 30, 99, 0.15);
+            border: 4px solid #F8BBD0;
+        }
+        .login-card p { text-align: center; color: #888; margin: 6px 0 20px; font-size: 0.9em; }
+        .login-card input {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            border: 2px solid #F8BBD0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1em;
+        }
+        .login-card input:focus { outline: none; border-color: #E91E63; }
+        .login-card button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 12px;
+            background: #E91E63;
+            color: white;
+            font-family: inherit;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .login-card button:disabled { opacity: 0.6; }
+        .login-error { color: #E74C3C; text-align: center; min-height: 1.4em; margin-top: 10px; font-size: 0.9em; }
+
+        /* En-tête + navigation entre pages */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .user-box { display: flex; align-items: center; gap: 8px; font-size: 0.9em; color: #666; }
+        .user-box button {
+            border: 2px solid #F8BBD0;
+            background: white;
+            color: #E91E63;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        .app-nav {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 20px;
+            padding: 6px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 8px;
+            z-index: 50;
+        }
+        .app-nav button {
+            flex: 1;
+            border: none;
+            background: transparent;
+            border-radius: 14px;
+            padding: 10px 6px;
+            font-family: inherit;
+            font-size: 0.95em;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .app-nav button .nav-icon { font-size: 1.2em; }
+        .app-nav button.active { background: #E91E63; color: white; font-weight: 600; }
+        .page { display: none; }
+        .page.active { display: block; animation: pageIn 0.25s ease; }
+        @keyframes pageIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        .quick-actions { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .quick-actions button {
+            border: none;
+            border-radius: 14px;
+            padding: 12px 18px;
+            font-family: inherit;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Utilisateurs */
+        .users-section { border-color: #E91E63; }
+        .users-section .stats-title { color: #E91E63; }
+        .user-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px dashed #EEE; }
+        .user-row small { color: #999; }
+        .cred-card { background: #E8FAF8; border-left: 5px solid #4ECDC4; border-radius: 10px; padding: 12px 14px; margin: 12px 0; line-height: 1.6; }
+        .cred-card code { background: white; padding: 2px 8px; border-radius: 6px; font-size: 1.05em; }
+
+        @media (max-width: 600px) {
+            .brand-logo.small { font-size: 1.4em; }
+            .user-box span.who { display: none; }
+            /* Navigation en bas de l'écran sur mobile */
+            .app-nav {
+                position: fixed;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: 0;
+                border-radius: 18px 18px 0 0;
+                padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+                box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+            }
+            .app-nav button { flex-direction: column; gap: 2px; font-size: 0.68em; padding: 6px 2px; }
+            .app-nav button .nav-icon { font-size: 1.5em; }
+            .container.app { padding-bottom: 80px; }
+        }
+
         /* Alertes d'habitudes */
         #habit-alerts { margin-bottom: 20px; }
         .habit-alert {
@@ -773,13 +959,104 @@
                 padding-top: 20px;
             }
         }
+
+        /* Icônes (remplacent les emojis) */
+        .ic { width: 1.15em; height: 1.15em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.2em; flex-shrink: 0; }
+        .app-nav button .nav-icon { display: inline-flex; }
+        .app-nav button .nav-icon .ic { width: 1.2em; height: 1.2em; }
+        .user-box .who, .user-box button { display: inline-flex; align-items: center; gap: 6px; }
+        .habit-alert > span { display: flex; align-items: center; gap: 8px; }
+        .habit-alert .ic { color: #FFB300; }
+        .habit-alert button { line-height: 0; }
+        .insight:has(> .ic) { display: flex; gap: 10px; align-items: flex-start; }
+        .insight > .ic { margin-top: 2px; color: #FFB300; }
+        .insight.good > .ic { color: #4ECDC4; }
+        .insight.bad > .ic { color: #FF6B6B; }
+        .quick-actions button { display: inline-flex; align-items: center; gap: 6px; }
+        .icon-btn { line-height: 0; }
+        .is-native .web-only, .is-web .native-only { display: none !important; }
+        .user-box .header-send { background: #E91E63; color: white; border-color: #E91E63; font-weight: 600; }
+        .user-box .who b { font-weight: 600; }
+        .account-field { margin-bottom: 12px; }
+        .account-field small { color: #999; font-weight: 400; }
+        .btn-expense { background: #FF6B6B; }
+        .btn-income { background: #4ECDC4; }
+        .user-row .ic { color: #999; }
+        @media (max-width: 600px) {
+            .app-nav button .nav-icon .ic { width: 1.5em; height: 1.5em; }
+            .user-box { gap: 6px; }
+            .user-box button { padding: 7px 10px; }
+            .user-box .label, .user-box .who b { display: none; }
+            /* Pendant la saisie, la barre du bas remonterait avec le clavier et cacherait les boutons */
+            body.typing .app-nav { display: none; }
+            body.typing .container.app { padding-bottom: 40vh; }
+            .modal { align-items: flex-start; overflow-y: auto; padding: 20px 0 45vh; }
+            .modal-content { max-height: none; margin: 0 auto; }
+        }
+        .suggest-box { overflow-y: auto; overscroll-behavior: contain; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Mon Porte-Monnaie</h1>
-        
-        <div class="emoji-decoration"></div>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></symbol>
+        <symbol id="i-swap" viewBox="0 0 24 24"><path d="M7 4 3 8l4 4"/><path d="M3 8h14"/><path d="m17 20 4-4-4-4"/><path d="M21 16H7"/></symbol>
+        <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></symbol>
+        <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></symbol>
+        <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+        <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5"/><path d="M5 12h11"/></symbol>
+        <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="m15 15 6 6"/><path d="M4 4l5 5"/></symbol>
+        <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+        <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/></symbol>
+        <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 2.4 17.5A2 2 0 0 0 4.1 20.5h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+        <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></symbol>
+        <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+        <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+        <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></symbol>
+        <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-14"/></symbol>
+    </svg>
+    <!-- Écran de chargement -->
+    <div class="splash" id="splash">
+        <svg viewBox="0 0 600 150" aria-label="Blessed Money"><text class="splash-text" x="300" y="105">Blessed Money</text></svg>
+        <div class="splash-sub">Chargement</div>
+    </div>
+
+    <!-- Connexion -->
+    <div class="login-screen hidden" id="login-screen">
+        <div class="login-card">
+            <div class="brand-logo">Blessed Money</div>
+            <p>Connecte-toi pour accéder à ton argent</p>
+            <form id="login-form">
+                <input type="text" id="login-user" placeholder="Nom d'utilisateur" autocomplete="username" autocapitalize="none" required>
+                <input type="password" id="login-pass" placeholder="Mot de passe" autocomplete="current-password" required>
+                <button type="submit" id="login-btn">Se connecter</button>
+                <div class="login-error" id="login-error"></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="container app hidden" id="app">
+        <header class="app-header">
+            <div class="brand-logo small">Blessed Money</div>
+            <div class="user-box">
+                <button class="native-only header-send" onclick="sendToPC()" title="Synchroniser avec le PC"><svg class="ic"><use href="#i-send"/></svg><span class="sync-label">Synchroniser</span></button>
+                <button class="who" onclick="openAccount()" title="Mon compte"><svg class="ic"><use href="#i-user"/></svg><b id="current-user"></b></button>
+                <button onclick="logout()" title="Déconnexion"><svg class="ic"><use href="#i-logout"/></svg><span class="label">Déconnexion</span></button>
+            </div>
+        </header>
+
+        <nav class="app-nav" id="app-nav">
+            <button data-page="accueil" onclick="showPage('accueil')"><span class="nav-icon"><svg class="ic"><use href="#i-home"/></svg></span><span>Accueil</span></button>
+            <button data-page="operations" onclick="showPage('operations')"><span class="nav-icon"><svg class="ic"><use href="#i-swap"/></svg></span><span>Opérations</span></button>
+            <button data-page="analyse" onclick="showPage('analyse')"><span class="nav-icon"><svg class="ic"><use href="#i-chart"/></svg></span><span>Analyse</span></button>
+            <button data-page="plan" onclick="showPage('plan')"><span class="nav-icon"><svg class="ic"><use href="#i-calendar"/></svg></span><span>Planifier</span></button>
+            <button data-page="users" onclick="showPage('users')" class="hidden" id="nav-users"><span class="nav-icon"><svg class="ic"><use href="#i-users"/></svg></span><span>Utilisateurs</span></button>
+        </nav>
+
+        <!-- ===== Page Accueil ===== -->
+        <section class="page" data-page="accueil">
 
         <!-- Section Compte est bon -->
         <div class="compte-section" id="compte-section">
@@ -838,6 +1115,14 @@
         <!-- Alertes d'habitudes inhabituelles -->
         <div id="habit-alerts"></div>
 
+        <div class="quick-actions">
+            <button class="btn-expense" onclick="showPage('operations'); showTab('sortie'); document.getElementById('sortie-desc').focus()"><svg class="ic"><use href="#i-plus"/></svg>Dépense</button>
+            <button class="btn-income" onclick="showPage('operations'); showTab('entree'); document.getElementById('entree-source').focus()"><svg class="ic"><use href="#i-plus"/></svg>Revenu</button>
+        </div>
+        </section>
+
+        <!-- ===== Page Analyse ===== -->
+        <section class="page" data-page="analyse">
         <!-- Section Statistiques -->
         <div class="stats-section">
             <h2 class="stats-title">Statistiques</h2>
@@ -858,6 +1143,10 @@
             <div id="analyse-content"></div>
         </div>
 
+        </section>
+
+        <!-- ===== Page Planifier ===== -->
+        <section class="page" data-page="plan">
         <!-- Section Planification -->
         <div class="stats-section plan-section">
             <h2 class="stats-title">Planifier mon mois</h2>
@@ -867,6 +1156,10 @@
             <div id="plan-content"></div>
         </div>
 
+        </section>
+
+        <!-- ===== Page Opérations ===== -->
+        <section class="page" data-page="operations">
         <!-- Tabs -->
         <div class="tabs">
             <button class="tab-btn sortie active" onclick="showTab('sortie')">Dépenses</button>
@@ -994,14 +1287,32 @@
         <div class="emoji-decoration"></div>
         
         <div style="text-align: center; margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-            <label style="background: #9B59B6; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">
+            <label class="web-only" style="background: #9B59B6; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">
                 Importer
                 <input type="file" id="import-file" accept=".json" onchange="importJSON(event)" style="display: none;">
             </label>
-            <button onclick="exportData()" style="background: #4ECDC4; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">Exporter</button>
-            <button id="send-pc-btn" onclick="sendToPC()" style="background: #3498DB; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">Envoyer au PC</button>
-            <button onclick="clearAllData()" style="background: #FF6B6B; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">Effacer</button>
+            <button class="web-only" onclick="exportData()" style="background: #4ECDC4; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">Exporter</button>
+            <button class="native-only" id="send-pc-btn" onclick="sendToPC()" style="background: #3498DB; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;"><span class="sync-label">Synchroniser</span> avec le PC</button>
+            <button class="web-only" onclick="clearAllData()" style="background: #FF6B6B; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">Effacer</button>
         </div>
+        </section>
+
+        <!-- ===== Page Utilisateurs (web, admin) ===== -->
+        <section class="page" data-page="users">
+            <div class="stats-section users-section">
+                <h2 class="stats-title">Utilisateurs</h2>
+                <p style="text-align:center;color:#888;font-size:0.9em;margin-bottom:15px">Chaque utilisateur a son propre porte-monnaie. Les identifiants sont générés, tu peux les modifier.</p>
+                <div class="plan-form">
+                    <input id="new-user" placeholder="Nom d'utilisateur" autocapitalize="none" style="flex:1 1 140px">
+                    <button class="plan-btn secondary icon-btn" onclick="document.getElementById('new-user').value = generateUsername()" title="Générer"><svg class="ic"><use href="#i-shuffle"/></svg></button>
+                    <input id="new-pass" placeholder="Mot de passe" style="flex:1 1 140px">
+                    <button class="plan-btn secondary icon-btn" onclick="document.getElementById('new-pass').value = generatePassword()" title="Générer"><svg class="ic"><use href="#i-shuffle"/></svg></button>
+                    <button class="plan-btn" onclick="createUser()">Créer l'utilisateur</button>
+                </div>
+                <div id="new-user-result"></div>
+                <div id="users-list"></div>
+            </div>
+        </section>
     </div>
 
     <!-- Modal -->
@@ -1013,6 +1324,36 @@
                 <div class="modal-buttons">
                     <button type="button" class="action-btn cancel-btn" onclick="closeModal()">Annuler</button>
                     <button type="submit" class="action-btn save-btn">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mon compte -->
+    <div class="modal" id="account-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Mon compte</h2>
+            <form id="account-form">
+                <div class="form-group account-field">
+                    <label>Nom d'utilisateur</label>
+                    <input type="text" id="acc-user" autocapitalize="none" autocomplete="username" required>
+                </div>
+                <div class="form-group account-field">
+                    <label>Mot de passe actuel</label>
+                    <input type="password" id="acc-current" autocomplete="current-password" required>
+                </div>
+                <div class="form-group account-field">
+                    <label>Nouveau mot de passe <small>(vide = inchangé)</small></label>
+                    <input type="password" id="acc-new" autocomplete="new-password">
+                </div>
+                <div class="form-group account-field">
+                    <label>Confirmer le nouveau mot de passe</label>
+                    <input type="password" id="acc-confirm" autocomplete="new-password">
+                </div>
+                <div class="login-error" id="acc-error"></div>
+                <div class="modal-buttons">
+                    <button type="button" class="action-btn cancel-btn" onclick="closeAccount()">Annuler</button>
+                    <button type="submit" class="action-btn save-btn" id="acc-save">Enregistrer</button>
                 </div>
             </form>
         </div>
@@ -1036,6 +1377,9 @@
         let entrees = [];
         let soldesInitiaux = { Chambre: 0, Wallet: 0, Mvola: 0, Airtel: 0 };
         let plan = { revenus: {}, budgets: {}, objectifs: [], activites: [] };
+        // Synchro téléphone <-> PC: dates de modification et opérations supprimées
+        let syncMeta = { majSoldes: 0, majPlan: 0, supprimes: [] };
+        let dataVersion = 0;
         let editingId = null;
         let editingType = null;
         let currentStatsView = 'daily';
@@ -1045,6 +1389,389 @@
         // Dans l'app Android (Capacitor) ou sur le site servi par server.js
         const IS_NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
         const IS_SERVER = !IS_NATIVE && location.protocol.startsWith('http');
+
+        // ===== Connexion / utilisateurs =====
+        const SESSION_KEY = 'porteMonnaie:session';
+        const LOCAL_ACCOUNTS_KEY = 'porteMonnaie:comptes';
+        let currentUser = null; // { username, role, token, server }
+
+        function readSession() {
+            try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { return null; }
+        }
+
+        function writeSession(session) {
+            currentUser = session;
+            if (session) localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+            else localStorage.removeItem(SESSION_KEY);
+        }
+
+        // Le compte principal (blessed à l'origine) garde les données historiques, même s'il change de nom
+        function isPrimaryUser() {
+            return !!currentUser && (currentUser.primary === true || (currentUser.primary === undefined && currentUser.username === 'blessed'));
+        }
+
+        // Chaque utilisateur a ses propres données sur l'appareil (le compte principal garde les clés historiques)
+        function userStorageKey() {
+            return !currentUser || isPrimaryUser() ? STORAGE_KEY : `${STORAGE_KEY}:${currentUser.username}`;
+        }
+
+        async function sha256(text) {
+            if (!window.crypto || !crypto.subtle) return null;
+            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+            return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // Comptes connus hors ligne sur le téléphone (blessed / blessed par défaut)
+        async function getLocalAccounts() {
+            let accounts = null;
+            try { accounts = JSON.parse(localStorage.getItem(LOCAL_ACCOUNTS_KEY) || 'null'); } catch (e) {}
+            // Tant qu'aucun compte n'a été enregistré, blessed / blessed fonctionne hors ligne
+            if (!accounts) accounts = { blessed: { hash: await sha256('blessed:blessed'), role: 'admin', primary: true } };
+            return accounts;
+        }
+
+        async function rememberLocalAccount(username, password, role, primary, oldUsername) {
+            const accounts = await getLocalAccounts();
+            if (oldUsername && oldUsername !== username) delete accounts[oldUsername];
+            // L'ancien compte par défaut ne doit plus marcher si le compte principal a changé
+            if (primary && username !== 'blessed') delete accounts.blessed;
+            accounts[username] = { hash: await sha256(`${username}:${password}`), role, primary: !!primary };
+            localStorage.setItem(LOCAL_ACCOUNTS_KEY, JSON.stringify(accounts));
+        }
+
+        class AuthError extends Error {}
+
+        // Appel API authentifié (serveur du PC)
+        async function apiFetch(url, options = {}, token = currentUser && currentUser.token) {
+            const response = await fetch(url, {
+                ...options,
+                cache: 'no-store',
+                headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(options.headers || {}) }
+            });
+            if (response.status === 401) throw new AuthError('Session expirée');
+            const result = await response.json();
+            if (!response.ok || result.success === false) throw new Error(result.error || `Erreur ${response.status}`);
+            return result;
+        }
+
+        async function remoteLogin(baseUrl, username, password, timeoutMs = 4000) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), timeoutMs);
+            try {
+                const response = await fetch(`${baseUrl}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }),
+                    signal: controller.signal
+                });
+                let result;
+                try {
+                    result = await response.json();
+                } catch (e) {
+                    // Le serveur répond mais ne connaît pas /api/login: c'est une ancienne version de server.js
+                    return { ok: false, reachable: true, error: 'Le serveur n\'est pas à jour: arrête-le (Ctrl+C) puis relance npm start' };
+                }
+                return { ok: response.ok && result.success, reachable: true, ...result };
+            } catch (e) {
+                return { ok: false, reachable: false };
+            } finally {
+                clearTimeout(timer);
+            }
+        }
+
+        let usingDefaultPassword = false;
+        async function login(username, password) {
+            username = username.trim().toLowerCase();
+            usingDefaultPassword = username === 'blessed' && password === 'blessed';
+            if (IS_SERVER) {
+                const r = await remoteLogin('', username, password, 10000);
+                if (!r.reachable) throw new Error('Serveur injoignable');
+                if (!r.ok) throw new Error(r.error || 'Identifiants incorrects');
+                writeSession({ username: r.username, role: r.role, primary: r.primary, token: r.token });
+                return;
+            }
+            // Téléphone: on tente le PC (s'il est connu), sinon on vérifie hors ligne
+            const pcUrl = localStorage.getItem(PC_URL_KEY);
+            if (pcUrl) {
+                const r = await remoteLogin(pcUrl, username, password);
+                if (r.reachable && r.ok) {
+                    await rememberLocalAccount(r.username, password, r.role, r.primary);
+                    writeSession({ username: r.username, role: r.role, primary: r.primary, token: r.token, server: pcUrl });
+                    return;
+                }
+                if (r.reachable && !r.ok) throw new Error(r.error || 'Identifiants incorrects');
+            }
+            const accounts = await getLocalAccounts();
+            const account = accounts[username];
+            if (!account || account.hash !== await sha256(`${username}:${password}`)) {
+                throw new Error(account ? 'Mot de passe incorrect' : 'Utilisateur inconnu sur ce téléphone (connecte-toi une fois avec le PC allumé)');
+            }
+            writeSession({ username, role: account.role, primary: account.primary });
+        }
+
+        async function restoreSession() {
+            const session = readSession();
+            if (!session) return false;
+            if (IS_SERVER) {
+                try {
+                    const me = await apiFetch('/api/me', {}, session.token);
+                    writeSession({ ...session, username: me.username, role: me.role, primary: me.primary });
+                    return true;
+                } catch (e) {
+                    if (e instanceof AuthError) writeSession(null);
+                    return false;
+                }
+            }
+            currentUser = session;
+            return true;
+        }
+
+        function showLogin(message = '') {
+            document.getElementById('app').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('login-error').textContent = message;
+            document.getElementById('login-pass').value = '';
+            setTimeout(() => document.getElementById('login-user').focus(), 50);
+        }
+
+        async function enterApp() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            document.getElementById('current-user').textContent = currentUser.username;
+            document.getElementById('nav-users').classList.toggle('hidden', !(IS_SERVER && currentUser.role === 'admin'));
+            let page = 'accueil';
+            try { page = localStorage.getItem('porteMonnaie:page') || 'accueil'; } catch (e) {}
+            showPage(page);
+            await loadData();
+            syncReference();
+            if (IS_NATIVE) syncWithPC({ silent: true });
+        }
+
+        // Retour sur l'app: récupérer ce que l'autre appareil a synchronisé entre-temps
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState !== 'visible' || !currentUser) return;
+            if (IS_SERVER) {
+                apiFetch('/api/load').then(d => applyMerged(d)).catch(err => handleAuthError(err));
+            } else if (IS_NATIVE) {
+                syncWithPC({ silent: true });
+            }
+        });
+
+        async function logout() {
+            if (!confirm('Se déconnecter ?')) return;
+            if (IS_SERVER && currentUser && currentUser.token) {
+                try { await apiFetch('/api/logout', { method: 'POST' }); } catch (e) {}
+            }
+            writeSession(null);
+            sorties = [];
+            entrees = [];
+            soldesInitiaux = { Chambre: 0, Wallet: 0, Mvola: 0, Airtel: 0 };
+            plan = { revenus: {}, budgets: {}, objectifs: [], activites: [] };
+            showLogin();
+        }
+
+        function handleAuthError(err) {
+            if (err instanceof AuthError) {
+                writeSession(null);
+                showLogin('Session expirée, reconnecte-toi.');
+                return true;
+            }
+            return false;
+        }
+
+
+        // ===== Mon compte (nom d'utilisateur / mot de passe) =====
+        function openAccount() {
+            document.getElementById('acc-user').value = currentUser.username;
+            ['acc-current', 'acc-new', 'acc-confirm'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('acc-error').textContent = '';
+            document.getElementById('account-modal').classList.add('active');
+            setTimeout(() => document.getElementById('acc-current').focus(), 50);
+        }
+
+        function closeAccount() {
+            document.getElementById('account-modal').classList.remove('active');
+        }
+
+        async function saveAccount(e) {
+            e.preventDefault();
+            const error = document.getElementById('acc-error');
+            const newUsername = document.getElementById('acc-user').value.trim().toLowerCase();
+            const currentPassword = document.getElementById('acc-current').value;
+            const newPassword = document.getElementById('acc-new').value;
+            if (newPassword !== document.getElementById('acc-confirm').value) {
+                error.textContent = 'Les deux nouveaux mots de passe ne sont pas identiques';
+                return;
+            }
+            // Le compte est géré par le serveur du PC: depuis le téléphone il faut l'avoir déjà joint une fois
+            const base = IS_SERVER ? '' : currentUser.server;
+            if (!IS_SERVER && (!base || !currentUser.token)) {
+                error.textContent = 'Le PC doit être joignable: fais d\'abord « Envoyer au PC » une fois, puis réessaie.';
+                return;
+            }
+            const btn = document.getElementById('acc-save');
+            btn.disabled = true;
+            try {
+                const oldUsername = currentUser.username;
+                const oldKey = userStorageKey();
+                const r = await apiFetch(`${base}/api/account`, { method: 'POST', body: JSON.stringify({ currentPassword, newUsername, newPassword }) });
+                writeSession({ ...currentUser, username: r.username, role: r.role, primary: r.primary });
+                // Les données locales suivent le nouveau nom
+                const newKey = userStorageKey();
+                if (newKey !== oldKey && localStorage.getItem(oldKey)) {
+                    localStorage.setItem(newKey, localStorage.getItem(oldKey));
+                    localStorage.removeItem(oldKey);
+                }
+                if (!IS_SERVER) await rememberLocalAccount(r.username, newPassword || currentPassword, r.role, r.primary, oldUsername);
+                if (newPassword) usingDefaultPassword = false;
+                document.getElementById('current-user').textContent = r.username;
+                closeAccount();
+                renderHabits();
+                alert(`Compte mis à jour.\n\nNom d'utilisateur: ${r.username}${newPassword ? '\nMot de passe: modifié' : ''}`);
+            } catch (err) {
+                if (!handleAuthError(err)) error.textContent = err.message;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+
+        // ===== Saisie sur mobile: le clavier ne doit rien cacher =====
+        const TYPING_SELECTOR = 'input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea, select';
+        let typingTimer = null;
+
+        function isSmallScreen() {
+            return window.matchMedia('(max-width: 600px)').matches;
+        }
+
+        // Fait défiler pour que le champ soit en haut de la zone visible (la place en dessous reste
+        // libre pour les suggestions et le bouton "Ajouter")
+        function revealField(el) {
+            if (!isSmallScreen() || !el.isConnected) return;
+            const vv = window.visualViewport;
+            const visibleHeight = vv ? vv.height : window.innerHeight;
+            const rect = el.getBoundingClientRect();
+            const hasSuggestions = !!el.getAttribute('autocomplete') && el.getAttribute('autocomplete') === 'off';
+            const target = hasSuggestions ? 70 : Math.max(70, visibleHeight * 0.3);
+            const scroller = el.closest('.modal');
+            if (scroller) {
+                el.scrollIntoView({ block: 'center' });
+            } else if (rect.top < 60 || rect.bottom > visibleHeight - 60 || hasSuggestions) {
+                window.scrollBy(0, rect.top - target);
+            }
+            setTimeout(() => el.dispatchEvent(new Event('ac:reposition')), 350);
+        }
+
+        document.addEventListener('focusin', e => {
+            if (!e.target.matches || !e.target.matches(TYPING_SELECTOR)) return;
+            clearTimeout(typingTimer);
+            document.body.classList.add('typing');
+            // Laisser le temps au clavier de s'ouvrir avant de calculer la place disponible
+            setTimeout(() => revealField(e.target), 300);
+        });
+
+        document.addEventListener('focusout', () => {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(() => {
+                if (!document.activeElement || !document.activeElement.matches(TYPING_SELECTOR)) document.body.classList.remove('typing');
+            }, 200);
+        });
+
+        if (window.visualViewport) {
+            // Le clavier s'ouvre / se ferme: recaler le champ et la liste de suggestions
+            window.visualViewport.addEventListener('resize', () => {
+                const el = document.activeElement;
+                if (el && el.matches && el.matches(TYPING_SELECTOR)) {
+                    el.dispatchEvent(new Event('ac:reposition'));
+                    if (window.visualViewport.height < window.innerHeight * 0.85) revealField(el);
+                }
+            });
+        }
+
+        // ===== Pages =====
+        function showPage(page) {
+            const btn = document.querySelector(`.app-nav button[data-page="${page}"]`);
+            if (!btn || btn.classList.contains('hidden')) page = 'accueil';
+            document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.dataset.page === page));
+            document.querySelectorAll('.app-nav button').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+            try { localStorage.setItem('porteMonnaie:page', page); } catch (e) {}
+            if (page === 'users') renderUsers();
+            window.scrollTo({ top: 0 });
+        }
+
+        // ===== Gestion des utilisateurs (web, admin) =====
+        function randomFrom(chars, n) {
+            const values = crypto.getRandomValues(new Uint32Array(n));
+            return [...values].map(v => chars[v % chars.length]).join('');
+        }
+
+        function generateUsername() {
+            const syllables = ['ma', 'ri', 'ko', 'na', 'lu', 'ti', 'so', 'fa', 'mi', 'ra', 'no', 'ze', 'ka', 'li', 'vo'];
+            const pick = () => syllables[crypto.getRandomValues(new Uint32Array(1))[0] % syllables.length];
+            return pick() + pick() + randomFrom('0123456789', 2);
+        }
+
+        function generatePassword() {
+            return randomFrom('abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789', 8);
+        }
+
+        async function renderUsers() {
+            const list = document.getElementById('users-list');
+            if (!document.getElementById('new-user').value) document.getElementById('new-user').value = generateUsername();
+            if (!document.getElementById('new-pass').value) document.getElementById('new-pass').value = generatePassword();
+            try {
+                const { users } = await apiFetch('/api/users');
+                list.innerHTML = users.map(u => `
+                    <div class="user-row">
+                        <span><svg class="ic"><use href="#i-user"/></svg> <b>${escapeHtml(u.username)}</b> ${u.role === 'admin' ? '· admin' : ''}<br><small>créé le ${formatDate((u.createdAt || '').slice(0, 10))}</small></span>
+                        ${u.primary || u.username === currentUser.username ? '' : `<button class="goal-del" onclick="deleteUser('${escapeHtml(u.username)}')" title="Supprimer">×</button>`}
+                    </div>`).join('');
+            } catch (e) {
+                if (!handleAuthError(e)) list.innerHTML = `<p style="color:#E74C3C">${escapeHtml(e.message)}</p>`;
+            }
+        }
+
+        let lastCreds = '';
+        async function copyCreds(btn) {
+            try {
+                await navigator.clipboard.writeText(lastCreds);
+                btn.textContent = 'Copié !';
+            } catch (e) {
+                prompt('Copie ces identifiants :', lastCreds);
+            }
+        }
+
+        async function createUser() {
+            const username = document.getElementById('new-user').value.trim().toLowerCase();
+            const password = document.getElementById('new-pass').value;
+            try {
+                await apiFetch('/api/users', { method: 'POST', body: JSON.stringify({ username, password }) });
+                lastCreds = `Blessed Money
+Utilisateur: ${username}
+Mot de passe: ${password}`;
+                document.getElementById('new-user-result').innerHTML = `
+                    <div class="cred-card">Utilisateur créé. Identifiants à lui donner:<br>
+                        Nom d'utilisateur: <code>${escapeHtml(username)}</code><br>
+                        Mot de passe: <code>${escapeHtml(password)}</code>
+                        <button class="plan-btn secondary" style="margin-left:8px" onclick="copyCreds(this)">Copier</button>
+                    </div>`;
+                document.getElementById('new-user').value = generateUsername();
+                document.getElementById('new-pass').value = generatePassword();
+                renderUsers();
+            } catch (e) {
+                if (!handleAuthError(e)) alert('' + e.message);
+            }
+        }
+
+        async function deleteUser(username) {
+            if (!confirm(`Supprimer l'utilisateur « ${username} » ?\n\nIl ne pourra plus se connecter (ses données restent sauvegardées sur le PC).`)) return;
+            try {
+                await apiFetch(`/api/users/${encodeURIComponent(username)}`, { method: 'DELETE' });
+                renderUsers();
+            } catch (e) {
+                if (!handleAuthError(e)) alert('' + e.message);
+            }
+        }
 
         function normalizeData(data) {
             const normalized = {
@@ -1067,6 +1794,10 @@
                 }
             };
 
+            normalized.majSoldes = Number(data?.majSoldes) || 0;
+            normalized.majPlan = Number(data?.majPlan) || 0;
+            normalized.supprimes = Array.isArray(data?.supprimes) ? data.supprimes : [];
+
             if (normalized.soldesInitiaux.Mvola === 488) {
                 normalized.soldesInitiaux.Mvola = -33;
             }
@@ -1074,65 +1805,84 @@
             return normalized;
         }
 
+        function setState(data) {
+            sorties = data.sorties;
+            entrees = data.entrees;
+            soldesInitiaux = data.soldesInitiaux;
+            plan = data.plan;
+            syncMeta = { majSoldes: data.majSoldes || 0, majPlan: data.majPlan || 0, supprimes: data.supprimes || [] };
+        }
+
+        function currentData() {
+            return { sorties, entrees, soldesInitiaux, plan, ...syncMeta };
+        }
+
+        function newUid() {
+            return [...crypto.getRandomValues(new Uint8Array(8))].map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // Une opération supprimée est mémorisée pour ne pas revenir à la prochaine synchro
+        function rememberDeletion(item) {
+            if (item && item.uid) syncMeta.supprimes.push({ uid: item.uid, at: Date.now() });
+        }
+
+        // Adopter le résultat fusionné renvoyé par le PC (sans renvoyer de synchro)
+        function applyMerged(data) {
+            const merged = normalizeData(data);
+            const visible = d => JSON.stringify([d.sorties.map(x => [x.id, x.date, x.description, x.montant, x.source]), d.entrees.map(x => [x.id, x.date, x.source, x.montant, x.destinataire]), d.soldesInitiaux, d.plan]);
+            const changed = visible(merged) !== visible(currentData());
+            setState(merged);
+            localStorage.setItem(userStorageKey(), JSON.stringify(currentData()));
+            if (changed) renderAll();
+            return changed;
+        }
+
         // Charger depuis localStorage ou data.json embarqué
         async function loadData() {
-            // Sur le PC, data.json (via server.js) fait foi: c'est là qu'arrivent les envois du téléphone
+            // Sur le PC, le fichier de l'utilisateur (via server.js) fait foi: c'est là qu'arrivent les envois du téléphone
             if (IS_SERVER) {
                 try {
-                    const response = await fetch('/api/load', { cache: 'no-store' });
-                    if (response.ok) {
-                        const data = normalizeData(await response.json());
-                        sorties = data.sorties;
-                        entrees = data.entrees;
-                        soldesInitiaux = data.soldesInitiaux;
-                        plan = data.plan;
-                        localStorage.setItem(STORAGE_KEY, JSON.stringify({ sorties, entrees, soldesInitiaux, plan }));
-                        renderAll();
-                        return;
-                    }
+                    const data = normalizeData(await apiFetch('/api/load'));
+                    setState(data);
+                    localStorage.setItem(userStorageKey(), JSON.stringify({ sorties, entrees, soldesInitiaux, plan }));
+                    renderAll();
+                    return;
                 } catch (e) {
+                    if (handleAuthError(e)) return;
                     console.log('Serveur injoignable, utilisation du localStorage', e);
                 }
             }
 
+            const isBlessed = isPrimaryUser();
             // Ne jamais perdre les données saisies avec l'ancienne clé
-            const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
-            if (saved) {
-                const data = normalizeData(JSON.parse(saved));
-                sorties = data.sorties;
-                entrees = data.entrees;
-                soldesInitiaux = data.soldesInitiaux;
-                        plan = data.plan;
-                saveData();
-            } else {
-                // Premier lancement: charger data.json embarqué
+            const saved = localStorage.getItem(userStorageKey()) || (isBlessed ? localStorage.getItem(LEGACY_STORAGE_KEY) : null);
+            let data = normalizeData(saved ? JSON.parse(saved) : {});
+            if (!saved && isBlessed && !IS_SERVER) {
+                // Premier lancement sur le téléphone: charger data.json embarqué (données de blessed uniquement)
                 try {
                     const response = await fetch('data.json');
-                    if (response.ok) {
-                        const data = normalizeData(await response.json());
-                        sorties = data.sorties;
-                        entrees = data.entrees;
-                        soldesInitiaux = data.soldesInitiaux;
-                        plan = data.plan;
-                        saveData(); // Sauvegarder dans localStorage
-                    }
+                    if (response.ok) data = normalizeData(await response.json());
                 } catch (e) {
                     console.log('Pas de data.json, démarrage vide');
                 }
             }
+            setState(data);
+            saveData();
             renderAll();
         }
 
         // Sauvegarder dans localStorage
         function saveData() {
-            const data = { sorties, entrees, soldesInitiaux, plan };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            if (!currentUser) return;
+            const data = currentData();
+            const version = ++dataVersion;
+            localStorage.setItem(userStorageKey(), JSON.stringify(data));
             if (IS_SERVER) {
-                fetch('/api/save', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                }).catch(err => console.log('Sauvegarde serveur impossible', err));
+                apiFetch('/api/save', { method: 'POST', body: JSON.stringify(data) })
+                    .then(r => { if (r.data && version === dataVersion) applyMerged(r.data); })
+                    .catch(err => { if (!handleAuthError(err)) console.log('Sauvegarde serveur impossible', err); });
+            } else {
+                scheduleSync();
             }
         }
 
@@ -1164,15 +1914,13 @@
             reader.onload = (e) => {
                 try {
                     const data = normalizeData(JSON.parse(e.target.result));
-                    sorties = data.sorties;
-                    entrees = data.entrees;
-                    soldesInitiaux = data.soldesInitiaux;
-                        plan = data.plan;
+                    setState(data);
+                    syncMeta.majSoldes = syncMeta.majPlan = Date.now();
                     saveData();
                     renderAll();
                     alert('Données importées avec succès!');
                 } catch (err) {
-                    alert('❌ Erreur: Fichier JSON invalide');
+                    alert('Erreur: Fichier JSON invalide');
                 }
             };
             reader.readAsText(file);
@@ -1235,33 +1983,86 @@
         }
 
         // Envoyer les données au serveur du PC (node server.js) via le Wi-Fi
-        async function sendToPC() {
+        // ===== Synchronisation téléphone <-> PC =====
+        let syncTimer = null;
+        let syncRunning = false;
+
+        function scheduleSync() {
+            if (!IS_NATIVE || !currentUser || !currentUser.token) return;
+            clearTimeout(syncTimer);
+            syncTimer = setTimeout(() => syncWithPC({ silent: true }), 4000);
+        }
+
+        function setSyncStatus(text) {
+            document.querySelectorAll('.sync-label').forEach(el => el.textContent = text);
+        }
+
+        // Envoie les données du téléphone, le PC fusionne et renvoie le résultat commun
+        async function pushAndMerge(baseUrl, token, manual) {
+            const before = sorties.length + entrees.length;
+            const version = dataVersion;
+            const r = await apiFetch(`${baseUrl}/api/save?source=${manual ? 'phone' : 'auto'}`, { method: 'POST', body: JSON.stringify(currentData()) }, token);
+            if (r.data && version === dataVersion) applyMerged(r.data);
+            return { envoyees: (r.stats && r.stats.envoyees) || 0, recues: Math.max(0, sorties.length + entrees.length - before - ((r.stats && r.stats.envoyees) || 0)) };
+        }
+
+        async function syncWithPC({ silent = false } = {}) {
+            if (syncRunning || !currentUser) return;
+            const baseUrl = currentUser.server || localStorage.getItem(PC_URL_KEY);
+            if (silent && (!baseUrl || !currentUser.token)) return;
+            syncRunning = true;
+            setSyncStatus('Synchro...');
+            try {
+                const result = await pushAndMerge(baseUrl, currentUser.token, !silent);
+                setSyncStatus('Synchronisé');
+                if (!silent) alert(`Synchronisé avec le PC\n\n${result.recues} opération(s) reçue(s) du PC\n${result.envoyees} opération(s) envoyée(s) au PC`);
+            } catch (err) {
+                setSyncStatus('Synchroniser');
+                if (!silent) {
+                    if (err instanceof AuthError) return sendToPC(true);
+                    alert(`Synchro impossible avec ${baseUrl}\n\nVérifie que server.js tourne sur le PC, que le téléphone est sur le même Wi-Fi et que le pare-feu Windows autorise Node.\n\n${err.message}`);
+                }
+            } finally {
+                syncRunning = false;
+                setTimeout(() => setSyncStatus('Synchroniser'), 3000);
+            }
+        }
+
+        // Bouton "Synchroniser": direct si le PC est déjà connu, sinon demande l'adresse (et le mot de passe)
+        async function sendToPC(forceSetup = false) {
+            if (!forceSetup && currentUser.token && currentUser.server) return syncWithPC();
             const saved = localStorage.getItem(PC_URL_KEY) || 'http://192.168.1.3:3000';
             const input = prompt('Adresse du PC (affichée au démarrage de server.js) :', saved);
             if (!input) return;
             const baseUrl = (input.startsWith('http') ? input : `http://${input}`).replace(/\/+$/, '');
             localStorage.setItem(PC_URL_KEY, baseUrl);
-
             try {
-                const response = await fetch(`${baseUrl}/api/save?source=phone`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: buildExport().json
-                });
-                const result = await response.json();
-                if (!response.ok || !result.success) throw new Error(result.error || response.status);
-                alert(`✅ Envoyé au PC ! (${sorties.length} sorties, ${entrees.length} entrées)`);
+                let token = currentUser.server === baseUrl ? currentUser.token : null;
+                if (!token || forceSetup) {
+                    const password = prompt(`Mot de passe de « ${currentUser.username} » sur le PC :`);
+                    if (!password) return;
+                    const r = await remoteLogin(baseUrl, currentUser.username, password);
+                    if (!r.reachable) throw new Error('PC injoignable');
+                    if (!r.ok) throw new Error(r.error || 'Mot de passe incorrect');
+                    await rememberLocalAccount(currentUser.username, password, r.role, r.primary);
+                    writeSession({ ...currentUser, primary: r.primary, token: r.token, server: baseUrl });
+                    token = r.token;
+                }
+                const result = await pushAndMerge(baseUrl, token, true);
+                alert(`Synchronisé avec le PC\n\n${result.recues} opération(s) reçue(s) du PC\n${result.envoyees} opération(s) envoyée(s) au PC`);
             } catch (err) {
-                alert(`❌ Envoi impossible vers ${baseUrl}\n\nVérifie que server.js tourne sur le PC, que le téléphone est sur le même Wi-Fi et que le pare-feu Windows autorise Node.\n\n${err.message}`);
+                alert(`Synchro impossible avec ${baseUrl}\n\nVérifie que server.js tourne sur le PC, que le téléphone est sur le même Wi-Fi et que le pare-feu Windows autorise Node.\n\n${err.message}`);
             }
         }
 
         // Effacer toutes les données
         function clearAllData() {
             if (confirm('Supprimer TOUTES les données?\n\nCette action est irréversible!')) {
+                [...sorties, ...entrees].forEach(rememberDeletion);
                 sorties = [];
                 entrees = [];
                 soldesInitiaux = { Chambre: 0, Wallet: 0, Mvola: 0, Airtel: 0 };
+                syncMeta.majSoldes = Date.now();
                 saveData();
                 renderAll();
                 alert('Données effacées');
@@ -1273,7 +2074,33 @@
             document.getElementById('sortie-date').value = today;
             document.getElementById('entree-date').value = today;
             setupAutocomplete();
-            await loadData();
+
+            document.body.classList.add(IS_NATIVE ? 'is-native' : 'is-web');
+            document.getElementById('account-form').addEventListener('submit', saveAccount);
+            document.getElementById('login-form').addEventListener('submit', async e => {
+                e.preventDefault();
+                const btn = document.getElementById('login-btn');
+                btn.disabled = true;
+                document.getElementById('login-error').textContent = '';
+                try {
+                    await login(document.getElementById('login-user').value, document.getElementById('login-pass').value);
+                    await enterApp();
+                } catch (err) {
+                    document.getElementById('login-error').textContent = err.message;
+                } finally {
+                    btn.disabled = false;
+                }
+            });
+
+            // Le logo s'écrit pendant le chargement (au moins 1,8 s)
+            const minSplash = new Promise(r => setTimeout(r, 1800));
+            const hasSession = await restoreSession();
+            if (hasSession) await enterApp();
+            else showLogin();
+            await minSplash;
+            const splash = document.getElementById('splash');
+            splash.classList.add('fade');
+            setTimeout(() => splash.remove(), 600);
         });
 
         function showTab(tab) {
@@ -1305,6 +2132,8 @@
             
             sorties.push({
                 id: Date.now(),
+                uid: newUid(),
+                maj: Date.now(),
                 date: document.getElementById('sortie-date').value,
                 description: document.getElementById('sortie-desc').value,
                 montant: montant,
@@ -1324,6 +2153,8 @@
             
             entrees.push({
                 id: Date.now(),
+                uid: newUid(),
+                maj: Date.now(),
                 date: document.getElementById('entree-date').value,
                 source: document.getElementById('entree-source').value,
                 montant: montant,
@@ -1338,6 +2169,7 @@
 
         function deleteSortie(id) {
             if (confirm('Supprimer?')) {
+                rememberDeletion(sorties.find(s => s.id === id));
                 sorties = sorties.filter(s => s.id !== id);
                 saveData();
                 renderAll();
@@ -1346,6 +2178,7 @@
 
         function deleteEntree(id) {
             if (confirm('Supprimer?')) {
+                rememberDeletion(entrees.find(e => e.id === id));
                 entrees = entrees.filter(e => e.id !== id);
                 saveData();
                 renderAll();
@@ -1357,27 +2190,27 @@
             if (!item) return;
             editingId = id;
             editingType = 'sortie';
-            document.getElementById('modal-title').textContent = '✏️ Modifier Dépense';
+            document.getElementById('modal-title').textContent = 'Modifier Dépense';
             document.getElementById('edit-fields').innerHTML = `
                 <div class="form-group" style="margin-bottom:15px">
-                    <label>📅 Date</label>
+                    <label>Date</label>
                     <input type="date" class="edit-input" id="edit-date" value="${item.date}" required style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
-                    <label>📝 Description</label>
+                    <label>Description</label>
                     <input type="text" id="edit-desc" value="${item.description}" required style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
-                    <label>💵 Montant</label>
+                    <label>Montant</label>
                     <input type="number" id="edit-montant" value="${item.montant}" required style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
-                    <label>🟡 Source</label>
+                    <label>Source</label>
                     <select id="edit-source" style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
-                        <option value="Wallet" ${item.source==='Wallet'?'selected':''}>👛 Porte-feuille</option>
-                        <option value="Chambre" ${item.source==='Chambre'?'selected':''}>🏠 Chambre</option>
-                        <option value="Mvola" ${item.source==='Mvola'?'selected':''}>📱 Mvola</option>
-                        <option value="Airtel" ${item.source==='Airtel'?'selected':''}>📶 Airtel Money</option>
+                        <option value="Wallet" ${item.source==='Wallet'?'selected':''}>Porte-feuille</option>
+                        <option value="Chambre" ${item.source==='Chambre'?'selected':''}>Chambre</option>
+                        <option value="Mvola" ${item.source==='Mvola'?'selected':''}>Mvola</option>
+                        <option value="Airtel" ${item.source==='Airtel'?'selected':''}>Airtel Money</option>
                     </select>
                 </div>`;
             document.getElementById('edit-modal').classList.add('active');
@@ -1388,27 +2221,27 @@
             if (!item) return;
             editingId = id;
             editingType = 'entree';
-            document.getElementById('modal-title').textContent = '✏️ Modifier Entrée';
+            document.getElementById('modal-title').textContent = 'Modifier Entrée';
             document.getElementById('edit-fields').innerHTML = `
                 <div class="form-group" style="margin-bottom:15px">
-                    <label>📅 Date</label>
+                    <label>Date</label>
                     <input type="date" id="edit-date" value="${item.date}" required style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
-                    <label>👤 Source</label>
+                    <label>Source</label>
                     <input type="text" id="edit-source-text" value="${item.source}" required style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
-                    <label>💵 Montant</label>
+                    <label>Montant</label>
                     <input type="number" id="edit-montant" value="${item.montant}" required style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
-                    <label>🔵 Destinataire</label>
+                    <label>Destinataire</label>
                     <select id="edit-dest" style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
-                        <option value="Wallet" ${item.destinataire==='Wallet'?'selected':''}>👛 Porte-feuille</option>
-                        <option value="Chambre" ${item.destinataire==='Chambre'?'selected':''}>🏠 Chambre</option>
-                        <option value="Mvola" ${item.destinataire==='Mvola'?'selected':''}>📱 Mvola</option>
-                        <option value="Airtel" ${item.destinataire==='Airtel'?'selected':''}>📶 Airtel Money</option>
+                        <option value="Wallet" ${item.destinataire==='Wallet'?'selected':''}>Porte-feuille</option>
+                        <option value="Chambre" ${item.destinataire==='Chambre'?'selected':''}>Chambre</option>
+                        <option value="Mvola" ${item.destinataire==='Mvola'?'selected':''}>Mvola</option>
+                        <option value="Airtel" ${item.destinataire==='Airtel'?'selected':''}>Airtel Money</option>
                     </select>
                 </div>`;
             document.getElementById('edit-modal').classList.add('active');
@@ -1427,6 +2260,7 @@
                 if (idx !== -1) {
                     sorties[idx] = {
                         ...sorties[idx],
+                        maj: Date.now(),
                         date: document.getElementById('edit-date').value,
                         description: document.getElementById('edit-desc').value,
                         montant: parseFloat(document.getElementById('edit-montant').value),
@@ -1438,6 +2272,7 @@
                 if (idx !== -1) {
                     entrees[idx] = {
                         ...entrees[idx],
+                        maj: Date.now(),
                         date: document.getElementById('edit-date').value,
                         source: document.getElementById('edit-source-text').value,
                         montant: parseFloat(document.getElementById('edit-montant').value),
@@ -1455,6 +2290,7 @@
             const val = parseFloat(input.value);
             if (!isNaN(val)) {
                 soldesInitiaux[type.charAt(0).toUpperCase() + type.slice(1)] = val;
+                syncMeta.majSoldes = Date.now();
                 saveData();
                 renderAll();
                 input.value = '';
@@ -1518,6 +2354,11 @@
                 </div>`).join('');
         }
 
+        function insightIcon(cls) {
+            const name = cls === 'good' ? 'check' : cls === 'bad' ? 'alert' : 'spark';
+            return `<svg class="ic"><use href="#i-${name}"/></svg>`;
+        }
+
         function renderAnalyse() {
             const content = document.getElementById('analyse-content');
             const select = document.getElementById('analyse-period');
@@ -1534,7 +2375,9 @@
             select.value = [...select.options].some(o => o.value === previous) ? previous : '3m';
 
             if (!sorties.length) {
-                content.innerHTML = '<p style="text-align:center">Pas encore de dépenses à analyser.</p>';
+                content.innerHTML = useReference()
+                    ? referenceHtml(false)
+                    : '<p style="text-align:center">Pas encore de dépenses à analyser.</p>';
                 return;
             }
 
@@ -1616,27 +2459,27 @@
             // Conseils
             const insights = [];
             if (livraisons.length) {
-                insights.push({ cls: livraisons.length >= 4 ? 'bad' : '', title: `🛍️ Achats en ligne: ${livraisons.length} livraison(s)`,
+                insights.push({ cls: livraisons.length >= 4 ? 'bad' : '', title: `Achats en ligne: ${livraisons.length} livraison(s)`,
                     text: `${formatNumber(sumMontant(livraisons))} Ar de frais de livraison seuls (≈ ${formatNumber(coutEnLigne)} Ar avec les articles). Regroupe tes commandes: 1 livraison par mois au lieu de ${livraisons.length} t'économiserait ≈ ${formatNumber(Math.max(perMonth(sumMontant(livraisons)) - Math.round(sumMontant(livraisons) / livraisons.length / 100) * 100, 0))} Ar/mois.` });
             }
             if (taxis.length) {
-                insights.push({ cls: taxis.length >= 3 ? 'bad' : '', title: `🛵 Taxi moto / Indrive: ${taxis.length} course(s)`,
+                insights.push({ cls: taxis.length >= 3 ? 'bad' : '', title: `Taxi moto / Indrive: ${taxis.length} course(s)`,
                     text: `${formatNumber(sumMontant(taxis))} Ar au total${sundaysTaxi ? `, dont ${sundaysTaxi} le dimanche` : ''}. En bus (≈ ${formatNumber(prixBus)} Ar le trajet) tu aurais dépensé ≈ ${formatNumber(taxis.length * prixBus * 2)} Ar, soit ${formatNumber(Math.max(economieTaxi, 0))} Ar d'économie possible.` });
             }
             if (grignotage) {
-                insights.push({ cls: grignotage > repas ? 'bad' : '', title: `🍬 Grignotage: ${formatNumber(perMonth(grignotage))} Ar / mois`,
+                insights.push({ cls: grignotage > repas ? 'bad' : '', title: `Grignotage: ${formatNumber(perMonth(grignotage))} Ar / mois`,
                     text: `${grignotage > repas ? 'Plus que tes vrais repas' : 'Comparé à'} (${formatNumber(perMonth(repas))} Ar/mois de repas). En tête: ${topSnacks.map(s => `${s.label} ×${s.count} (${formatNumber(s.value)} Ar)`).join(', ')}.` });
             }
             if (fuite) {
-                insights.push({ cls: 'bad', title: `🕳️ Fuites: ${formatNumber(fuite)} Ar`,
+                insights.push({ cls: 'bad', title: `Fuites: ${formatNumber(fuite)} Ar`,
                     text: `Argent perdu (« Very ») ${formatNumber(catValue('Argent perdu (Very)'))} Ar et frais de retrait/transfert ${formatNumber(catValue('Frais Mobile Money'))} Ar. Retirer moins souvent mais plus d'un coup réduit les frais.` });
             }
             if (revenus) {
                 const epargne = revenus - total;
-                insights.push({ cls: epargne >= 0 ? 'good' : 'bad', title: epargne >= 0 ? `💰 Il te reste ${formatNumber(epargne)} Ar sur la période` : `⚠️ Tu as dépensé ${formatNumber(-epargne)} Ar de plus que tes revenus`,
+                insights.push({ cls: epargne >= 0 ? 'good' : 'bad', title: epargne >= 0 ? `Il te reste ${formatNumber(epargne)} Ar sur la période` : `Tu as dépensé ${formatNumber(-epargne)} Ar de plus que tes revenus`,
                     text: `Revenus ${formatNumber(revenus)} Ar · Dépenses ${formatNumber(total)} Ar (${Math.round(total / revenus * 100)}% de ce qui est entré).` });
             }
-            insights.push({ cls: 'good', title: `✅ Ce dont tu as vraiment besoin: ≈ ${formatNumber(perMonth(essentiel))} Ar / mois`,
+            insights.push({ cls: 'good', title: `Ce dont tu as vraiment besoin: ≈ ${formatNumber(perMonth(essentiel))} Ar / mois`,
                 text: `Repas, bus, téléphone, église, hygiène, papiers. Le reste (${formatNumber(perMonth(plaisir))} Ar/mois) c'est du plaisir: shopping, snacks, taxi, sorties, cadeaux. ${moyDimanche ? `Un dimanche te coûte en moyenne ${formatNumber(moyDimanche)} Ar.` : ''}` });
 
             content.innerHTML = `
@@ -1648,28 +2491,29 @@
                 </div>
 
                 <div class="analyse-block">
-                    <h4>💡 Ce qu'il faut retenir</h4>
-                    ${insights.map(i => `<div class="insight ${i.cls}"><strong>${i.title}</strong>${i.text}</div>`).join('')}
+                    <h4>Ce qu'il faut retenir</h4>
+                    ${insights.map(i => `<div class="insight ${i.cls}">${insightIcon(i.cls)}<div><strong>${i.title}</strong>${i.text}</div></div>`).join('')}
                 </div>
 
                 <div class="analyse-block">
-                    <h4>📊 Où va mon argent</h4>
+                    <h4>Où va mon argent</h4>
                     ${barRows(byCat.map(c => ({ label: c.name, value: c.value, color: c.color, extra: `${Math.round(c.value / total * 100)}%` })))}
                 </div>
 
                 ${monthly.length > 1 ? `
                 <div class="analyse-block">
-                    <h4>📅 Évolution par mois</h4>
+                    <h4>Évolution par mois</h4>
                     ${barRows(monthly, '#E91E63')}
                 </div>` : ''}
 
                 ${grosses.length ? `
                 <div class="analyse-block">
-                    <h4>💥 Grosses dépenses (20 000 Ar et +)</h4>
+                    <h4>Grosses dépenses (20 000 Ar et +)</h4>
                     ${barRows(grosses.map(g => ({ label: `${formatDate(g.date)} · ${g.description}`, value: g.montant, color: g.cat.color })))}
                 </div>` : ''}
 
                 <p class="analyse-note">Les catégories sont devinées depuis la description de chaque dépense.</p>`;
+            if (useReference()) content.innerHTML = referenceHtml(true) + '<div class="analyse-block"><h4>Mes premières dépenses</h4></div>' + content.innerHTML;
         }
 
         // ===== Planification du mois =====
@@ -1725,11 +2569,16 @@
             });
             Object.keys(perCat).forEach(c => perCat[c] = perCat[c] * factor);
             const income = sumMontant(entrees.filter(e => e.date >= start && e.date <= end)) * factor;
+            if (useReference()) {
+                // Pas encore assez d'historique: on part des repères partagés
+                return { perCat: { ...reference.categories }, income, items, fromReference: true };
+            }
             return { perCat, income, items };
         }
 
         // Prix habituels tirés de l'historique pour préremplir les activités
         function getPresets() {
+            if (useReference() && reference.presets) return reference.presets;
             const avg = (re, min, fallback) => {
                 const list = sorties.filter(s => re.test(normalizeText(s.description)) && s.montant >= min);
                 return list.length ? round500(sumMontant(list) / list.length) : fallback;
@@ -1766,6 +2615,7 @@
         }
 
         function savePlan() {
+            syncMeta.majPlan = Date.now();
             saveData();
             renderPlan();
         }
@@ -1839,6 +2689,7 @@
             const id = Date.now();
             plan.activites.push({ id, date, nom, montant, cat });
             planSelectedDay = date;
+            syncMeta.majPlan = Date.now();
             saveData();
             renderPlan();
             const verdict = planVerdicts[id];
@@ -1876,15 +2727,15 @@
                 const extra = a.montant - fromCat;
                 if (extra === 0) {
                     a._etat = 'ok';
-                    a._verdict = `✅ Tu peux te le permettre: c'est dans ton budget « ${a.cat} ».`;
+                    a._verdict = `Tu peux te le permettre: c'est dans ton budget « ${a.cat} ».`;
                 } else if (argentLibre >= extra) {
                     argentLibre -= extra;
                     a._etat = 'libre';
-                    a._verdict = `🙂 Possible: ${formatNumber(extra)} Ar pris sur ton argent libre (il en reste ${formatNumber(argentLibre)} Ar).`;
+                    a._verdict = `Possible: ${formatNumber(extra)} Ar pris sur ton argent libre (il en reste ${formatNumber(argentLibre)} Ar).`;
                 } else {
                     argentLibre -= extra;
                     a._etat = 'over';
-                    a._verdict = `⚠️ Pas dans ton budget: il manque ${formatNumber(-argentLibre)} Ar. Réduis une autre dépense ou trouve un petit revenu.`;
+                    a._verdict = `Pas dans ton budget: il manque ${formatNumber(-argentLibre)} Ar. Réduis une autre dépense ou trouve un petit revenu.`;
                 }
                 planVerdicts[a.id] = a._verdict;
             });
@@ -1917,7 +2768,7 @@
             window.planCuts = cuts;
             if (goals.length) {
                 if (manque <= 0) {
-                    goalsHtml = `<div class="insight good"><strong>✅ Objectif atteignable sans sacrifice</strong>Tu mets ${formatNumber(epargneObjectifs)} Ar de côté ce mois et il te reste ${formatNumber(-manque)} Ar d'argent libre.</div>`;
+                    goalsHtml = `<div class="insight good"><strong>Objectif atteignable sans sacrifice</strong>Tu mets ${formatNumber(epargneObjectifs)} Ar de côté ce mois et il te reste ${formatNumber(-manque)} Ar d'argent libre.</div>`;
                 } else {
                     let reste = manque;
                     SACRIFICES.forEach(s => {
@@ -1933,7 +2784,7 @@
                     const maxParMois = Math.max(margeAvantObjectifs + SACRIFICES.reduce((a, s) => a + round500((budgets[s.cat] || 0) * s.part), 0), 0);
                     goalsHtml = `
                         <div class="insight ${reste > 0 ? 'bad' : ''}">
-                            <strong>✂️ Il manque ${formatNumber(manque)} Ar ce mois pour tes objectifs</strong>
+                            <strong>Il manque ${formatNumber(manque)} Ar ce mois pour tes objectifs</strong>
                             Voici les sacrifices possibles:
                             <ul>${cuts.map(c => `<li><b>-${formatNumber(c.montant)} Ar</b> en ${c.cat}: ${c.conseil}</li>`).join('')}</ul>
                             ${reste > 0
@@ -1969,14 +2820,14 @@
 
             content.innerHTML = `
                 <div class="kpi-grid">
-                    <div class="kpi"><div class="kpi-label">Revenu prévu</div><div class="kpi-value" style="color:#3498DB">${formatNumber(revenu)} Ar</div><div class="kpi-sub">moyenne récente ${formatNumber(round500(history.income))} Ar</div></div>
+                    <div class="kpi"><div class="kpi-label">Revenu prévu</div><div class="kpi-value" style="color:#3498DB">${formatNumber(revenu)} Ar</div><div class="kpi-sub">${history.income ? `moyenne récente ${formatNumber(round500(history.income))} Ar` : 'indique-le dans le budget plus bas'}</div></div>
                     <div class="kpi"><div class="kpi-label">Dépenses prévues</div><div class="kpi-value">${formatNumber(totalBudgets)} Ar</div><div class="kpi-sub">dont essentiel ${formatNumber(CATEGORIES.filter(c => c.type === 'essentiel').reduce((a, c) => a + budgets[c.name], 0))} Ar</div></div>
                     <div class="kpi"><div class="kpi-label">Objectifs ce mois</div><div class="kpi-value" style="color:#9B59B6">${formatNumber(epargneObjectifs)} Ar</div><div class="kpi-sub">${goals.length} objectif(s)</div></div>
                     <div class="kpi"><div class="kpi-label">Argent libre</div><div class="kpi-value" style="color:${argentLibre >= 0 ? '#4CAF50' : '#E74C3C'}">${formatNumber(argentLibre)} Ar</div><div class="kpi-sub">après budgets, objectifs et activités</div></div>
                 </div>
 
                 <div class="analyse-block">
-                    <h4>🎯 Mes objectifs</h4>
+                    <h4>Mes objectifs</h4>
                     <div class="plan-form">
                         <input id="goal-name" placeholder="Ex: Bottes" style="flex:2 1 120px">
                         <input id="goal-amount" type="number" placeholder="Prix (Ar)" style="flex:1 1 90px">
@@ -1997,7 +2848,7 @@
                 </div>
 
                 <div class="analyse-block">
-                    <h4>📅 Calendrier des activités · ${formatPeriod(month)}</h4>
+                    <h4>Calendrier des activités · ${formatPeriod(month)}</h4>
                     <div class="plan-form">
                         <select onchange="fillPreset(this.value); this.value=''">
                             <option value="">Activité type...</option>
@@ -2011,7 +2862,7 @@
                     </div>
                     <div class="cal-grid">${cells}</div>
                     <div class="activity-list">
-                        ${activites.map(a => `<div class="activity-item ${a._etat === 'over' ? 'over' : ''}">
+                        ${activites.map(a => `<div class="activity-item ${a._etat}">
                             <span>${formatDate(a.date)} · <b>${escapeHtml(a.nom)}</b> · ${formatNumber(a.montant)} Ar<br><small>${a._verdict}</small></span>
                             <button class="goal-del" onclick="deleteActivity(${a.id})">×</button>
                         </div>`).join('') || '<p style="color:#888">Clique sur un jour pour planifier une sortie, un resto... L\'app te dit si tu peux te le permettre.</p>'}
@@ -2019,7 +2870,7 @@
                 </div>
 
                 <div class="analyse-block">
-                    <h4>📋 Budget du mois (estimé sur tes 3 derniers mois, modifiable)</h4>
+                    <h4>Budget du mois (${history.fromReference ? 'estimé sur les repères Blessed Money en attendant tes propres données' : 'estimé sur tes 3 derniers mois'}, modifiable)</h4>
                     <div class="plan-form">
                         <label style="font-size:0.9em">Revenu prévu: <input type="number" value="${revenu}" onchange="setPlanRevenu(this.value)" style="width:110px"> Ar</label>
                         <button class="plan-btn secondary" onclick="resetPlanBudgets()">Revenir à l'estimation</button>
@@ -2176,7 +3027,7 @@
 
             content.innerHTML = `
                 <div class="stats-panel sorties">
-                    <h4>💸 Dépenses par ${periodLabel}</h4>
+                    <h4>Dépenses par ${periodLabel}</h4>
                     <div class="stats-list">
                         ${Object.entries(sortiesGrouped).sort((a,b) => b[0].localeCompare(a[0])).map(([d, t]) => `
                             <div class="stats-item">
@@ -2188,7 +3039,7 @@
                     <div class="stats-total">Total: ${formatNumber(totalS)} Ar</div>
                 </div>
                 <div class="stats-panel entrees">
-                    <h4>💵 Entrées par ${periodLabel}</h4>
+                    <h4>Entrées par ${periodLabel}</h4>
                     <div class="stats-list">
                         ${Object.entries(entreesGrouped).sort((a,b) => b[0].localeCompare(a[0])).map(([d, t]) => `
                             <div class="stats-item">
@@ -2254,21 +3105,115 @@
         }
 
         async function reloadFromJSON() {
-            if (confirm('📂 Recharger les données depuis data.json?')) {
+            if (confirm('Recharger les données depuis data.json?')) {
                 await loadData();
                 renderAll();
-                alert('✅ Données rechargées depuis data.json!');
+                alert('Données rechargées depuis data.json!');
             }
         }
 
         async function resetData() {
-            if (confirm('🔄 Recharger les données depuis data.json?')) {
+            if (confirm('Recharger les données depuis data.json?')) {
                 await loadData();
                 renderAll();
-                alert('✅ Données rechargées!');
+                alert('Données rechargées!');
             }
         }
 
+
+        // ===== Repères partagés (pour les nouveaux utilisateurs) =====
+        // L'admin publie des moyennes anonymes (catégories + prix habituels, sans noms ni revenus);
+        // un utilisateur qui n'a pas encore assez de données s'en sert pour ses estimations.
+        const REFERENCE_KEY = 'porteMonnaie:reference';
+        const PRIVATE_CATEGORIES = ['Cadeaux & proches', 'Argent perdu (Very)'];
+        let reference = null;
+        try { reference = JSON.parse(localStorage.getItem(REFERENCE_KEY) || 'null'); } catch (e) {}
+
+        function hasEnoughData() {
+            if (sorties.length < 30) return false;
+            const first = sorties.reduce((m, x) => x.date < m ? x.date : m, sorties[0].date);
+            return daysBetween(first, new Date().toISOString().split('T')[0]) >= 30;
+        }
+
+        function useReference() {
+            return !!(reference && reference.categories) && !hasEnoughData();
+        }
+
+        function buildReference() {
+            const month = addMonths(new Date().toISOString().slice(0, 7), 1);
+            const history = getHistory(month);
+            const categories = {};
+            Object.entries(history.perCat).forEach(([cat, v]) => {
+                if (!PRIVATE_CATEGORIES.includes(cat) && v > 0) categories[cat] = round500(v);
+            });
+            const first = sorties.reduce((m, x) => x.date < m ? x.date : m, sorties[0].date);
+            const nbMonths = Math.max(daysBetween(first, new Date().toISOString().split('T')[0]) / 30.4, 1);
+            const items = buildSuggestIndex(sorties, 'description', 'source')
+                .filter(e => e.count >= 3 && !PRIVATE_CATEGORIES.includes(getCategory({ description: e.label }).name))
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 150)
+                .map(e => ({ label: e.label, montant: e.montant, parMois: Math.round(e.count / nbMonths * 10) / 10 }));
+            return { categories, items, presets: getPresets(), mois: Math.round(nbMonths) };
+        }
+
+        // Appelé à la connexion: l'admin met à jour les repères, les autres les récupèrent
+        async function syncReference() {
+            const base = IS_SERVER ? '' : currentUser && currentUser.server;
+            if (!currentUser || !currentUser.token || base === undefined || (!IS_SERVER && !base)) return;
+            try {
+                if (currentUser.role === 'admin' && IS_SERVER && hasEnoughData()) {
+                    await apiFetch(`${base}/api/reference`, { method: 'POST', body: JSON.stringify(buildReference()) });
+                }
+                const { reference: ref } = await apiFetch(`${base}/api/reference`);
+                if (ref) {
+                    reference = ref;
+                    localStorage.setItem(REFERENCE_KEY, JSON.stringify(ref));
+                    if (useReference()) renderAll();
+                }
+            } catch (e) {
+                console.log('Repères indisponibles', e);
+            }
+        }
+
+        function referenceHtml(hasOwnData) {
+            const cats = Object.entries(reference.categories).sort((a, b) => b[1] - a[1]);
+            const total = cats.reduce((a, [, v]) => a + v, 0);
+            const typeOf = name => (CATEGORIES.find(c => c.name === name) || {}).type;
+            const essentiel = cats.filter(([n]) => typeOf(n) === 'essentiel').reduce((a, [, v]) => a + v, 0);
+            const plaisir = total - essentiel;
+            const price = re => (reference.items.find(i => re.test(normalizeText(i.label))) || {}).montant;
+            const bus = price(/^bus$/) || 600;
+            const taxi = (reference.presets || []).find(pr => /indrive|taxi/i.test(pr.nom));
+            const liv = price(/livraison/);
+            const tips = [
+                liv ? `Chaque commande en ligne coûte en plus ~${formatNumber(liv)} Ar de livraison: regroupe tes achats en une seule commande par mois.` : '',
+                taxi ? `Un Indrive / taxi moto coûte ~${formatNumber(taxi.montant)} Ar contre ~${formatNumber(bus)} Ar en bus: garde-le pour les vraies urgences.` : '',
+                `Les petits snacks (goûters, bonbons, jus) montent vite: c'est souvent le premier poste qui dépasse sans qu'on s'en rende compte.`,
+                `Note chaque dépense le jour même: au bout d'un mois, l'app pourra te faire ta propre analyse.`,
+            ].filter(Boolean);
+            return `
+                <div class="analyse-block">
+                    <div class="insight"><svg class="ic"><use href="#i-spark"/></svg><div><strong>Repères pour bien démarrer</strong>
+                        ${hasOwnData ? 'Tu as encore peu de données: en attendant, ' : ''}voici ce que coûte un mois en moyenne d'après les dépenses réelles enregistrées dans Blessed Money (moyennes anonymes, sans noms ni revenus).</div></div>
+                </div>
+                <div class="kpi-grid">
+                    <div class="kpi"><div class="kpi-label">Budget mensuel typique</div><div class="kpi-value">${formatNumber(total)} Ar</div></div>
+                    <div class="kpi"><div class="kpi-label">dont essentiel</div><div class="kpi-value" style="color:#4CAF50">${formatNumber(essentiel)} Ar</div><div class="kpi-sub">repas, bus, téléphone, hygiène...</div></div>
+                    <div class="kpi"><div class="kpi-label">dont plaisir</div><div class="kpi-value" style="color:#FF6B6B">${formatNumber(plaisir)} Ar</div><div class="kpi-sub">shopping, snacks, sorties...</div></div>
+                </div>
+                <div class="analyse-block">
+                    <h4>Conseils tirés des données</h4>
+                    ${tips.map(t => `<div class="insight">${t}</div>`).join('')}
+                </div>
+                <div class="analyse-block">
+                    <h4>Budget typique par catégorie (par mois)</h4>
+                    ${barRows(cats.map(([name, v]) => ({ label: name, value: v, color: (CATEGORIES.find(c => c.name === name) || {}).color || '#999' })))}
+                </div>
+                <div class="analyse-block">
+                    <h4>Prix habituels</h4>
+                    ${barRows(reference.items.slice(0, 10).map(i => ({ label: i.label, value: i.montant, color: getCategory({ description: i.label }).color, extra: `~${i.parMois}×/mois` })))}
+                </div>`;
+        }
 
         // ===== Habitudes inhabituelles (détection automatique) =====
         // "Jean 5☺️", "jean" et "Jean🙆" deviennent la même clé "jean"
@@ -2353,10 +3298,13 @@
             const box = document.getElementById('habit-alerts');
             if (!box) return;
             const alerts = detectHabits();
-            box.innerHTML = alerts.map(a => `
+            const warning = usingDefaultPassword
+                ? `<div class="habit-alert"><span><svg class="ic"><use href="#i-alert"/></svg> <span>Tu utilises encore le mot de passe par défaut.</span></span><button class="plan-btn secondary" style="line-height:normal" onclick="openAccount()">Changer</button></div>`
+                : '';
+            box.innerHTML = warning + alerts.map(a => `
                 <div class="habit-alert">
-                    <span>🔔 ${a.text}</span>
-                    <button onclick="dismissHabit('${a.id.replace(/'/g, "\\'")}', '${a.week}')" title="Masquer cette semaine">×</button>
+                    <span><svg class="ic"><use href="#i-bell"/></svg> <span>${a.text}</span></span>
+                    <button onclick="dismissHabit('${a.id.replace(/'/g, "\\'")}', '${a.week}')" title="Masquer cette semaine"><svg class="ic"><use href="#i-x"/></svg></button>
                 </div>`).join('');
         }
 
@@ -2410,6 +3358,28 @@
         }
 
         let suggestBox = null;
+
+        // Place la liste sous le champ, ou au-dessus si le clavier ne laisse pas la place
+        function placeSuggestBox(input) {
+            const rect = input.getBoundingClientRect();
+            const vv = window.visualViewport;
+            const visibleBottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
+            const visibleTop = vv ? vv.offsetTop : 0;
+            const below = visibleBottom - rect.bottom - 8;
+            const above = rect.top - visibleTop - 8;
+            suggestBox.style.maxHeight = '';
+            const natural = suggestBox.scrollHeight;
+            const showAbove = below < Math.min(natural, 180) && above > below;
+            const room = Math.max(showAbove ? above : below, 90);
+            suggestBox.style.maxHeight = Math.min(natural, room) + 'px';
+            const height = Math.min(natural, room);
+            const pageWidth = document.documentElement.clientWidth;
+            const boxWidth = Math.min(Math.max(rect.width, 220), pageWidth - 8);
+            suggestBox.style.left = Math.max(4, Math.min(rect.left, pageWidth - boxWidth - 4)) + window.scrollX + 'px';
+            suggestBox.style.width = boxWidth + 'px';
+            suggestBox.style.top = (showAbove ? rect.top - height - 4 : rect.bottom + 4) + window.scrollY + 'px';
+        }
+
         function attachAutocomplete(input, getIndex, onPick, describe) {
             if (!suggestBox) {
                 suggestBox = document.createElement('div');
@@ -2427,16 +3397,14 @@
             const show = () => {
                 results = searchSuggestions(getIndex(), input.value);
                 if (!results.length || document.activeElement !== input) return hide();
-                const rect = input.getBoundingClientRect();
-                suggestBox.style.left = (rect.left + window.scrollX) + 'px';
-                suggestBox.style.top = (rect.bottom + window.scrollY + 2) + 'px';
-                suggestBox.style.width = Math.max(rect.width, 220) + 'px';
                 suggestBox.innerHTML = (input.value.trim() ? '' : '<div class="suggest-title">Tes habitudes ce jour-ci</div>') +
                     results.map((r, i) => `<div class="suggest-item ${i === active ? 'active' : ''}" data-i="${i}">
                         <span>${escapeHtml(r.label)}</span><small>${describe(r)}</small>
                     </div>`).join('');
                 suggestBox.style.display = 'block';
+                placeSuggestBox(input);
             };
+            input.addEventListener('ac:reposition', () => { if (suggestBox.style.display === 'block' && suggestBox.owner === input) placeSuggestBox(input); });
             suggestBox.addEventListener('pointerdown', e => {
                 const item = e.target.closest('.suggest-item');
                 if (item && suggestBox.owner === input) {
@@ -2459,15 +3427,23 @@
 
         let sortieIndexCache = null, entreeIndexCache = null, indexVersion = '';
         function getSortieIndex() {
-            const v = sorties.length + ':' + entrees.length;
+            const v = sorties.length + ':' + entrees.length + ':' + (reference && reference.updatedAt);
             if (v !== indexVersion) { sortieIndexCache = entreeIndexCache = null; indexVersion = v; }
-            return sortieIndexCache = sortieIndexCache || buildSuggestIndex(sorties, 'description', 'source');
+            if (!sortieIndexCache) {
+                sortieIndexCache = buildSuggestIndex(sorties, 'description', 'source');
+                const own = new Set(sortieIndexCache.map(e => e.key));
+                (reference && reference.items || []).forEach(i => {
+                    const key = itemKey(i.label);
+                    if (key && !own.has(key)) sortieIndexCache.push({ key, label: i.label, montant: i.montant, extra: 'Wallet', count: 0, score: i.parMois / 100, days: {}, ref: true });
+                });
+            }
+            return sortieIndexCache;
         }
         function getEntreeIndex() {
             getSortieIndex();
             return entreeIndexCache = entreeIndexCache || buildSuggestIndex(entrees, 'source', 'destinataire');
         }
-        const describeUsual = r => `${formatNumber(r.montant)} Ar · ×${r.count}`;
+        const describeUsual = r => r.ref ? `~${formatNumber(r.montant)} Ar · repère` : `${formatNumber(r.montant)} Ar · ×${r.count}`;
 
         function setupAutocomplete() {
             attachAutocomplete(document.getElementById('sortie-desc'), getSortieIndex, r => {
@@ -2512,13 +3488,13 @@
             const reste = (st.budgets[category.name] || 0) - (st.reel[category.name] || 0) - plannedLater;
             const depassement = montant - Math.max(reste, 0);
             const known = getSortieIndex().find(e => e.key === itemKey(description));
-            const rare = !known || known.count <= 1;
+            const rare = hasEnoughData() && (!known || (!known.ref && known.count <= 1));
             const cher = known && known.montant && montant >= known.montant * 2 && montant - known.montant >= 3000;
             const libre = st.argentLibre; // tient compte des activités déjà planifiées
 
             // Objectif pas encore financé ce mois: tout achat plaisir l'éloigne
             if (st.goals.length && libre < 0 && montant >= 3000) {
-                return `⚠️ Achat plaisir: ${formatNumber(montant)} Ar en « ${category.name} »\n\n` +
+                return `Achat plaisir: ${formatNumber(montant)} Ar en « ${category.name} »\n\n` +
                     `Ton objectif « ${st.goals.map(g => g.nom).join(', ')} » n'est pas encore financé ce mois: il manque ${formatNumber(-libre)} Ar.\n` +
                     `Avec cet achat, il manquera ${formatNumber(montant - libre)} Ar.` +
                     (rare ? `\nEn plus, tu n'achètes presque jamais ça: achat impulsif ?` : '') +
@@ -2527,7 +3503,7 @@
             }
             if (st.goals.length && depassement > 0 && depassement > libre) {
                 const manque = depassement - Math.max(libre, 0);
-                return `⚠️ Achat plaisir non prévu (${formatNumber(montant)} Ar en « ${category.name} »)\n\n` +
+                return `Achat plaisir non prévu (${formatNumber(montant)} Ar en « ${category.name} »)\n\n` +
                     `Ton budget « ${category.name} » ${reste > 0 ? `n'a plus que ${formatNumber(reste)} Ar` : 'est déjà épuisé'} ce mois.\n` +
                     `Cet achat retire ${formatNumber(manque)} Ar à ton objectif « ${st.goals.map(g => g.nom).join(', ')} ».` +
                     (rare ? '\nEn plus, tu n\'achètes presque jamais ça: achat impulsif ?' : '') +
@@ -2535,12 +3511,12 @@
                     '\n\nTu veux vraiment l\'ajouter ?';
             }
             if (depassement > 0 && montant >= 10000) {
-                return `⚠️ ${formatNumber(montant)} Ar en « ${category.name} » dépasse ton budget du mois de ${formatNumber(depassement)} Ar.` +
+                return `${formatNumber(montant)} Ar en « ${category.name} » dépasse ton budget du mois de ${formatNumber(depassement)} Ar.` +
                     (rare ? '\nTu n\'achètes presque jamais ça: achat impulsif ?' : '') +
                     '\n\nTu veux vraiment l\'ajouter ?';
             }
             if (cher && montant >= 5000) {
-                return `🤔 ${formatNumber(montant)} Ar pour « ${description} » alors que tu paies d'habitude ~${formatNumber(known.montant)} Ar.\n\nC'est bien ça ?`;
+                return `${formatNumber(montant)} Ar pour « ${description} » alors que tu paies d'habitude ~${formatNumber(known.montant)} Ar.\n\nC'est bien ça ?`;
             }
             return null;
         }
@@ -2553,7 +3529,7 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('✅ Service Worker enregistré'))
+                    .then(reg => console.log('Service Worker enregistré'))
                     .catch(err => console.log('Service Worker non enregistré:', err));
             });
         }
