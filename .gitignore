@@ -31,3 +31,4 @@ android/**/*.jks
 *.iml
 .DS_Store
 Thumbs.db
+backups/

@@ -226,6 +226,193 @@
             transform: scale(1.05);
         }
 
+        /* Analyse */
+        .analyse-section { border-color: #E91E63; }
+        .analyse-section .stats-title { color: #E91E63; }
+        .analyse-select {
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: 2px solid #E91E63;
+            font-family: inherit;
+            font-size: 1em;
+            background: white;
+        }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .kpi {
+            background: #FFF0F5;
+            border-radius: 15px;
+            padding: 12px;
+            text-align: center;
+        }
+        .kpi .kpi-label { font-size: 0.8em; color: #666; }
+        .kpi .kpi-value { font-size: 1.3em; font-weight: 700; color: #E91E63; margin-top: 4px; }
+        .kpi .kpi-sub { font-size: 0.75em; color: #888; margin-top: 2px; }
+        .analyse-block { margin-bottom: 22px; }
+        .analyse-block h4 { color: #333; margin-bottom: 10px; }
+        .bar-row {
+            display: grid;
+            grid-template-columns: minmax(110px, 190px) 1fr auto;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85em;
+            margin-bottom: 6px;
+        }
+        .bar-track { background: #F1F1F1; border-radius: 6px; height: 14px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 6px; }
+        .bar-value { font-weight: 600; white-space: nowrap; }
+        .insight {
+            border-left: 5px solid #FFB300;
+            background: #FFF8E1;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            line-height: 1.45;
+        }
+        .insight.good { border-color: #4ECDC4; background: #E8FAF8; }
+        .insight.bad { border-color: #FF6B6B; background: #FFF0F0; }
+        .insight strong { display: block; margin-bottom: 2px; }
+        .analyse-note { font-size: 0.75em; color: #888; margin-top: 8px; }
+        /* Alertes d'habitudes */
+        #habit-alerts { margin-bottom: 20px; }
+        .habit-alert {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            background: #FFF8E1;
+            border-left: 5px solid #FFB300;
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            font-size: 0.88em;
+        }
+        .habit-alert button { background: none; border: none; font-size: 1.2em; cursor: pointer; color: #999; }
+
+        /* Autocomplétion */
+        .suggest-box {
+            display: none;
+            position: absolute;
+            z-index: 1000;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+            overflow: hidden;
+            max-width: calc(100vw - 20px);
+        }
+        .suggest-title { font-size: 0.72em; color: #888; padding: 6px 12px 2px; }
+        .suggest-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 9px 12px;
+            cursor: pointer;
+            font-size: 0.92em;
+        }
+        .suggest-item small { color: #999; white-space: nowrap; }
+        .suggest-item:hover, .suggest-item.active { background: #FFF0F5; }
+
+        /* Planification */
+        .plan-section { border-color: #3498DB; }
+        .plan-section .stats-title { color: #3498DB; }
+        .plan-select { border-color: #3498DB; }
+        .plan-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .plan-form input, .plan-form select {
+            padding: 8px 10px;
+            border: 2px solid #DDD;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.9em;
+            min-width: 0;
+        }
+        .plan-form button, .plan-btn {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 10px;
+            background: #3498DB;
+            color: white;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .plan-btn.secondary { background: #ECF0F1; color: #333; }
+        .budget-table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+        .budget-table th, .budget-table td { padding: 6px 4px; border-bottom: 1px solid #EEE; text-align: right; }
+        .budget-table th:first-child, .budget-table td:first-child { text-align: left; }
+        .budget-table input { width: 90px; padding: 4px 6px; border: 1px solid #DDD; border-radius: 6px; text-align: right; font-family: inherit; }
+        .budget-table .over { color: #E74C3C; font-weight: 700; }
+        .budget-table .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+        .budget-table tfoot td { font-weight: 700; border-top: 2px solid #CCC; }
+        .goal-card {
+            background: #F4F9FD;
+            border-radius: 15px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+        }
+        .goal-card .goal-head { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+        .goal-card ul { margin: 6px 0 0 18px; font-size: 0.88em; line-height: 1.5; }
+        .goal-del { background: none; border: none; color: #E74C3C; cursor: pointer; font-size: 1.1em; }
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .cal-head { text-align: center; font-size: 0.75em; font-weight: 700; color: #666; padding: 4px 0; }
+        .cal-day {
+            min-height: 70px;
+            background: #FAFAFA;
+            border-radius: 8px;
+            padding: 4px;
+            font-size: 0.72em;
+            cursor: pointer;
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+        .cal-day:hover { border-color: #3498DB; }
+        .cal-day.empty { background: transparent; cursor: default; border: none; }
+        .cal-day.today { border-color: #E91E63; }
+        .cal-day.selected { border-color: #3498DB; background: #EAF4FC; }
+        .cal-num { font-weight: 700; color: #555; }
+        .cal-spent { color: #999; font-size: 0.9em; }
+        .cal-chip {
+            display: block;
+            background: #D6EAF8;
+            border-radius: 5px;
+            padding: 1px 4px;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cal-chip.over { background: #FADBD8; color: #C0392B; }
+        .cal-chip.done { background: #D5F5E3; }
+        .activity-list { font-size: 0.88em; margin-top: 10px; }
+        .activity-item { display: flex; justify-content: space-between; gap: 8px; padding: 5px 0; border-bottom: 1px dashed #DDD; }
+        .activity-item.over { color: #C0392B; }
+
+        @media (max-width: 600px) {
+            .cal-day { min-height: 48px; font-size: 0.62em; padding: 2px; }
+            .cal-chip { padding: 0 2px; }
+            .budget-table input { width: 72px; }
+        }
+
+        @media (max-width: 600px) {
+            .bar-row { grid-template-columns: 1fr auto; row-gap: 3px; margin-bottom: 10px; }
+            .bar-track { grid-column: 1 / -1; grid-row: 2; }
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+        }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -648,6 +835,9 @@
             </div>
         </div>
 
+        <!-- Alertes d'habitudes inhabituelles -->
+        <div id="habit-alerts"></div>
+
         <!-- Section Statistiques -->
         <div class="stats-section">
             <h2 class="stats-title">Statistiques</h2>
@@ -657,6 +847,24 @@
                 <button class="stats-tab" onclick="showStats('monthly')">Mois</button>
             </div>
             <div class="stats-grid" id="stats-content"></div>
+        </div>
+
+        <!-- Section Analyse -->
+        <div class="stats-section analyse-section">
+            <h2 class="stats-title">Analyse de mes dépenses</h2>
+            <div class="stats-tabs">
+                <select id="analyse-period" class="analyse-select" onchange="renderAnalyse()"></select>
+            </div>
+            <div id="analyse-content"></div>
+        </div>
+
+        <!-- Section Planification -->
+        <div class="stats-section plan-section">
+            <h2 class="stats-title">Planifier mon mois</h2>
+            <div class="stats-tabs">
+                <select id="plan-month" class="analyse-select plan-select" onchange="renderPlan()"></select>
+            </div>
+            <div id="plan-content"></div>
         </div>
 
         <!-- Tabs -->
@@ -791,6 +999,7 @@
                 <input type="file" id="import-file" accept=".json" onchange="importJSON(event)" style="display: none;">
             </label>
             <button onclick="exportData()" style="background: #4ECDC4; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">Exporter</button>
+            <button id="send-pc-btn" onclick="sendToPC()" style="background: #3498DB; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">Envoyer au PC</button>
             <button onclick="clearAllData()" style="background: #FF6B6B; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">Effacer</button>
         </div>
     </div>
@@ -809,14 +1018,33 @@
         </div>
     </div>
 
+    <!-- Modal export (secours quand le téléchargement est impossible dans l'app) -->
+    <div class="modal" id="export-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Export JSON</h2>
+            <p style="font-size: 0.9em; margin-bottom: 10px;">Copie ce texte et envoie-le toi (mail, Messenger, notes...), puis colle-le dans un fichier .json sur le PC.</p>
+            <textarea id="export-text" readonly style="width: 100%; height: 250px; font-family: monospace; font-size: 0.75em;"></textarea>
+            <div class="modal-buttons">
+                <button type="button" class="action-btn cancel-btn" onclick="document.getElementById('export-modal').classList.remove('active')">Fermer</button>
+                <button type="button" class="action-btn save-btn" onclick="copyExport()">Copier</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let sorties = [];
         let entrees = [];
         let soldesInitiaux = { Chambre: 0, Wallet: 0, Mvola: 0, Airtel: 0 };
+        let plan = { revenus: {}, budgets: {}, objectifs: [], activites: [] };
         let editingId = null;
         let editingType = null;
         let currentStatsView = 'daily';
         const STORAGE_KEY = 'porteMonnaie:v2026-08-03';
+        const LEGACY_STORAGE_KEY = 'porteMonnaie'; // clé utilisée par l'app depuis février
+        const PC_URL_KEY = 'porteMonnaie:pcUrl';
+        // Dans l'app Android (Capacitor) ou sur le site servi par server.js
+        const IS_NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+        const IS_SERVER = !IS_NATIVE && location.protocol.startsWith('http');
 
         function normalizeData(data) {
             const normalized = {
@@ -828,6 +1056,14 @@
                     Mvola: 0,
                     Airtel: 0,
                     ...(data?.soldesInitiaux || {})
+                },
+                // Planification: revenus prévus / budgets par mois, objectifs, activités
+                plan: {
+                    revenus: {},
+                    budgets: {},
+                    objectifs: [],
+                    activites: [],
+                    ...(data?.plan || {})
                 }
             };
 
@@ -840,12 +1076,33 @@
 
         // Charger depuis localStorage ou data.json embarqué
         async function loadData() {
-            const saved = localStorage.getItem(STORAGE_KEY);
+            // Sur le PC, data.json (via server.js) fait foi: c'est là qu'arrivent les envois du téléphone
+            if (IS_SERVER) {
+                try {
+                    const response = await fetch('/api/load', { cache: 'no-store' });
+                    if (response.ok) {
+                        const data = normalizeData(await response.json());
+                        sorties = data.sorties;
+                        entrees = data.entrees;
+                        soldesInitiaux = data.soldesInitiaux;
+                        plan = data.plan;
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify({ sorties, entrees, soldesInitiaux, plan }));
+                        renderAll();
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Serveur injoignable, utilisation du localStorage', e);
+                }
+            }
+
+            // Ne jamais perdre les données saisies avec l'ancienne clé
+            const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
             if (saved) {
                 const data = normalizeData(JSON.parse(saved));
                 sorties = data.sorties;
                 entrees = data.entrees;
                 soldesInitiaux = data.soldesInitiaux;
+                        plan = data.plan;
                 saveData();
             } else {
                 // Premier lancement: charger data.json embarqué
@@ -856,6 +1113,7 @@
                         sorties = data.sorties;
                         entrees = data.entrees;
                         soldesInitiaux = data.soldesInitiaux;
+                        plan = data.plan;
                         saveData(); // Sauvegarder dans localStorage
                     }
                 } catch (e) {
@@ -867,8 +1125,15 @@
 
         // Sauvegarder dans localStorage
         function saveData() {
-            const data = { sorties, entrees, soldesInitiaux };
+            const data = { sorties, entrees, soldesInitiaux, plan };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            if (IS_SERVER) {
+                fetch('/api/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                }).catch(err => console.log('Sauvegarde serveur impossible', err));
+            }
         }
 
         // Calculer les soldes actuels
@@ -902,6 +1167,7 @@
                     sorties = data.sorties;
                     entrees = data.entrees;
                     soldesInitiaux = data.soldesInitiaux;
+                        plan = data.plan;
                     saveData();
                     renderAll();
                     alert('Données importées avec succès!');
@@ -914,10 +1180,15 @@
         }
 
         // Exporter en JSON
-        async function exportData() {
-            const data = { sorties, entrees, soldesInitiaux, exportDate: new Date().toISOString() };
-            const json = JSON.stringify(data, null, 4);
+        function buildExport() {
+            const data = { sorties, entrees, soldesInitiaux, plan, exportDate: new Date().toISOString() };
             const fileName = `porte-monnaie-${new Date().toISOString().split('T')[0]}.json`;
+            return { data, json: JSON.stringify(data, null, 4), fileName };
+        }
+
+        // Exporter en JSON
+        async function exportData() {
+            const { json, fileName } = buildExport();
             const blob = new Blob([json], { type: 'application/json' });
 
             try {
@@ -931,7 +1202,14 @@
                     return;
                 }
             } catch (err) {
-                console.log('Partage natif indisponible, bascule vers téléchargement', err);
+                console.log('Partage natif indisponible', err);
+            }
+
+            // Dans la WebView Android, un lien "download" ne fait rien: on affiche le JSON à copier
+            if (IS_NATIVE) {
+                document.getElementById('export-text').value = json;
+                document.getElementById('export-modal').classList.add('active');
+                return;
             }
 
             const url = URL.createObjectURL(blob);
@@ -942,6 +1220,40 @@
             a.click();
             a.remove();
             setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        async function copyExport() {
+            const textarea = document.getElementById('export-text');
+            try {
+                await navigator.clipboard.writeText(textarea.value);
+            } catch (err) {
+                textarea.focus();
+                textarea.select();
+                document.execCommand('copy');
+            }
+            alert('JSON copié !');
+        }
+
+        // Envoyer les données au serveur du PC (node server.js) via le Wi-Fi
+        async function sendToPC() {
+            const saved = localStorage.getItem(PC_URL_KEY) || 'http://192.168.1.3:3000';
+            const input = prompt('Adresse du PC (affichée au démarrage de server.js) :', saved);
+            if (!input) return;
+            const baseUrl = (input.startsWith('http') ? input : `http://${input}`).replace(/\/+$/, '');
+            localStorage.setItem(PC_URL_KEY, baseUrl);
+
+            try {
+                const response = await fetch(`${baseUrl}/api/save?source=phone`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: buildExport().json
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success) throw new Error(result.error || response.status);
+                alert(`✅ Envoyé au PC ! (${sorties.length} sorties, ${entrees.length} entrées)`);
+            } catch (err) {
+                alert(`❌ Envoi impossible vers ${baseUrl}\n\nVérifie que server.js tourne sur le PC, que le téléphone est sur le même Wi-Fi et que le pare-feu Windows autorise Node.\n\n${err.message}`);
+            }
         }
 
         // Effacer toutes les données
@@ -960,6 +1272,7 @@
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('sortie-date').value = today;
             document.getElementById('entree-date').value = today;
+            setupAutocomplete();
             await loadData();
         });
 
@@ -983,6 +1296,12 @@
             e.preventDefault();
             const montant = parseFloat(document.getElementById('sortie-montant').value);
             const source = document.getElementById('sortie-source').value;
+            const warning = impulseWarning({
+                date: document.getElementById('sortie-date').value,
+                description: document.getElementById('sortie-desc').value,
+                montant
+            });
+            if (warning && !confirm(warning)) return;
             
             sorties.push({
                 id: Date.now(),
@@ -1147,6 +1466,582 @@
             renderEntrees();
             calculateCompte();
             renderStats();
+            renderAnalyse();
+            renderPlan();
+            renderHabits();
+        }
+
+        // ===== Analyse des dépenses =====
+        // Catégories devinées depuis la description (ordre = priorité)
+        const CATEGORIES = [
+            { name: 'Argent perdu (Very)', color: '#7F8C8D', type: 'fuite', re: /^very/ },
+            { name: 'Église & dons', color: '#9B59B6', type: 'essentiel', re: /tithe|offering|thanksgiving|chorale|cotisation|prophet|dime|offrande/ },
+            { name: 'Livraison (achat en ligne)', color: '#E74C3C', type: 'plaisir', re: /livraison|colis/ },
+            { name: 'Taxi moto / Indrive', color: '#E67E22', type: 'plaisir', re: /taxi moto|indrive|yango|taxi$/ },
+            { name: 'Transport quotidien', color: '#3498DB', type: 'essentiel', re: /^bus|bajaj|bicyclette|bisclette|cyclo|pousse|^transport/ },
+            { name: 'Vêtements & accessoires', color: '#F06292', type: 'plaisir', re: /akanjo|jean|jupe|combi|body|manteau|haut|robe|pantalon|pant working|friperie|short|pyjama|mayo|slip|chaussette|bonnet|gant|poketra|bague|lunette|ceinture|cache teton|chaussure|kiraro/ },
+            { name: 'Beauté & hygiène', color: '#BA68C8', type: 'essentiel', re: /curly|cire|epilatoire|gloss|parfum|creme|colgate|dentifrice|brosse|savon|serviette|softex|mouchoir|cache bouche|toilette|pipi|ody moka|shampo/ },
+            { name: 'Téléphone & abonnements', color: '#26A69A', type: 'essentiel', re: /credit|appel|kasaina|spotify|forfait|internet/ },
+            { name: 'Frais Mobile Money', color: '#95A5A6', type: 'fuite', re: /^frais/ },
+            { name: 'Sport & loisirs', color: '#00ACC1', type: 'plaisir', re: /piscine|tennis|basket|gym|^jeu$|billet|entree|smatch|club|cinema|sortie/ },
+            { name: 'Cadeaux & proches', color: '#FF8A65', type: 'plaisir', re: /cadeau|fetra|fete des meres|fifaliana|aunty|christophine|gabriel|isra|alan|minah|tsaratiana|famangina|nounours|mpangataka|enveloppe|envelope|mum|mummy/ },
+            { name: 'Études, papiers & auto-école', color: '#5C6BC0', type: 'essentiel', re: /auto|commune|legalisation|photo|imprimerie|papier|stylo|bloc|bible|cahier|livre/ },
+            { name: 'Repas', color: '#4CAF50', type: 'essentiel', re: /dejeun|diner|petit dej|breakfast|sakafo|lasopy|compose|sandwich|panini|tacos|burger|quiche|pain pate|salade|vary|nem|sambos|pain aux|pain frite|oeuf|oignon|matsiro|sedap|koba|nan$|potata|farilac/ },
+            { name: 'Grignotage & boissons', color: '#FFB300', type: 'plaisir', re: /coca|soda|fanta|sprite|biere|gout|bonbon|chips|salto|choco|cocomo|glace|jus|yaourt|makasoaka|menakely|frego|kipcoco|cookie|biscuit|donut|beignet|croissant|tarte|gateau|mofo|cafe|coffee|boisson|ronono|rano|frite|catless|cacapigeon|banane|voasary|bolo|pakopako|astro|tsiky|greffy|illico/ },
+            { name: 'Maison & divers', color: '#A1887F', type: 'essentiel', re: /.*/ },
+        ];
+
+        function normalizeText(s) {
+            return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+        }
+
+        function getCategory(sortie) {
+            const d = normalizeText(sortie.description);
+            return CATEGORIES.find(c => c.re.test(d));
+        }
+
+        function daysBetween(a, b) {
+            return Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 864e5) + 1;
+        }
+
+        function sumMontant(items) {
+            return items.reduce((s, x) => s + (Number(x.montant) || 0), 0);
+        }
+
+        function barRows(entries, color) {
+            const max = Math.max(...entries.map(e => e.value), 1);
+            return entries.map(e => `
+                <div class="bar-row">
+                    <span>${e.label}</span>
+                    <div class="bar-track"><div class="bar-fill" style="width:${(e.value / max * 100).toFixed(1)}%; background:${e.color || color}"></div></div>
+                    <span class="bar-value">${formatNumber(e.value)} Ar${e.extra ? ' · ' + e.extra : ''}</span>
+                </div>`).join('');
+        }
+
+        function renderAnalyse() {
+            const content = document.getElementById('analyse-content');
+            const select = document.getElementById('analyse-period');
+            if (!content || !select) return;
+
+            // Liste des périodes: tout, 3 derniers mois, puis chaque mois
+            const months = [...new Set(sorties.map(s => s.date.slice(0, 7)))].sort().reverse();
+            const previous = select.value || '3m';
+            select.innerHTML = [
+                `<option value="3m">3 derniers mois</option>`,
+                `<option value="all">Depuis le début</option>`,
+                ...months.map(m => `<option value="${m}">${formatPeriod(m)}</option>`)
+            ].join('');
+            select.value = [...select.options].some(o => o.value === previous) ? previous : '3m';
+
+            if (!sorties.length) {
+                content.innerHTML = '<p style="text-align:center">Pas encore de dépenses à analyser.</p>';
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            const lastDate = sorties.reduce((m, s) => s.date > m ? s.date : m, '');
+            const endDate = lastDate > today ? lastDate : today;
+            let start, end, items;
+            if (select.value === 'all') {
+                start = sorties.reduce((m, s) => s.date < m ? s.date : m, endDate);
+                end = endDate;
+            } else if (select.value === '3m') {
+                // Mois en cours + 2 mois pleins avant
+                const d = new Date(endDate.slice(0, 7) + '-01T12:00:00');
+                d.setMonth(d.getMonth() - 2);
+                start = d.toISOString().split('T')[0];
+                end = endDate;
+            } else {
+                start = select.value + '-01';
+                const d = new Date(start + 'T12:00:00');
+                d.setMonth(d.getMonth() + 1, 0);
+                end = d.toISOString().split('T')[0];
+                if (end > endDate) end = endDate;
+            }
+            items = sorties.filter(s => s.date >= start && s.date <= end).map(s => ({ ...s, cat: getCategory(s) }));
+            const nbDays = Math.max(daysBetween(start, end), 1);
+            const perMonth = v => Math.round(v / nbDays * 30.4 / 100) * 100;
+            const total = sumMontant(items);
+
+            // Totaux par catégorie
+            const byCat = CATEGORIES.map(c => {
+                const list = items.filter(i => i.cat === c);
+                return { ...c, list, value: sumMontant(list) };
+            }).filter(c => c.value > 0).sort((a, b) => b.value - a.value);
+            const catValue = name => (byCat.find(c => c.name === name) || { value: 0 }).value;
+            const catList = name => (byCat.find(c => c.name === name) || { list: [] }).list;
+            const essentiel = byCat.filter(c => c.type === 'essentiel').reduce((s, c) => s + c.value, 0);
+            const plaisir = byCat.filter(c => c.type === 'plaisir').reduce((s, c) => s + c.value, 0);
+            const fuite = byCat.filter(c => c.type === 'fuite').reduce((s, c) => s + c.value, 0);
+
+            // Revenus sur la même période
+            const revenus = sumMontant(entrees.filter(e => e.date >= start && e.date <= end));
+
+            // Achats en ligne: frais de livraison + vêtements/beauté achetés le même jour
+            const livraisons = catList('Livraison (achat en ligne)');
+            const livDays = new Set(livraisons.map(l => l.date));
+            const achatsEnLigne = items.filter(i => livDays.has(i.date) && ['Vêtements & accessoires', 'Beauté & hygiène'].includes(i.cat.name) && i.montant >= 5000);
+            const coutEnLigne = sumMontant(livraisons) + sumMontant(achatsEnLigne);
+
+            // Taxi moto / Indrive vs bus
+            const taxis = catList('Taxi moto / Indrive');
+            const bus = items.filter(i => /^bus/.test(normalizeText(i.description)));
+            const prixBus = bus.length ? Math.round(sumMontant(bus) / bus.length / 100) * 100 : 600;
+            const economieTaxi = sumMontant(taxis) - taxis.length * prixBus * 2;
+
+            // Grignotage vs repas
+            const grignotage = catValue('Grignotage & boissons');
+            const repas = catValue('Repas');
+            const topSnacks = Object.values(catList('Grignotage & boissons').reduce((acc, s) => {
+                const key = normalizeText(s.description).replace(/[^a-z ]/g, '').trim().replace(/e$/, 'er');
+                acc[key] = acc[key] || { label: s.description.replace(/[^\p{L} ']/gu, '').trim(), count: 0, value: 0 };
+                acc[key].count++;
+                acc[key].value += s.montant;
+                return acc;
+            }, {})).sort((a, b) => b.value - a.value).slice(0, 5);
+
+            // Dimanches (sorties église / week-end)
+            const byDay = groupBy(items, 'date');
+            const sundays = Object.keys(byDay).filter(d => new Date(d + 'T12:00:00').getDay() === 0);
+            const moyDimanche = sundays.length ? Math.round(sumMontant(sundays.map(d => ({ montant: byDay[d] }))) / sundays.length / 100) * 100 : 0;
+            const sundaysTaxi = sundays.filter(d => taxis.some(t => t.date === d)).length;
+
+            // Grosses dépenses
+            const grosses = items.filter(i => i.montant >= 20000).sort((a, b) => b.montant - a.montant).slice(0, 8);
+
+            // Évolution par mois (sur toute la période)
+            const monthly = Object.entries(groupByMonth(items)).sort((a, b) => a[0].localeCompare(b[0]))
+                .map(([m, v]) => ({ label: formatPeriod(m), value: v }));
+
+            // Conseils
+            const insights = [];
+            if (livraisons.length) {
+                insights.push({ cls: livraisons.length >= 4 ? 'bad' : '', title: `🛍️ Achats en ligne: ${livraisons.length} livraison(s)`,
+                    text: `${formatNumber(sumMontant(livraisons))} Ar de frais de livraison seuls (≈ ${formatNumber(coutEnLigne)} Ar avec les articles). Regroupe tes commandes: 1 livraison par mois au lieu de ${livraisons.length} t'économiserait ≈ ${formatNumber(Math.max(perMonth(sumMontant(livraisons)) - Math.round(sumMontant(livraisons) / livraisons.length / 100) * 100, 0))} Ar/mois.` });
+            }
+            if (taxis.length) {
+                insights.push({ cls: taxis.length >= 3 ? 'bad' : '', title: `🛵 Taxi moto / Indrive: ${taxis.length} course(s)`,
+                    text: `${formatNumber(sumMontant(taxis))} Ar au total${sundaysTaxi ? `, dont ${sundaysTaxi} le dimanche` : ''}. En bus (≈ ${formatNumber(prixBus)} Ar le trajet) tu aurais dépensé ≈ ${formatNumber(taxis.length * prixBus * 2)} Ar, soit ${formatNumber(Math.max(economieTaxi, 0))} Ar d'économie possible.` });
+            }
+            if (grignotage) {
+                insights.push({ cls: grignotage > repas ? 'bad' : '', title: `🍬 Grignotage: ${formatNumber(perMonth(grignotage))} Ar / mois`,
+                    text: `${grignotage > repas ? 'Plus que tes vrais repas' : 'Comparé à'} (${formatNumber(perMonth(repas))} Ar/mois de repas). En tête: ${topSnacks.map(s => `${s.label} ×${s.count} (${formatNumber(s.value)} Ar)`).join(', ')}.` });
+            }
+            if (fuite) {
+                insights.push({ cls: 'bad', title: `🕳️ Fuites: ${formatNumber(fuite)} Ar`,
+                    text: `Argent perdu (« Very ») ${formatNumber(catValue('Argent perdu (Very)'))} Ar et frais de retrait/transfert ${formatNumber(catValue('Frais Mobile Money'))} Ar. Retirer moins souvent mais plus d'un coup réduit les frais.` });
+            }
+            if (revenus) {
+                const epargne = revenus - total;
+                insights.push({ cls: epargne >= 0 ? 'good' : 'bad', title: epargne >= 0 ? `💰 Il te reste ${formatNumber(epargne)} Ar sur la période` : `⚠️ Tu as dépensé ${formatNumber(-epargne)} Ar de plus que tes revenus`,
+                    text: `Revenus ${formatNumber(revenus)} Ar · Dépenses ${formatNumber(total)} Ar (${Math.round(total / revenus * 100)}% de ce qui est entré).` });
+            }
+            insights.push({ cls: 'good', title: `✅ Ce dont tu as vraiment besoin: ≈ ${formatNumber(perMonth(essentiel))} Ar / mois`,
+                text: `Repas, bus, téléphone, église, hygiène, papiers. Le reste (${formatNumber(perMonth(plaisir))} Ar/mois) c'est du plaisir: shopping, snacks, taxi, sorties, cadeaux. ${moyDimanche ? `Un dimanche te coûte en moyenne ${formatNumber(moyDimanche)} Ar.` : ''}` });
+
+            content.innerHTML = `
+                <div class="kpi-grid">
+                    <div class="kpi"><div class="kpi-label">Dépensé</div><div class="kpi-value">${formatNumber(total)} Ar</div><div class="kpi-sub">${items.length} dépenses · ${nbDays} jours</div></div>
+                    <div class="kpi"><div class="kpi-label">Moyenne par mois</div><div class="kpi-value">${formatNumber(perMonth(total))} Ar</div><div class="kpi-sub">${formatNumber(Math.round(total / nbDays))} Ar / jour</div></div>
+                    <div class="kpi"><div class="kpi-label">Essentiel / mois</div><div class="kpi-value" style="color:#4CAF50">${formatNumber(perMonth(essentiel))} Ar</div><div class="kpi-sub">${total ? Math.round(essentiel / total * 100) : 0}% des dépenses</div></div>
+                    <div class="kpi"><div class="kpi-label">Plaisir / mois</div><div class="kpi-value" style="color:#FF6B6B">${formatNumber(perMonth(plaisir))} Ar</div><div class="kpi-sub">${total ? Math.round(plaisir / total * 100) : 0}% des dépenses</div></div>
+                </div>
+
+                <div class="analyse-block">
+                    <h4>💡 Ce qu'il faut retenir</h4>
+                    ${insights.map(i => `<div class="insight ${i.cls}"><strong>${i.title}</strong>${i.text}</div>`).join('')}
+                </div>
+
+                <div class="analyse-block">
+                    <h4>📊 Où va mon argent</h4>
+                    ${barRows(byCat.map(c => ({ label: c.name, value: c.value, color: c.color, extra: `${Math.round(c.value / total * 100)}%` })))}
+                </div>
+
+                ${monthly.length > 1 ? `
+                <div class="analyse-block">
+                    <h4>📅 Évolution par mois</h4>
+                    ${barRows(monthly, '#E91E63')}
+                </div>` : ''}
+
+                ${grosses.length ? `
+                <div class="analyse-block">
+                    <h4>💥 Grosses dépenses (20 000 Ar et +)</h4>
+                    ${barRows(grosses.map(g => ({ label: `${formatDate(g.date)} · ${g.description}`, value: g.montant, color: g.cat.color })))}
+                </div>` : ''}
+
+                <p class="analyse-note">Les catégories sont devinées depuis la description de chaque dépense.</p>`;
+        }
+
+        // ===== Planification du mois =====
+        // Ce qu'on peut réduire en priorité, et de combien (part du budget)
+        const SACRIFICES = [
+            { cat: 'Livraison (achat en ligne)', part: 1, conseil: 'Aucune commande en ligne ce mois' },
+            { cat: 'Argent perdu (Very)', part: 1, conseil: 'Note tout de suite chaque dépense' },
+            { cat: 'Taxi moto / Indrive', part: 0.8, conseil: 'Bus au lieu d\'Indrive / taxi moto' },
+            { cat: 'Vêtements & accessoires', part: 0.7, conseil: 'Pas de nouveaux vêtements' },
+            { cat: 'Grignotage & boissons', part: 0.5, conseil: 'Deux fois moins de goûters, bonbons et jus' },
+            { cat: 'Sport & loisirs', part: 0.5, conseil: 'Une sortie payante au lieu de deux' },
+            { cat: 'Frais Mobile Money', part: 0.5, conseil: 'Retirer moins souvent, en une fois' },
+            { cat: 'Cadeaux & proches', part: 0.3, conseil: 'Cadeaux plus petits ou faits maison' },
+            { cat: 'Beauté & hygiène', part: 0.2, conseil: 'Uniquement l\'indispensable en beauté' },
+        ];
+        let planMonth = null;
+        let planSelectedDay = null;
+        let planVerdicts = {};
+
+        function addMonths(ym, n) {
+            const d = new Date(ym + '-01T12:00:00');
+            d.setMonth(d.getMonth() + n);
+            return d.toISOString().slice(0, 7);
+        }
+
+        function monthsBetween(a, b) {
+            const [ya, ma] = a.split('-').map(Number);
+            const [yb, mb] = b.split('-').map(Number);
+            return (yb - ya) * 12 + (mb - ma);
+        }
+
+        function round500(v) {
+            return Math.max(0, Math.round(v / 500) * 500);
+        }
+
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        // Moyennes mensuelles des 3 mois précédant le mois planifié
+        function getHistory(month) {
+            const today = new Date().toISOString().split('T')[0];
+            const start = addMonths(month, -3) + '-01';
+            const monthStart = month + '-01';
+            const end = today < monthStart ? today : new Date(new Date(monthStart + 'T12:00:00') - 864e5).toISOString().split('T')[0];
+            const days = Math.max(daysBetween(start, end), 1);
+            const factor = 30.4 / days;
+            const items = sorties.filter(s => s.date >= start && s.date <= end);
+            const perCat = {};
+            items.forEach(s => {
+                const c = getCategory(s).name;
+                perCat[c] = (perCat[c] || 0) + s.montant;
+            });
+            Object.keys(perCat).forEach(c => perCat[c] = perCat[c] * factor);
+            const income = sumMontant(entrees.filter(e => e.date >= start && e.date <= end)) * factor;
+            return { perCat, income, items };
+        }
+
+        // Prix habituels tirés de l'historique pour préremplir les activités
+        function getPresets() {
+            const avg = (re, min, fallback) => {
+                const list = sorties.filter(s => re.test(normalizeText(s.description)) && s.montant >= min);
+                return list.length ? round500(sumMontant(list) / list.length) : fallback;
+            };
+            return [
+                { nom: 'Resto', cat: 'Repas', montant: avg(/dejeun|diner|burger|tacos|sakafo|resto/, 3000, 5000) },
+                { nom: 'Piscine', cat: 'Sport & loisirs', montant: avg(/piscine/, 0, 25000) },
+                { nom: 'Sortie entre amis', cat: 'Sport & loisirs', montant: 10000 },
+                { nom: 'Indrive / taxi moto', cat: 'Taxi moto / Indrive', montant: avg(/indrive|taxi moto/, 0, 7000) },
+                { nom: 'Glace / café', cat: 'Grignotage & boissons', montant: avg(/glace|iced|cafe/, 1000, 4000) },
+                { nom: 'Cadeau', cat: 'Cadeaux & proches', montant: 10000 },
+                { nom: 'Vêtement (en ligne)', cat: 'Vêtements & accessoires', montant: 10000 },
+            ];
+        }
+
+        function getPlanRevenu(month, history) {
+            return plan.revenus[month] ?? Math.round(history.income / 1000) * 1000;
+        }
+
+        function getPlanBudgets(month, history) {
+            const saved = plan.budgets[month] || {};
+            const budgets = {};
+            CATEGORIES.forEach(c => {
+                budgets[c.name] = saved[c.name] ?? round500(history.perCat[c.name] || 0);
+            });
+            return budgets;
+        }
+
+        // Part mensuelle de chaque objectif active pour ce mois
+        function getGoalContributions(month) {
+            return plan.objectifs
+                .filter(o => o.debut <= month && o.fin >= month)
+                .map(o => ({ ...o, parMois: Math.ceil(o.montant / (monthsBetween(o.debut, o.fin) + 1) / 100) * 100 }));
+        }
+
+        function savePlan() {
+            saveData();
+            renderPlan();
+        }
+
+        function setPlanRevenu(value) {
+            plan.revenus[planMonth] = Math.max(0, parseInt(value) || 0);
+            savePlan();
+        }
+
+        function setPlanBudget(cat, value) {
+            plan.budgets[planMonth] = plan.budgets[planMonth] || {};
+            plan.budgets[planMonth][cat] = Math.max(0, parseInt(value) || 0);
+            savePlan();
+        }
+
+        function resetPlanBudgets() {
+            delete plan.budgets[planMonth];
+            delete plan.revenus[planMonth];
+            savePlan();
+        }
+
+        function addGoal() {
+            const nom = document.getElementById('goal-name').value.trim();
+            const montant = parseInt(document.getElementById('goal-amount').value);
+            const fin = document.getElementById('goal-end').value;
+            if (!nom || !montant || !fin) {
+                alert('Indique le nom, le prix et le mois où tu veux l\'avoir.');
+                return;
+            }
+            const debut = fin < planMonth ? fin : planMonth;
+            plan.objectifs.push({ id: Date.now(), nom, montant, debut, fin });
+            savePlan();
+        }
+
+        function deleteGoal(id) {
+            plan.objectifs = plan.objectifs.filter(o => o.id !== id);
+            savePlan();
+        }
+
+        function applySacrifices(cuts) {
+            plan.budgets[planMonth] = { ...getPlanBudgets(planMonth, getHistory(planMonth)) };
+            cuts.forEach(c => plan.budgets[planMonth][c.cat] = Math.max(0, plan.budgets[planMonth][c.cat] - c.montant));
+            savePlan();
+        }
+
+        function fillPreset(index) {
+            const p = getPresets()[index];
+            if (!p) return;
+            document.getElementById('act-name').value = p.nom;
+            document.getElementById('act-amount').value = p.montant;
+            document.getElementById('act-cat').value = p.cat;
+        }
+
+        function selectPlanDay(date) {
+            planSelectedDay = date;
+            renderPlan();
+            document.getElementById('act-name').focus();
+        }
+
+        function addActivity() {
+            const date = document.getElementById('act-date').value;
+            const nom = document.getElementById('act-name').value.trim();
+            const montant = parseInt(document.getElementById('act-amount').value) || 0;
+            const cat = document.getElementById('act-cat').value;
+            if (!date || !nom) {
+                alert('Choisis un jour et un nom d\'activité.');
+                return;
+            }
+            const warning = impulseWarning({ date, description: nom, montant, cat });
+            if (warning && !confirm(warning)) return;
+            const id = Date.now();
+            plan.activites.push({ id, date, nom, montant, cat });
+            planSelectedDay = date;
+            saveData();
+            renderPlan();
+            const verdict = planVerdicts[id];
+            if (verdict) alert(verdict);
+        }
+
+        function deleteActivity(id) {
+            plan.activites = plan.activites.filter(a => a.id !== id);
+            savePlan();
+        }
+
+        // Calcule tout l'état du plan pour un mois (budgets, objectifs, réel, activités)
+        function computePlanState(month) {
+            const history = getHistory(month);
+            const revenu = getPlanRevenu(month, history);
+            const budgets = getPlanBudgets(month, history);
+            const goals = getGoalContributions(month);
+            const epargneObjectifs = sumMontant(goals.map(g => ({ montant: g.parMois })));
+            const reel = {};
+            sorties.filter(s => s.date.startsWith(month)).forEach(s => {
+                const c = getCategory(s).name;
+                reel[c] = (reel[c] || 0) + s.montant;
+            });
+            const hasReel = Object.keys(reel).length > 0;
+
+            // Activités du mois, dans l'ordre: d'abord le budget de la catégorie, puis l'argent libre
+            const totalBudgets = Object.values(budgets).reduce((a, b) => a + b, 0);
+            let argentLibre = revenu - totalBudgets - epargneObjectifs;
+            const resteCat = { ...budgets };
+            const activites = plan.activites.filter(a => a.date.startsWith(month)).map(a => ({ ...a })).sort((a, b) => a.date.localeCompare(b.date) || a.id - b.id);
+            planVerdicts = {};
+            activites.forEach(a => {
+                const fromCat = Math.min(Math.max(resteCat[a.cat] || 0, 0), a.montant);
+                resteCat[a.cat] = (resteCat[a.cat] || 0) - fromCat;
+                const extra = a.montant - fromCat;
+                if (extra === 0) {
+                    a._etat = 'ok';
+                    a._verdict = `✅ Tu peux te le permettre: c'est dans ton budget « ${a.cat} ».`;
+                } else if (argentLibre >= extra) {
+                    argentLibre -= extra;
+                    a._etat = 'libre';
+                    a._verdict = `🙂 Possible: ${formatNumber(extra)} Ar pris sur ton argent libre (il en reste ${formatNumber(argentLibre)} Ar).`;
+                } else {
+                    argentLibre -= extra;
+                    a._etat = 'over';
+                    a._verdict = `⚠️ Pas dans ton budget: il manque ${formatNumber(-argentLibre)} Ar. Réduis une autre dépense ou trouve un petit revenu.`;
+                }
+                planVerdicts[a.id] = a._verdict;
+            });
+            const planned = {};
+            activites.forEach(a => planned[a.cat] = (planned[a.cat] || 0) + a.montant);
+            return { history, revenu, budgets, goals, epargneObjectifs, reel, hasReel, totalBudgets, argentLibre, activites, planned };
+        }
+
+        function renderPlan() {
+            const content = document.getElementById('plan-content');
+            const select = document.getElementById('plan-month');
+            if (!content || !select) return;
+
+            const currentMonth = new Date().toISOString().slice(0, 7);
+            const options = [0, 1, 2, 3, 4, 5].map(n => addMonths(currentMonth, n));
+            if (!planMonth) planMonth = select.value || addMonths(currentMonth, 1);
+            if (select.value && select.value !== planMonth && options.includes(select.value)) planMonth = select.value;
+            select.innerHTML = options.map(m => `<option value="${m}">${formatPeriod(m)}${m === currentMonth ? ' (ce mois)' : ''}</option>`).join('');
+            select.value = options.includes(planMonth) ? planMonth : options[1];
+            planMonth = select.value;
+            const month = planMonth;
+
+            const { history, revenu, budgets, goals, epargneObjectifs, reel, hasReel, totalBudgets, argentLibre, activites, planned } = computePlanState(month);
+
+            // Objectifs: faut-il faire des sacrifices ?
+            const margeAvantObjectifs = revenu - totalBudgets;
+            const manque = epargneObjectifs - margeAvantObjectifs;
+            let goalsHtml = '';
+            let cuts = [];
+            window.planCuts = cuts;
+            if (goals.length) {
+                if (manque <= 0) {
+                    goalsHtml = `<div class="insight good"><strong>✅ Objectif atteignable sans sacrifice</strong>Tu mets ${formatNumber(epargneObjectifs)} Ar de côté ce mois et il te reste ${formatNumber(-manque)} Ar d'argent libre.</div>`;
+                } else {
+                    let reste = manque;
+                    SACRIFICES.forEach(s => {
+                        if (reste <= 0) return;
+                        const possible = round500((budgets[s.cat] || 0) * s.part);
+                        const cut = Math.min(possible, Math.ceil(reste / 500) * 500);
+                        if (cut > 0) {
+                            cuts.push({ cat: s.cat, montant: cut, conseil: s.conseil });
+                            reste -= cut;
+                        }
+                    });
+                    const totalCuts = sumMontant(cuts);
+                    const maxParMois = Math.max(margeAvantObjectifs + SACRIFICES.reduce((a, s) => a + round500((budgets[s.cat] || 0) * s.part), 0), 0);
+                    goalsHtml = `
+                        <div class="insight ${reste > 0 ? 'bad' : ''}">
+                            <strong>✂️ Il manque ${formatNumber(manque)} Ar ce mois pour tes objectifs</strong>
+                            Voici les sacrifices possibles:
+                            <ul>${cuts.map(c => `<li><b>-${formatNumber(c.montant)} Ar</b> en ${c.cat}: ${c.conseil}</li>`).join('')}</ul>
+                            ${reste > 0
+                                ? `<div style="margin-top:6px">Même avec tout ça, il manque encore <b>${formatNumber(reste)} Ar</b>: il faut <b>trouver ${formatNumber(reste)} Ar de revenu en plus</b> (petit job, vente, stage...)${maxParMois > 0 ? `, ou repousser ton objectif: avec ${formatNumber(maxParMois)} Ar max par mois, il te faut ${Math.ceil(goals.reduce((a, g) => a + g.montant, 0) / maxParMois)} mois.` : '.'}</div>`
+                                : `<div style="margin-top:6px">Total: ${formatNumber(totalCuts)} Ar économisés, ton objectif passe.</div>`}
+                            <div style="margin-top:8px"><button class="plan-btn" onclick="applySacrifices(window.planCuts)">Appliquer ces sacrifices au budget</button></div>
+                        </div>`;
+                }
+            }
+
+            // Calendrier (lundi en premier)
+            const first = new Date(month + '-01T12:00:00');
+            const nbDays = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+            const offset = (first.getDay() + 6) % 7;
+            const todayStr = new Date().toISOString().split('T')[0];
+            const spentByDay = groupBy(sorties.filter(s => s.date.startsWith(month)), 'date');
+            let cells = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map(d => `<div class="cal-head">${d}</div>`).join('');
+            for (let i = 0; i < offset; i++) cells += '<div class="cal-day empty"></div>';
+            for (let day = 1; day <= nbDays; day++) {
+                const date = `${month}-${String(day).padStart(2, '0')}`;
+                const acts = activites.filter(a => a.date === date);
+                cells += `
+                    <div class="cal-day ${date === todayStr ? 'today' : ''} ${date === planSelectedDay ? 'selected' : ''}" onclick="selectPlanDay('${date}')">
+                        <div class="cal-num">${day}</div>
+                        ${spentByDay[date] ? `<div class="cal-spent">${formatNumber(spentByDay[date])} Ar</div>` : ''}
+                        ${acts.map(a => `<span class="cal-chip ${a._etat === 'over' ? 'over' : ''}" title="${escapeHtml(a.nom)} · ${formatNumber(a.montant)} Ar">${escapeHtml(a.nom)}</span>`).join('')}
+                    </div>`;
+            }
+
+            const presets = getPresets();
+            const defaultEnd = addMonths(month, 0);
+            const rows = CATEGORIES.filter(c => budgets[c.name] || reel[c.name] || planned[c.name] || history.perCat[c.name]);
+
+            content.innerHTML = `
+                <div class="kpi-grid">
+                    <div class="kpi"><div class="kpi-label">Revenu prévu</div><div class="kpi-value" style="color:#3498DB">${formatNumber(revenu)} Ar</div><div class="kpi-sub">moyenne récente ${formatNumber(round500(history.income))} Ar</div></div>
+                    <div class="kpi"><div class="kpi-label">Dépenses prévues</div><div class="kpi-value">${formatNumber(totalBudgets)} Ar</div><div class="kpi-sub">dont essentiel ${formatNumber(CATEGORIES.filter(c => c.type === 'essentiel').reduce((a, c) => a + budgets[c.name], 0))} Ar</div></div>
+                    <div class="kpi"><div class="kpi-label">Objectifs ce mois</div><div class="kpi-value" style="color:#9B59B6">${formatNumber(epargneObjectifs)} Ar</div><div class="kpi-sub">${goals.length} objectif(s)</div></div>
+                    <div class="kpi"><div class="kpi-label">Argent libre</div><div class="kpi-value" style="color:${argentLibre >= 0 ? '#4CAF50' : '#E74C3C'}">${formatNumber(argentLibre)} Ar</div><div class="kpi-sub">après budgets, objectifs et activités</div></div>
+                </div>
+
+                <div class="analyse-block">
+                    <h4>🎯 Mes objectifs</h4>
+                    <div class="plan-form">
+                        <input id="goal-name" placeholder="Ex: Bottes" style="flex:2 1 120px">
+                        <input id="goal-amount" type="number" placeholder="Prix (Ar)" style="flex:1 1 90px">
+                        <label style="font-size:0.85em">pour
+                            <select id="goal-end">${options.filter(m => m >= month).map(m => `<option value="${m}" ${m === defaultEnd ? 'selected' : ''}>${formatPeriod(m)}</option>`).join('')}</select>
+                        </label>
+                        <button onclick="addGoal()">Ajouter</button>
+                    </div>
+                    ${plan.objectifs.map(o => {
+                        const g = goals.find(x => x.id === o.id);
+                        const nbMois = monthsBetween(o.debut, o.fin) + 1;
+                        return `<div class="goal-card"><div class="goal-head">
+                            <span><b>${escapeHtml(o.nom)}</b> · ${formatNumber(o.montant)} Ar · pour ${formatPeriod(o.fin)}${nbMois > 1 ? ` (${nbMois} mois)` : ''}</span>
+                            <span>${g ? `<b>${formatNumber(g.parMois)} Ar</b> ce mois` : '<i>pas ce mois</i>'} <button class="goal-del" onclick="deleteGoal(${o.id})">×</button></span>
+                        </div></div>`;
+                    }).join('') || '<p style="font-size:0.85em;color:#888">Ajoute un objectif (ex: bottes à 100 000 Ar) pour voir quels sacrifices il demande.</p>'}
+                    ${goalsHtml}
+                </div>
+
+                <div class="analyse-block">
+                    <h4>📅 Calendrier des activités · ${formatPeriod(month)}</h4>
+                    <div class="plan-form">
+                        <select onchange="fillPreset(this.value); this.value=''">
+                            <option value="">Activité type...</option>
+                            ${presets.map((p, i) => `<option value="${i}">${p.nom} (~${formatNumber(p.montant)} Ar)</option>`).join('')}
+                        </select>
+                        <input id="act-date" type="date" value="${planSelectedDay && planSelectedDay.startsWith(month) ? planSelectedDay : month + '-01'}" min="${month}-01" max="${month}-${nbDays}">
+                        <input id="act-name" placeholder="Ex: Resto avec amis" style="flex:2 1 120px">
+                        <input id="act-amount" type="number" placeholder="Coût (Ar)" style="flex:1 1 80px">
+                        <select id="act-cat">${CATEGORIES.slice(0, -1).map(c => `<option value="${c.name}" ${c.name === 'Sport & loisirs' ? 'selected' : ''}>${c.name}</option>`).join('')}</select>
+                        <button onclick="addActivity()">Planifier</button>
+                    </div>
+                    <div class="cal-grid">${cells}</div>
+                    <div class="activity-list">
+                        ${activites.map(a => `<div class="activity-item ${a._etat === 'over' ? 'over' : ''}">
+                            <span>${formatDate(a.date)} · <b>${escapeHtml(a.nom)}</b> · ${formatNumber(a.montant)} Ar<br><small>${a._verdict}</small></span>
+                            <button class="goal-del" onclick="deleteActivity(${a.id})">×</button>
+                        </div>`).join('') || '<p style="color:#888">Clique sur un jour pour planifier une sortie, un resto... L\'app te dit si tu peux te le permettre.</p>'}
+                    </div>
+                </div>
+
+                <div class="analyse-block">
+                    <h4>📋 Budget du mois (estimé sur tes 3 derniers mois, modifiable)</h4>
+                    <div class="plan-form">
+                        <label style="font-size:0.9em">Revenu prévu: <input type="number" value="${revenu}" onchange="setPlanRevenu(this.value)" style="width:110px"> Ar</label>
+                        <button class="plan-btn secondary" onclick="resetPlanBudgets()">Revenir à l'estimation</button>
+                    </div>
+                    <div style="overflow-x:auto">
+                    <table class="budget-table">
+                        <thead><tr><th>Catégorie</th><th>Moyenne</th><th>Budget</th><th>Activités</th>${hasReel ? '<th>Réel</th>' : ''}</tr></thead>
+                        <tbody>
+                            ${rows.map(c => `<tr>
+                                <td><span class="dot" style="background:${c.color}"></span>${c.name}</td>
+                                <td>${formatNumber(round500(history.perCat[c.name] || 0))}</td>
+                                <td><input type="number" value="${budgets[c.name]}" onchange="setPlanBudget('${c.name.replace(/'/g, "\\'")}', this.value)"></td>
+                                <td class="${(planned[c.name] || 0) > budgets[c.name] ? 'over' : ''}">${planned[c.name] ? formatNumber(planned[c.name]) : '-'}</td>
+                                ${hasReel ? `<td class="${(reel[c.name] || 0) > budgets[c.name] ? 'over' : ''}">${reel[c.name] ? formatNumber(reel[c.name]) : '-'}</td>` : ''}
+                            </tr>`).join('')}
+                        </tbody>
+                        <tfoot><tr><td>Total</td><td>${formatNumber(round500(Object.values(history.perCat).reduce((a, b) => a + b, 0)))}</td><td>${formatNumber(totalBudgets)}</td><td>${formatNumber(sumMontant(activites))}</td>${hasReel ? `<td>${formatNumber(sumMontant(Object.values(reel).map(v => ({ montant: v }))))}</td>` : ''}</tr></tfoot>
+                    </table>
+                    </div>
+                    <p class="analyse-note">Les activités planifiées puisent d'abord dans le budget de leur catégorie, puis dans l'argent libre.</p>
+                </div>`;
+            setupPlanAutocomplete();
         }
 
         function getFilteredSorties() {
@@ -1374,34 +2269,280 @@
             }
         }
 
-        async function exportData() {
-            const data = { sorties, entrees, soldesInitiaux, exportDate: new Date().toISOString() };
-            const json = JSON.stringify(data, null, 2);
-            const fileName = `porte-monnaie-${new Date().toISOString().split('T')[0]}.json`;
-            const blob = new Blob([json], { type: 'application/json' });
 
-            try {
-                const file = new File([blob], fileName, { type: 'application/json' });
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Export Porte-Monnaie',
-                        text: 'Sauvegarde JSON des données',
-                    });
-                    return;
-                }
-            } catch (err) {
-                console.log('Partage natif indisponible, bascule vers téléchargement', err);
+        // ===== Habitudes inhabituelles (détection automatique) =====
+        // "Jean 5☺️", "jean" et "Jean🙆" deviennent la même clé "jean"
+        function itemKey(desc) {
+            return normalizeText(desc).replace(/[^a-z' ]/g, ' ').split(/\s+/)
+                .filter(w => w && !['de', 'du', 'des', 'la', 'le', 'les', 'et', 'sy', 'a', 'au'].includes(w)).join(' ');
+        }
+
+        function detectHabits() {
+            if (sorties.length < 30) return [];
+            const today = new Date().toISOString().split('T')[0];
+            const ref = sorties.reduce((m, s) => s.date > m ? s.date : m, '') > today ? sorties.reduce((m, s) => s.date > m ? s.date : m, '') : today;
+            const shift = (d, n) => new Date(new Date(d + 'T12:00:00').getTime() + n * 864e5).toISOString().split('T')[0];
+            const first = sorties.reduce((m, s) => s.date < m ? s.date : m, ref);
+            const alerts = [];
+
+            // 1) Un article acheté bien plus souvent que d'habitude (3 dernières semaines)
+            const recentStart = shift(ref, -20);
+            const baseDays = daysBetween(first, shift(recentStart, -1));
+            if (baseDays >= 45) {
+                const stats = {};
+                sorties.forEach(s => {
+                    const k = itemKey(s.description);
+                    if (!k) return;
+                    const st = stats[k] = stats[k] || { label: s.description, rc: 0, rs: 0, bc: 0, bs: 0 };
+                    if (s.date >= recentStart && s.date <= ref) { st.rc++; st.rs += s.montant; st.label = s.description; }
+                    else if (s.date < recentStart) { st.bc++; st.bs += s.montant; }
+                });
+                Object.entries(stats).forEach(([k, st]) => {
+                    const cat = getCategory({ description: st.label });
+                    if (cat.type === 'essentiel' && cat.name !== 'Maison & divers') return; // le bus ou le repas quotidien ne sont pas des "addictions"
+                    const expected = st.bc / baseDays * 21;
+                    const expectedSum = st.bs / baseDays * 21;
+                    if (st.rc >= 4 && st.rc >= expected * 2.5 + 1 && st.rs >= 5000) {
+                        alerts.push({
+                            id: 'item:' + k,
+                            extra: st.rs - expectedSum,
+                            text: st.bc === 0
+                                ? `Nouvelle habitude: <b>${escapeHtml(st.label.replace(/[^\p{L} ']/gu, '').trim())}</b> ${st.rc}× en 3 semaines (${formatNumber(st.rs)} Ar)`
+                                : `<b>${escapeHtml(st.label.replace(/[^\p{L} ']/gu, '').trim())}</b>: ${st.rc}× en 3 semaines, d'habitude ~${Math.max(1, Math.round(expected))}× (${formatNumber(st.rs)} Ar)`
+                        });
+                    }
+                });
             }
 
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = fileName;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            // 2) Une catégorie plaisir qui s'emballe (30 derniers jours vs moyenne)
+            const monthStart = shift(ref, -29);
+            const catBaseDays = daysBetween(first, shift(monthStart, -1));
+            if (catBaseDays >= 60) {
+                CATEGORIES.filter(c => c.type !== 'essentiel').forEach(c => {
+                    const list = sorties.filter(s => getCategory(s) === c);
+                    const recent = sumMontant(list.filter(s => s.date >= monthStart && s.date <= ref));
+                    const base = sumMontant(list.filter(s => s.date < monthStart)) / catBaseDays * 30;
+                    if (recent >= base * 1.7 && recent - base >= 15000) {
+                        alerts.push({
+                            id: 'cat:' + c.name,
+                            extra: recent - base,
+                            text: `<b>${c.name}</b>: ${formatNumber(recent)} Ar sur 30 jours, d'habitude ~${formatNumber(round500(base))} Ar`
+                        });
+                    }
+                });
+            }
+
+            let dismissed = {};
+            try { dismissed = JSON.parse(localStorage.getItem('porteMonnaie:alertesVues') || '{}'); } catch (e) {}
+            const week = shift(ref, -new Date(ref + 'T12:00:00').getDay()); // on peut masquer une alerte pour la semaine
+            // Les articles précis (ex: coca) passent avant les catégories
+            return alerts.filter(a => dismissed[a.id] !== week)
+                .sort((a, b) => (a.id.startsWith('item:') ? 0 : 1) - (b.id.startsWith('item:') ? 0 : 1) || b.extra - a.extra).slice(0, 3).map(a => ({ ...a, week }));
+        }
+
+        function dismissHabit(id, week) {
+            try {
+                const d = JSON.parse(localStorage.getItem('porteMonnaie:alertesVues') || '{}');
+                d[id] = week;
+                localStorage.setItem('porteMonnaie:alertesVues', JSON.stringify(d));
+            } catch (e) {}
+            renderHabits();
+        }
+
+        function renderHabits() {
+            const box = document.getElementById('habit-alerts');
+            if (!box) return;
+            const alerts = detectHabits();
+            box.innerHTML = alerts.map(a => `
+                <div class="habit-alert">
+                    <span>🔔 ${a.text}</span>
+                    <button onclick="dismissHabit('${a.id.replace(/'/g, "\\'")}', '${a.week}')" title="Masquer cette semaine">×</button>
+                </div>`).join('');
+        }
+
+        // ===== Autocomplétion (description, source, activité) =====
+        // Index des dépenses: nom le plus utilisé, montant habituel, source habituelle
+        function buildSuggestIndex(items, textKey, extraKey) {
+            const index = {};
+            const today = new Date();
+            items.forEach(it => {
+                const k = itemKey(it[textKey]);
+                if (!k) return;
+                const e = index[k] = index[k] || { k, labels: {}, montants: {}, extras: {}, count: 0, score: 0, last: '', days: {} };
+                const label = String(it[textKey]).trim();
+                e.labels[label] = (e.labels[label] || 0) + 1;
+                e.montants[it.montant] = (e.montants[it.montant] || 0) + 1;
+                e.extras[it[extraKey]] = (e.extras[it[extraKey]] || 0) + 1;
+                e.count++;
+                const age = (today - new Date(it.date + 'T12:00:00')) / 864e5;
+                e.score += age < 60 ? 3 : age < 120 ? 1.5 : 1; // les habitudes récentes comptent plus
+                const wd = new Date(it.date + 'T12:00:00').getDay();
+                if (age < 90) e.days[wd] = (e.days[wd] || 0) + 1;
+                if (it.date > e.last) e.last = it.date;
+            });
+            const top = obj => Object.entries(obj).sort((a, b) => b[1] - a[1])[0]?.[0];
+            return Object.values(index).map(e => ({
+                key: e.k,
+                label: top(e.labels),
+                montant: Number(top(e.montants)) || 0,
+                extra: top(e.extras),
+                count: e.count,
+                score: e.score,
+                days: e.days,
+            }));
+        }
+
+        function searchSuggestions(index, text) {
+            const q = itemKey(text);
+            if (!q) {
+                // Rien de tapé: ce que tu achètes d'habitude ce jour de la semaine
+                const wd = new Date().getDay();
+                return index.filter(e => (e.days[wd] || 0) >= 2).sort((a, b) => (b.days[wd] || 0) - (a.days[wd] || 0)).slice(0, 6);
+            }
+            const words = q.split(' ');
+            return index
+                .filter(e => {
+                    const kw = e.key.split(' ');
+                    return words.every(w => kw.some(k => k.startsWith(w))) && e.key !== q;
+                })
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 6);
+        }
+
+        let suggestBox = null;
+        function attachAutocomplete(input, getIndex, onPick, describe) {
+            if (!suggestBox) {
+                suggestBox = document.createElement('div');
+                suggestBox.className = 'suggest-box';
+                document.body.appendChild(suggestBox);
+            }
+            let results = [];
+            let active = -1;
+            const hide = () => { suggestBox.style.display = 'none'; active = -1; };
+            const pick = r => {
+                input.value = r.label;
+                onPick(r);
+                hide();
+            };
+            const show = () => {
+                results = searchSuggestions(getIndex(), input.value);
+                if (!results.length || document.activeElement !== input) return hide();
+                const rect = input.getBoundingClientRect();
+                suggestBox.style.left = (rect.left + window.scrollX) + 'px';
+                suggestBox.style.top = (rect.bottom + window.scrollY + 2) + 'px';
+                suggestBox.style.width = Math.max(rect.width, 220) + 'px';
+                suggestBox.innerHTML = (input.value.trim() ? '' : '<div class="suggest-title">Tes habitudes ce jour-ci</div>') +
+                    results.map((r, i) => `<div class="suggest-item ${i === active ? 'active' : ''}" data-i="${i}">
+                        <span>${escapeHtml(r.label)}</span><small>${describe(r)}</small>
+                    </div>`).join('');
+                suggestBox.style.display = 'block';
+            };
+            suggestBox.addEventListener('pointerdown', e => {
+                const item = e.target.closest('.suggest-item');
+                if (item && suggestBox.owner === input) {
+                    e.preventDefault();
+                    pick(results[Number(item.dataset.i)]);
+                }
+            });
+            input.setAttribute('autocomplete', 'off');
+            input.addEventListener('input', () => { active = -1; suggestBox.owner = input; show(); });
+            input.addEventListener('focus', () => { suggestBox.owner = input; show(); });
+            input.addEventListener('blur', () => setTimeout(hide, 150));
+            input.addEventListener('keydown', e => {
+                if (suggestBox.style.display !== 'block' || suggestBox.owner !== input) return;
+                if (e.key === 'ArrowDown') { active = Math.min(active + 1, results.length - 1); show(); e.preventDefault(); }
+                else if (e.key === 'ArrowUp') { active = Math.max(active - 1, 0); show(); e.preventDefault(); }
+                else if (e.key === 'Enter' && active >= 0) { pick(results[active]); e.preventDefault(); }
+                else if (e.key === 'Escape') hide();
+            });
+        }
+
+        let sortieIndexCache = null, entreeIndexCache = null, indexVersion = '';
+        function getSortieIndex() {
+            const v = sorties.length + ':' + entrees.length;
+            if (v !== indexVersion) { sortieIndexCache = entreeIndexCache = null; indexVersion = v; }
+            return sortieIndexCache = sortieIndexCache || buildSuggestIndex(sorties, 'description', 'source');
+        }
+        function getEntreeIndex() {
+            getSortieIndex();
+            return entreeIndexCache = entreeIndexCache || buildSuggestIndex(entrees, 'source', 'destinataire');
+        }
+        const describeUsual = r => `${formatNumber(r.montant)} Ar · ×${r.count}`;
+
+        function setupAutocomplete() {
+            attachAutocomplete(document.getElementById('sortie-desc'), getSortieIndex, r => {
+                const m = document.getElementById('sortie-montant');
+                if (!m.value) m.value = r.montant;
+                if (r.extra) document.getElementById('sortie-source').value = r.extra;
+                m.focus();
+                m.select();
+            }, describeUsual);
+            attachAutocomplete(document.getElementById('entree-source'), getEntreeIndex, r => {
+                const m = document.getElementById('entree-montant');
+                if (!m.value) m.value = r.montant;
+                if (r.extra) document.getElementById('entree-dest').value = r.extra;
+                m.focus();
+                m.select();
+            }, describeUsual);
+        }
+
+        // Le champ "activité" du planning est recréé à chaque affichage
+        function setupPlanAutocomplete() {
+            const input = document.getElementById('act-name');
+            if (!input || input.dataset.ac) return;
+            input.dataset.ac = '1';
+            attachAutocomplete(input, getSortieIndex, r => {
+                const m = document.getElementById('act-amount');
+                if (!m.value) m.value = r.montant;
+                const cat = getCategory({ description: r.label }).name;
+                const sel = document.getElementById('act-cat');
+                if ([...sel.options].some(o => o.value === cat)) sel.value = cat;
+            }, describeUsual);
+        }
+
+        // ===== Alerte achat impulsif =====
+        // Renvoie un message si cet achat "plaisir" dépasse le budget et menace un objectif
+        function impulseWarning({ date, description, montant, cat }) {
+            const category = CATEGORIES.find(c => c.name === cat) || getCategory({ description });
+            if (category.type === 'essentiel' || !date || !montant) return null;
+            const month = date.slice(0, 7);
+            const st = computePlanState(month);
+            const today = new Date().toISOString().split('T')[0];
+            const plannedLater = sumMontant(st.activites.filter(a => a.cat === category.name && a.date >= today));
+            const reste = (st.budgets[category.name] || 0) - (st.reel[category.name] || 0) - plannedLater;
+            const depassement = montant - Math.max(reste, 0);
+            const known = getSortieIndex().find(e => e.key === itemKey(description));
+            const rare = !known || known.count <= 1;
+            const cher = known && known.montant && montant >= known.montant * 2 && montant - known.montant >= 3000;
+            const libre = st.argentLibre; // tient compte des activités déjà planifiées
+
+            // Objectif pas encore financé ce mois: tout achat plaisir l'éloigne
+            if (st.goals.length && libre < 0 && montant >= 3000) {
+                return `⚠️ Achat plaisir: ${formatNumber(montant)} Ar en « ${category.name} »\n\n` +
+                    `Ton objectif « ${st.goals.map(g => g.nom).join(', ')} » n'est pas encore financé ce mois: il manque ${formatNumber(-libre)} Ar.\n` +
+                    `Avec cet achat, il manquera ${formatNumber(montant - libre)} Ar.` +
+                    (rare ? `\nEn plus, tu n'achètes presque jamais ça: achat impulsif ?` : '') +
+                    (cher ? `\nD'habitude tu paies ça ~${formatNumber(known.montant)} Ar.` : '') +
+                    `\n\nTu veux vraiment l'ajouter ?`;
+            }
+            if (st.goals.length && depassement > 0 && depassement > libre) {
+                const manque = depassement - Math.max(libre, 0);
+                return `⚠️ Achat plaisir non prévu (${formatNumber(montant)} Ar en « ${category.name} »)\n\n` +
+                    `Ton budget « ${category.name} » ${reste > 0 ? `n'a plus que ${formatNumber(reste)} Ar` : 'est déjà épuisé'} ce mois.\n` +
+                    `Cet achat retire ${formatNumber(manque)} Ar à ton objectif « ${st.goals.map(g => g.nom).join(', ')} ».` +
+                    (rare ? '\nEn plus, tu n\'achètes presque jamais ça: achat impulsif ?' : '') +
+                    (cher ? `\nD'habitude tu paies ça ~${formatNumber(known.montant)} Ar.` : '') +
+                    '\n\nTu veux vraiment l\'ajouter ?';
+            }
+            if (depassement > 0 && montant >= 10000) {
+                return `⚠️ ${formatNumber(montant)} Ar en « ${category.name} » dépasse ton budget du mois de ${formatNumber(depassement)} Ar.` +
+                    (rare ? '\nTu n\'achètes presque jamais ça: achat impulsif ?' : '') +
+                    '\n\nTu veux vraiment l\'ajouter ?';
+            }
+            if (cher && montant >= 5000) {
+                return `🤔 ${formatNumber(montant)} Ar pour « ${description} » alors que tu paies d'habitude ~${formatNumber(known.montant)} Ar.\n\nC'est bien ça ?`;
+            }
+            return null;
         }
 
         document.getElementById('edit-modal').addEventListener('click', (e) => {
