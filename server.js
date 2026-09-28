@@ -32,6 +32,19 @@ function hashPassword(password, salt = crypto.randomBytes(16).toString('hex')) {
     return { salt, hash: crypto.scryptSync(password, salt, 64).toString('hex') };
 }
 
+// Empreinte vérifiable par l'app hors ligne (PBKDF2, disponible dans le navigateur du téléphone):
+// elle est embarquée dans l'APK pour que les testeurs se connectent sans jamais joindre le PC
+const OFFLINE_ITERATIONS = 150000;
+function offlineVerifier(password) {
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.pbkdf2Sync(password, Buffer.from(salt, 'hex'), OFFLINE_ITERATIONS, 32, 'sha256').toString('hex');
+    return { salt, hash, iterations: OFFLINE_ITERATIONS };
+}
+
+function credentials(password) {
+    return { ...hashPassword(password), offline: offlineVerifier(password) };
+}
+
 function checkPassword(user, password) {
     const { hash } = hashPassword(password, user.salt);
     return crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(user.hash, 'hex'));
@@ -49,7 +62,7 @@ function loadUsers() {
     const users = readJson(USERS_FILE, null);
     if (users && Array.isArray(users.users) && users.users.length) return users;
     // Premier démarrage: compte par défaut blessed / blessed
-    const created = { users: [{ username: 'blessed', role: 'admin', primary: true, createdAt: new Date().toISOString(), ...hashPassword('blessed') }] };
+    const created = { users: [{ username: 'blessed', role: 'admin', primary: true, createdAt: new Date().toISOString(), ...credentials('blessed') }] };
     fs.writeFileSync(USERS_FILE, JSON.stringify(created, null, 4), 'utf8');
     console.log('👤 Compte par défaut créé: blessed / blessed');
     return created;
@@ -115,6 +128,12 @@ async function handleApi(req, res, url) {
         if (!user || !checkPassword(user, String(password || ''))) {
             return sendJson(res, 401, { success: false, error: 'Nom d\'utilisateur ou mot de passe incorrect' });
         }
+        if (!user.offline) {
+            const all = loadUsers();
+            const stored = all.users.find(u => u.username === user.username);
+            stored.offline = offlineVerifier(String(password));
+            saveUsers(all);
+        }
         const token = crypto.randomBytes(32).toString('hex');
         sessions.set(token, { username: user.username, createdAt: new Date().toISOString() });
         saveSessions();
@@ -156,7 +175,7 @@ async function handleApi(req, res, url) {
             for (const s of sessions.values()) if (s.username === oldName) s.username = name;
             saveSessions();
         }
-        if (newPassword) Object.assign(user, hashPassword(String(newPassword)));
+        if (newPassword) Object.assign(user, credentials(String(newPassword)));
         saveUsers(users);
         console.log(`👤 Compte modifié: ${oldName}${name !== oldName ? ` → ${name}` : ''}${newPassword ? ' (nouveau mot de passe)' : ''}`);
         return sendJson(res, 200, { success: true, username: user.username, role: user.role, primary: isPrimary(user) });
@@ -230,23 +249,44 @@ async function handleApi(req, res, url) {
             if (users.users.some(u => u.username === name)) {
                 return sendJson(res, 409, { success: false, error: 'Ce nom d\'utilisateur existe déjà' });
             }
-            users.users.push({ username: name, role: 'user', dataId: name, createdAt: new Date().toISOString(), ...hashPassword(String(password)) });
+            users.users.push({ username: name, role: 'user', dataId: name, createdAt: new Date().toISOString(), ...credentials(String(password)) });
             saveUsers(users);
             console.log(`👤 Utilisateur créé: ${name}`);
             return sendJson(res, 200, { success: true, username: name });
         }
 
-        const match = route.match(/^\/api\/users\/([^/]+)$/);
-        if (match && req.method === 'DELETE') {
-            const name = decodeURIComponent(match[1]);
-            const target = users.users.find(u => u.username === name);
-            if (!target) return sendJson(res, 404, { success: false, error: 'Utilisateur introuvable' });
-            if (isPrimary(target) || name === me.username) return sendJson(res, 400, { success: false, error: 'Ce compte ne peut pas être supprimé' });
-            users.users = users.users.filter(u => u.username !== name);
+        const match = route.match(/^\/api\/users\/([^/]+)(\/password)?$/);
+        const target = match && users.users.find(u => u.username === decodeURIComponent(match[1]));
+        if (match && !target) return sendJson(res, 404, { success: false, error: 'Utilisateur introuvable' });
+
+        // Nouveau mot de passe choisi par l'admin (l'ancien ne peut pas être affiché: il est haché)
+        if (match && match[2] && req.method === 'POST') {
+            const { password } = JSON.parse(await readBody(req) || '{}');
+            if (String(password || '').length < 4) return sendJson(res, 400, { success: false, error: 'Mot de passe: 4 caractères minimum' });
+            Object.assign(target, credentials(String(password)));
             saveUsers(users);
-            for (const [token, s] of sessions) if (s.username === name) sessions.delete(token);
+            // L'ancien mot de passe ne doit plus ouvrir de session
+            for (const [token, s] of sessions) if (s.username === target.username && token !== me.token) sessions.delete(token);
             saveSessions();
-            console.log(`🗑️ Utilisateur supprimé: ${name} (ses données restent dans donnees/)`);
+            console.log(`🔑 Nouveau mot de passe pour ${target.username}`);
+            return sendJson(res, 200, { success: true });
+        }
+
+        if (match && !match[2] && req.method === 'DELETE') {
+            if (isPrimary(target) || target.username === me.username) return sendJson(res, 400, { success: false, error: 'Ce compte ne peut pas être supprimé' });
+            users.users = users.users.filter(u => u !== target);
+            saveUsers(users);
+            for (const [token, s] of sessions) if (s.username === target.username) sessions.delete(token);
+            saveSessions();
+            // Ses données: une dernière copie dans backups/, puis suppression
+            const file = dataFileFor(target);
+            if (fs.existsSync(file)) {
+                fs.mkdirSync(BACKUP_DIR, { recursive: true });
+                const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+                fs.copyFileSync(file, path.join(BACKUP_DIR, `supprime-${target.username}-${stamp}.json`));
+                fs.unlinkSync(file);
+            }
+            console.log(`🗑️ Utilisateur supprimé avec ses données: ${target.username}`);
             return sendJson(res, 200, { success: true });
         }
     }

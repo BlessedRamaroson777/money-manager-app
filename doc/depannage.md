@@ -22,13 +22,12 @@ L'app a été désinstallée (ou ses données effacées) : elle repart de l'inst
 Se connecter avec le PC allumé : la synchro ramène tout. Pour la suite, toujours installer **par-dessus**,
 et générer l'APK avec `npm run apk` (qui embarque les données à jour).
 
-## « Utilisateur inconnu sur ce téléphone »
+## « Compte inconnu sur ce téléphone et PC injoignable »
 
-Le compte a été créé sur le web mais le téléphone ne le connaît pas encore. Le téléphone ne peut le
-vérifier qu'auprès du PC, et il doit donc connaître l'adresse du PC : elle est enregistrée dès qu'une
-synchro a eu lieu sur ce téléphone (bouton **Synchroniser**). Ensuite, se connecter avec le PC allumé ;
-les connexions suivantes marchent hors ligne. En attendant, le compte est utilisable depuis le
-navigateur du téléphone (adresse du PC).
+Le compte a été créé sur le web et le téléphone ne peut le vérifier qu'auprès du PC. Vérifier que
+`npm start` tourne, que le téléphone est sur le même Wi-Fi, et que le champ **Adresse du PC** de l'écran
+de connexion correspond à l'adresse affichée par `npm start` (elle peut changer après un redémarrage de
+la box). Après une première connexion réussie, le compte marche aussi hors ligne.
 
 ## Mot de passe oublié
 

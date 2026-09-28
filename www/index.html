@@ -978,6 +978,12 @@
         .user-box .header-send { background: #E91E63; color: white; border-color: #E91E63; font-weight: 600; }
         .user-box .who b { font-weight: 600; }
         .account-field { margin-bottom: 12px; }
+        .login-pc label { display: block; font-size: 0.8em; color: #888; margin: 2px 0 6px; }
+        .login-pc small { color: #aaa; }
+        .user-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+        .user-actions .plan-btn { padding: 6px 12px; font-size: 0.82em; white-space: nowrap; }
+        .user-row { flex-wrap: wrap; }
+        .plan-btn.danger { background: #FFF0F0; color: #E74C3C; }
         .account-field small { color: #999; font-weight: 400; }
         .btn-expense { background: #FF6B6B; }
         .btn-income { background: #4ECDC4; }
@@ -1031,6 +1037,10 @@
             <form id="login-form">
                 <input type="text" id="login-user" placeholder="Nom d'utilisateur" autocomplete="username" autocapitalize="none" required>
                 <input type="password" id="login-pass" placeholder="Mot de passe" autocomplete="current-password" required>
+                <div class="native-only login-pc">
+                    <label for="login-pc">Adresse du PC <small>(facultatif, seulement pour synchroniser avec le PC)</small></label>
+                    <input type="text" id="login-pc" placeholder="http://192.168.1.3:3000" autocapitalize="none" inputmode="url">
+                </div>
                 <button type="submit" id="login-btn">Se connecter</button>
                 <div class="login-error" id="login-error"></div>
             </form>
@@ -1426,7 +1436,10 @@
             let accounts = null;
             try { accounts = JSON.parse(localStorage.getItem(LOCAL_ACCOUNTS_KEY) || 'null'); } catch (e) {}
             // Tant qu'aucun compte n'a été enregistré, blessed / blessed fonctionne hors ligne
-            if (!accounts) accounts = { blessed: { hash: await sha256('blessed:blessed'), role: 'admin', primary: true } };
+            // blessed / blessed par défaut: jamais dans l'APK des testeurs, ni si le compte principal est embarqué
+            const bundledPrimary = Object.values(await getBundledAccounts()).some(a => a.primary);
+            const noDefault = bundledPrimary || bundledMode === 'testeurs';
+            if (!accounts) accounts = noDefault ? {} : { blessed: { hash: await sha256('blessed:blessed'), role: 'admin', primary: true } };
             return accounts;
         }
 
@@ -1437,6 +1450,21 @@
             if (primary && username !== 'blessed') delete accounts.blessed;
             accounts[username] = { hash: await sha256(`${username}:${password}`), role, primary: !!primary };
             localStorage.setItem(LOCAL_ACCOUNTS_KEY, JSON.stringify(accounts));
+        }
+
+        // Adresse du PC: celle enregistrée, sinon celle mise dans l'APK par "npm run apk"
+        let bundledPcUrl;
+        async function getPcUrl() {
+            const saved = localStorage.getItem(PC_URL_KEY);
+            if (saved) return saved;
+            if (bundledPcUrl === undefined) {
+                bundledPcUrl = null;
+                try {
+                    const r = await fetch('pc.json', { cache: 'no-store' });
+                    if (r.ok) bundledPcUrl = (await r.json()).pcUrl || null;
+                } catch (e) {}
+            }
+            return bundledPcUrl;
         }
 
         class AuthError extends Error {}
@@ -1490,23 +1518,78 @@
                 writeSession({ username: r.username, role: r.role, primary: r.primary, token: r.token });
                 return;
             }
-            // Téléphone: on tente le PC (s'il est connu), sinon on vérifie hors ligne
-            const pcUrl = localStorage.getItem(PC_URL_KEY);
+            // Téléphone: les comptes sont vérifiés hors ligne (comptes embarqués dans l'APK ou déjà connus);
+            // le PC n'est qu'une option (synchro, comptes créés après la génération de l'APK)
+            const typed = document.getElementById('login-pc').value.trim();
+            const pcUrl = typed ? (typed.startsWith('http') ? typed : `http://${typed}`).replace(/\/+$/, '') : await getPcUrl();
+            const offline = await checkOffline(username, password);
+            if (offline.ok) {
+                writeSession({ username, role: offline.account.role, primary: offline.account.primary });
+                if (pcUrl) connectPcInBackground(pcUrl, username, password);
+                return;
+            }
             if (pcUrl) {
                 const r = await remoteLogin(pcUrl, username, password);
                 if (r.reachable && r.ok) {
+                    localStorage.setItem(PC_URL_KEY, pcUrl);
                     await rememberLocalAccount(r.username, password, r.role, r.primary);
                     writeSession({ username: r.username, role: r.role, primary: r.primary, token: r.token, server: pcUrl });
                     return;
                 }
-                if (r.reachable && !r.ok) throw new Error(r.error || 'Identifiants incorrects');
+                if (r.reachable) throw new Error(r.error || 'Identifiants incorrects');
             }
-            const accounts = await getLocalAccounts();
-            const account = accounts[username];
-            if (!account || account.hash !== await sha256(`${username}:${password}`)) {
-                throw new Error(account ? 'Mot de passe incorrect' : 'Utilisateur inconnu sur ce téléphone (connecte-toi une fois avec le PC allumé)');
+            throw new Error(offline.known
+                ? 'Mot de passe incorrect'
+                : "Compte inconnu. S'il vient d'être créé, il faut une nouvelle version de l'app (npm run apk:testeurs).");
+        }
+
+        // Comptes embarqués dans l'APK par "npm run apk" (empreinte PBKDF2, pas le mot de passe)
+        let bundledAccounts;
+        let bundledMode = 'perso';
+        async function getBundledAccounts() {
+            if (bundledAccounts === undefined) {
+                bundledAccounts = {};
+                if (IS_NATIVE) {
+                    try {
+                        const r = await fetch('accounts.json', { cache: 'no-store' });
+                        if (r.ok) {
+                            const bundle = await r.json();
+                            bundledMode = bundle.mode || 'perso';
+                            (bundle.accounts || []).forEach(a => bundledAccounts[a.username] = a);
+                        }
+                    } catch (e) {}
+                }
             }
-            writeSession({ username, role: account.role, primary: account.primary });
+            return bundledAccounts;
+        }
+
+        function hexToBytes(hex) {
+            return new Uint8Array(hex.match(/.{2}/g).map(h => parseInt(h, 16)));
+        }
+
+        async function verifyOffline(verifier, password) {
+            if (!verifier || !window.crypto || !crypto.subtle) return false;
+            const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
+            const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: hexToBytes(verifier.salt), iterations: verifier.iterations, hash: 'SHA-256' }, key, 256);
+            return [...new Uint8Array(bits)].map(b => b.toString(16).padStart(2, '0')).join('') === verifier.hash;
+        }
+
+        async function checkOffline(username, password) {
+            const bundled = (await getBundledAccounts())[username];
+            if (bundled && await verifyOffline(bundled.offline, password)) return { ok: true, account: bundled };
+            const local = (await getLocalAccounts())[username];
+            if (local && local.hash === await sha256(`${username}:${password}`)) return { ok: true, account: local };
+            return { ok: false, known: !!(bundled || local) };
+        }
+
+        // Déjà connecté hors ligne: si le PC répond (à la maison), on récupère une session pour la synchro
+        async function connectPcInBackground(pcUrl, username, password) {
+            const r = await remoteLogin(pcUrl, username, password);
+            if (!r.reachable || !r.ok || !currentUser || currentUser.username !== username) return;
+            localStorage.setItem(PC_URL_KEY, pcUrl);
+            await rememberLocalAccount(r.username, password, r.role, r.primary);
+            writeSession({ ...currentUser, role: r.role, primary: r.primary, token: r.token, server: pcUrl });
+            syncWithPC({ silent: true });
         }
 
         async function restoreSession() {
@@ -1531,6 +1614,7 @@
             document.getElementById('login-screen').classList.remove('hidden');
             document.getElementById('login-error').textContent = message;
             document.getElementById('login-pass').value = '';
+            if (IS_NATIVE) getPcUrl().then(url => { if (url && !document.getElementById('login-pc').value) document.getElementById('login-pc').value = url; });
             setTimeout(() => document.getElementById('login-user').focus(), 50);
         }
 
@@ -1724,7 +1808,10 @@
                 list.innerHTML = users.map(u => `
                     <div class="user-row">
                         <span><svg class="ic"><use href="#i-user"/></svg> <b>${escapeHtml(u.username)}</b> ${u.role === 'admin' ? '· admin' : ''}<br><small>créé le ${formatDate((u.createdAt || '').slice(0, 10))}</small></span>
-                        ${u.primary || u.username === currentUser.username ? '' : `<button class="goal-del" onclick="deleteUser('${escapeHtml(u.username)}')" title="Supprimer">×</button>`}
+                        <span class="user-actions">
+                            <button class="plan-btn secondary" onclick="resetUserPassword('${escapeHtml(u.username)}')">Nouveau mot de passe</button>
+                            ${u.primary || u.username === currentUser.username ? '' : `<button class="plan-btn danger" onclick="deleteUser('${escapeHtml(u.username)}')">Supprimer</button>`}
+                        </span>
                     </div>`).join('');
             } catch (e) {
                 if (!handleAuthError(e)) list.innerHTML = `<p style="color:#E74C3C">${escapeHtml(e.message)}</p>`;
@@ -1763,8 +1850,27 @@ Mot de passe: ${password}`;
             }
         }
 
+        // Le mot de passe actuel ne peut pas être affiché (il est haché): l'admin en donne un nouveau
+        async function resetUserPassword(username) {
+            const password = prompt(`Nouveau mot de passe pour « ${username} » (généré, modifiable) :`, generatePassword());
+            if (password === null) return;
+            try {
+                await apiFetch(`/api/users/${encodeURIComponent(username)}/password`, { method: 'POST', body: JSON.stringify({ password }) });
+                lastCreds = `Blessed Money\nUtilisateur: ${username}\nMot de passe: ${password}`;
+                document.getElementById('new-user-result').innerHTML = `
+                    <div class="cred-card">Nouveau mot de passe enregistré. Identifiants à lui donner:<br>
+                        Nom d'utilisateur: <code>${escapeHtml(username)}</code><br>
+                        Mot de passe: <code>${escapeHtml(password)}</code>
+                        <button class="plan-btn secondary" style="margin-left:8px" onclick="copyCreds(this)">Copier</button>
+                    </div>`;
+                document.getElementById('new-user-result').scrollIntoView({ block: 'center' });
+            } catch (e) {
+                if (!handleAuthError(e)) alert(e.message);
+            }
+        }
+
         async function deleteUser(username) {
-            if (!confirm(`Supprimer l'utilisateur « ${username} » ?\n\nIl ne pourra plus se connecter (ses données restent sauvegardées sur le PC).`)) return;
+            if (!confirm(`Supprimer le compte « ${username} » et toutes ses données ?\n\nIl ne pourra plus se connecter. Une dernière copie de ses données est gardée dans backups/ sur le PC.`)) return;
             try {
                 await apiFetch(`/api/users/${encodeURIComponent(username)}`, { method: 'DELETE' });
                 renderUsers();
@@ -2031,7 +2137,7 @@ Mot de passe: ${password}`;
         // Bouton "Synchroniser": direct si le PC est déjà connu, sinon demande l'adresse (et le mot de passe)
         async function sendToPC(forceSetup = false) {
             if (!forceSetup && currentUser.token && currentUser.server) return syncWithPC();
-            const saved = localStorage.getItem(PC_URL_KEY) || 'http://192.168.1.3:3000';
+            const saved = (await getPcUrl()) || 'http://192.168.1.3:3000';
             const input = prompt('Adresse du PC (affichée au démarrage de server.js) :', saved);
             if (!input) return;
             const baseUrl = (input.startsWith('http') ? input : `http://${input}`).replace(/\/+$/, '');
@@ -3128,6 +3234,12 @@ Mot de passe: ${password}`;
         const PRIVATE_CATEGORIES = ['Cadeaux & proches', 'Argent perdu (Very)'];
         let reference = null;
         try { reference = JSON.parse(localStorage.getItem(REFERENCE_KEY) || 'null'); } catch (e) {}
+        if (!reference && IS_NATIVE) {
+            fetch('reference.json', { cache: 'no-store' })
+                .then(r => r.ok ? r.json() : null)
+                .then(ref => { if (ref && !reference) { reference = ref; if (currentUser) renderAll(); } })
+                .catch(() => {});
+        }
 
         function hasEnoughData() {
             if (sorties.length < 30) return false;

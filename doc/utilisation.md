@@ -95,12 +95,19 @@ le PC doit être joignable.
 
 Page **Utilisateurs** : un nom et un mot de passe sont générés (le bouton à côté de chaque champ en
 génère d'autres), et restent modifiables.
-**Créer l'utilisateur** affiche les identifiants à transmettre avec un bouton **Copier**. On peut
-supprimer un compte (ses données restent sur le PC, dans `donnees/`). Le compte principal ne peut pas
-être supprimé.
+**Créer l'utilisateur** affiche les identifiants à transmettre avec un bouton **Copier**.
 
-Un utilisateur créé sur le web doit se connecter une première fois sur le téléphone avec le PC allumé ;
-ensuite la connexion marche aussi hors ligne.
+Pour chaque compte :
+
+- **Nouveau mot de passe** : les mots de passe sont chiffrés de façon irréversible, on ne peut donc pas
+  voir celui d'un utilisateur. L'admin en donne un nouveau (généré, modifiable), affiché avec **Copier**.
+  L'ancien ne marche plus et les sessions ouvertes avec lui sont fermées.
+- **Supprimer** : supprime le compte **et ses données** (une dernière copie est gardée dans
+  `backups/supprime-<nom>-<date>.json` sur le PC). Le compte principal ne peut pas être supprimé.
+
+Un utilisateur créé sur le web se connecte sur le téléphone avec le PC allumé : l'écran de connexion de
+l'app contient le champ **Adresse du PC** (déjà rempli avec l'adresse mise dans l'APK). Après cette
+première connexion, ça marche aussi hors ligne.
 
 ## Différences téléphone / web
 

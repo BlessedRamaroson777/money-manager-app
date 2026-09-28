@@ -41,6 +41,15 @@ Conseil : copier régulièrement `data.json` sur une clé USB ou un cloud person
 - La communication téléphone ↔ PC est en HTTP simple : à utiliser sur un Wi-Fi de confiance (maison),
   pas sur un Wi-Fi public.
 
+## APK des testeurs
+
+`npm run apk:testeurs` ne met **aucune donnée personnelle** dans l'APK (vérifié : `data.json` vide,
+pas de `pc.json`, pas de compte admin). Les mots de passe des testeurs n'y sont pas non plus : seulement
+une empreinte PBKDF2. Un mot de passe trop simple (« 1234 ») pourrait toutefois être retrouvé par
+quelqu'un qui décortique l'APK : garder les mots de passe générés.
+
+L'APK perso (`npm run apk`) contient au contraire toutes tes données : **ne jamais l'envoyer à quelqu'un**.
+
 ## Ce qui est partagé avec les autres utilisateurs
 
 Les **repères** (`reference.json`), publiés automatiquement quand l'admin se connecte sur le web :

@@ -36,6 +36,9 @@ Elle tourne de deux façons :
 | `donnees/<utilisateur>.json` | Données des autres comptes |
 | `users.json`, `sessions.json` | Comptes (mots de passe hachés) et sessions ouvertes |
 | `reference.json` | Repères anonymes publiés par l'admin |
+| `www/accounts.json` | (généré) comptes embarqués dans l'APK : `{mode: "perso" \| "testeurs", accounts: [{username, role, primary, offline}]}` |
+| `www/pc.json` | (généré, APK perso uniquement) adresse du PC sur le Wi-Fi |
+| `apk/` | (généré) `BlessedMoney-testeurs.apk` |
 | `backups/` | Copies de sécurité |
 | `demarrage.md` | Aide-mémoire des commandes |
 | `PorteMonnaieApp/` | Ancienne copie du projet (historique, non utilisée) |
@@ -86,7 +89,8 @@ Toutes les routes sauf `/api/login` exigent l'en-tête `Authorization: Bearer <t
 | POST | `/api/reference` | (admin) Publie les repères |
 | GET | `/api/users` | (admin) Liste des comptes |
 | POST | `/api/users` | (admin) `{username, password}` : créer un compte |
-| DELETE | `/api/users/<nom>` | (admin) Supprimer un compte (ses données restent) |
+| POST | `/api/users/<nom>/password` | (admin) `{password}` : donner un nouveau mot de passe |
+| DELETE | `/api/users/<nom>` | (admin) Supprimer un compte et ses données (copie dans `backups/`) |
 
 Seuls `index.html`, `manifest.json`, `sw.js`, `icon.svg` et `DancingScript.ttf` sont servis
 publiquement ; aucun fichier de données n'est accessible sans connexion.
@@ -96,8 +100,14 @@ publiquement ; aucun fichier de données n'est accessible sans connexion.
 - `users.json` : `username`, `role` (`admin` / `user`), `primary` (compte principal → `data.json`),
   `dataId` (nom du fichier dans `donnees/`, stable même après renommage), `salt` + `hash` (scrypt).
 - Au premier démarrage, le serveur crée `blessed` / `blessed` (admin, principal).
-- Sur le téléphone, les comptes connus sont gardés hors ligne (`porteMonnaie:comptes`, empreinte
-  SHA-256) : la connexion marche sans le PC une fois qu'on s'est connecté une fois avec lui.
+- `offline` : empreinte **PBKDF2-SHA256** (150 000 itérations, sel aléatoire) créée avec le mot de
+  passe (création, nouveau mot de passe, changement, ou prochaine connexion pour les anciens comptes).
+  Elle est embarquée dans l'APK et vérifiée par l'app avec la WebCrypto du téléphone.
+- Connexion sur le téléphone : d'abord **hors ligne** (comptes embarqués, puis comptes déjà connus
+  `porteMonnaie:comptes`) ; si le PC répond, une session est récupérée en arrière-plan pour la synchro.
+  Le PC n'est interrogé en premier que pour un compte inconnu de l'appareil.
+- `blessed/blessed` par défaut n'existe que si l'APK n'embarque pas déjà le compte principal, et jamais
+  dans l'APK des testeurs.
 
 ## Logique des analyses (dans `index.html`)
 

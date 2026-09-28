@@ -40,13 +40,37 @@ npm run apk
 Le script [`scripts/build-apk.js`](../scripts/build-apk.js) :
 
 1. copie la page (`index.html`, `manifest.json`, `sw.js`, `icon.svg`, `DancingScript.ttf`) dans `www/` ;
-2. copie les **données à jour** du compte principal (`data.json`) dans l'APK ;
+2. copie les **données à jour** du compte principal (`data.json`) et **l'adresse du PC sur le Wi-Fi**
+   (`pc.json`) dans l'APK : même après une installation neuve, le téléphone sait où trouver le PC ;
 3. lance `npx cap sync android` puis `gradlew assembleDebug`.
 
 Résultat : `android/app/build/outputs/apk/debug/BlessedMoney.apk`.
 
 > Les données embarquées ne servent qu'au **tout premier lancement** d'une installation neuve.
 > Ensuite l'app garde ses propres données et se synchronise avec le PC.
+
+## APK pour les testeurs (sans PC)
+
+```
+npm run apk:testeurs
+```
+
+Génère `apk/BlessedMoney-testeurs.apk`, à envoyer aux testeurs, même très loin : l'app fonctionne
+**sans jamais joindre le PC**.
+
+- Embarque : la page, les **comptes créés sur le site web** (sous forme d'empreinte PBKDF2, jamais le
+  mot de passe) et les **repères**.
+- N'embarque pas : tes données, l'adresse du PC, le compte admin / principal (et `blessed/blessed`
+  ne marche pas dans cet APK).
+- Chaque testeur se connecte hors ligne ; ses données restent **sur son téléphone** (tu ne les vois pas).
+
+Étapes :
+1. Site web → **Utilisateurs** : créer un compte par testeur (ou **Nouveau mot de passe** pour un
+   compte créé avant cette fonction : il lui faut une empreinte hors ligne, le script le signale).
+2. `npm run apk:testeurs`.
+3. Envoyer `apk/BlessedMoney-testeurs.apk` + ses identifiants à chaque testeur.
+
+Un compte créé ou un mot de passe changé **après** la génération n'est connu qu'avec un nouvel APK.
 
 ## Installer l'APK sur le téléphone
 

@@ -41,3 +41,9 @@ reference.json
 
 data.json
 www/data.json
+
+# APK testeurs et fichiers générés pour l'APK
+apk/
+www/accounts.json
+www/pc.json
+www/reference.json
