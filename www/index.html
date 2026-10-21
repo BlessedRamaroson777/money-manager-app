@@ -975,6 +975,8 @@
         .quick-actions button { display: inline-flex; align-items: center; gap: 6px; }
         .icon-btn { line-height: 0; }
         .is-native .web-only, .is-web .native-only { display: none !important; }
+        body:not(.can-sync) .sync-only { display: none !important; }
+        .cloud .login-pc { display: none !important; }
         /* Pas de rectangle gris au toucher sur mobile; contour arrondi au clavier */
         * { -webkit-tap-highlight-color: transparent; }
         button:focus { outline: none; }
@@ -1159,7 +1161,7 @@
         <header class="app-header">
             <div class="brand-logo small">Blessed Money</div>
             <div class="user-box">
-                <button class="native-only header-send" onclick="sendToPC()" title="Synchroniser avec le PC"><svg class="ic"><use href="#i-send"/></svg><span class="sync-label">Synchroniser</span></button>
+                <button class="sync-only header-send" onclick="sendToPC()" title="Synchroniser"><svg class="ic"><use href="#i-send"/></svg><span class="sync-label">Synchroniser</span></button>
                 <button onclick="showPage('reglages')" title="Réglages"><svg class="ic"><use href="#i-settings"/></svg></button>
                 <button class="who" onclick="openAccount()" title="Mon compte"><svg class="ic"><use href="#i-user"/></svg><b id="current-user"></b></button>
                 <button onclick="logout()" title="Déconnexion"><svg class="ic"><use href="#i-logout"/></svg><span class="label">Déconnexion</span></button>
@@ -1456,7 +1458,7 @@
                 <input type="file" id="import-file" accept=".json" onchange="importJSON(event)" style="display: none;">
             </label>
             <button class="web-only" onclick="exportData()" style="background: #4ECDC4; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">Exporter</button>
-            <button class="native-only" id="send-pc-btn" onclick="sendToPC()" style="background: #3498DB; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;"><span class="sync-label">Synchroniser</span> avec le PC</button>
+            <button class="sync-only" id="send-pc-btn" onclick="sendToPC()" style="background: #3498DB; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;"><span class="sync-label">Synchroniser</span> maintenant</button>
             <button class="web-only" onclick="clearAllData()" style="background: #FF6B6B; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">Effacer</button>
         </div>
         </section>
@@ -1580,6 +1582,9 @@
         </div>
     </div>
 
+    <script src="firebase-config.js"></script>
+    <script src="firebase-sdk.js"></script>
+    <script src="sync.js"></script>
     <script>
         let sorties = [];
         let entrees = [];
@@ -1599,7 +1604,9 @@
         const PC_URL_KEY = 'porteMonnaie:pcUrl';
         // Dans l'app Android (Capacitor) ou sur le site servi par server.js
         const IS_NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
-        const IS_SERVER = !IS_NATIVE && location.protocol.startsWith('http');
+        // Firebase configuré et chargé: connexion et synchro par internet (le serveur du PC devient facultatif)
+        const CLOUD = !!(window.FB && window.FIREBASE_CONFIG && window.BlessedSync);
+        const IS_SERVER = !CLOUD && !IS_NATIVE && location.protocol.startsWith('http');
 
         // ===== Connexion / utilisateurs =====
         const SESSION_KEY = 'porteMonnaie:session';
@@ -1712,6 +1719,7 @@
         async function login(username, password) {
             username = username.trim().toLowerCase();
             usingDefaultPassword = username === 'blessed' && password === 'blessed';
+            if (CLOUD) return cloudLoginFlow(username, password);
             if (IS_SERVER) {
                 const r = await remoteLogin('', username, password, 10000);
                 if (!r.reachable) throw new Error('Serveur injoignable');
@@ -1776,7 +1784,8 @@
         }
 
         async function checkOffline(username, password) {
-            const bundled = (await getBundledAccounts())[username];
+            // Avec Firebase, les comptes sont ceux de Firebase (ceux embarqués dans l'APK ne servent plus)
+            const bundled = CLOUD ? null : (await getBundledAccounts())[username];
             if (bundled && await verifyOffline(bundled.offline, password)) return { ok: true, account: bundled };
             const local = (await getLocalAccounts())[username];
             if (local && local.hash === await sha256(`${username}:${password}`)) return { ok: true, account: local };
@@ -1796,6 +1805,13 @@
         async function restoreSession() {
             const session = readSession();
             if (!session) return false;
+            if (CLOUD) {
+                // Ancienne session (serveur du PC): il faut se reconnecter une fois
+                if (!session.cloud) { writeSession(null); return false; }
+                currentUser = session;
+                cloudInit();
+                return true;
+            }
             if (IS_SERVER) {
                 try {
                     const me = await apiFetch('/api/me', {}, session.token);
@@ -1823,18 +1839,20 @@
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('app').classList.remove('hidden');
             document.getElementById('current-user').textContent = currentUser.username;
-            document.getElementById('nav-users').classList.toggle('hidden', !(IS_SERVER && currentUser.role === 'admin'));
+            document.getElementById('nav-users').classList.toggle('hidden', !((IS_SERVER || CLOUD) && currentUser.role === 'admin'));
             let page = 'accueil';
             try { page = localStorage.getItem('porteMonnaie:page') || 'accueil'; } catch (e) {}
             showPage(page);
             await loadData();
             syncReference();
-            if (IS_NATIVE) syncWithPC({ silent: true });
+            if (CLOUD) cloudSync();
+            else if (IS_NATIVE) syncWithPC({ silent: true });
         }
 
         // Retour sur l'app: récupérer ce que l'autre appareil a synchronisé entre-temps
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState !== 'visible' || !currentUser) return;
+            if (CLOUD) return cloudSync();
             if (IS_SERVER) {
                 apiFetch('/api/load').then(d => applyMerged(d)).catch(err => handleAuthError(err));
             } else if (IS_NATIVE) {
@@ -1846,6 +1864,10 @@
             if (!confirm('Se déconnecter ?')) return;
             if (IS_SERVER && currentUser && currentUser.token) {
                 try { await apiFetch('/api/logout', { method: 'POST' }); } catch (e) {}
+            }
+            if (CLOUD) {
+                stopCloudListener();
+                try { cloudInit(); await FB.signOut(fbAuth); } catch (e) {}
             }
             writeSession(null);
             sorties = [];
@@ -1890,7 +1912,7 @@
             }
             // Le compte est géré par le serveur du PC: depuis le téléphone il faut l'avoir déjà joint une fois
             const base = IS_SERVER ? '' : currentUser.server;
-            if (!IS_SERVER && (!base || !currentUser.token)) {
+            if (!CLOUD && !IS_SERVER && (!base || !currentUser.token)) {
                 error.textContent = 'Le PC doit être joignable: fais d\'abord « Envoyer au PC » une fois, puis réessaie.';
                 return;
             }
@@ -1899,7 +1921,10 @@
             try {
                 const oldUsername = currentUser.username;
                 const oldKey = userStorageKey();
-                const r = await apiFetch(`${base}/api/account`, { method: 'POST', body: JSON.stringify({ currentPassword, newUsername, newPassword }) });
+                const r = CLOUD
+                    ? await cloudUpdateAccount(currentPassword, newUsername, newPassword)
+                    : await apiFetch(`${base}/api/account`, { method: 'POST', body: JSON.stringify({ currentPassword, newUsername, newPassword }) });
+                if (CLOUD) rememberCloudProfile({ ...currentUser, username: r.username }, oldUsername);
                 writeSession({ ...currentUser, username: r.username, role: r.role, primary: r.primary });
                 // Les données locales suivent le nouveau nom
                 const newKey = userStorageKey();
@@ -1914,7 +1939,7 @@
                 renderHabits();
                 alert(`Compte mis à jour.\n\nNom d'utilisateur: ${r.username}${newPassword ? '\nMot de passe: modifié' : ''}`);
             } catch (err) {
-                if (!handleAuthError(err)) error.textContent = err.message;
+                if (!handleAuthError(err)) error.textContent = CLOUD ? cloudErrorMessage(err) : err.message;
             } finally {
                 btn.disabled = false;
             }
@@ -1973,6 +1998,363 @@
             });
         }
 
+        // ===================================================================
+        // ===== Firebase: connexion et synchronisation par internet     =====
+        // ===================================================================
+        // Les données restent d'abord sur l'appareil (hors ligne), puis sont fusionnées avec Firestore
+        // (même logique que sync.js) dès qu'il y a internet. Un changement sur un autre appareil arrive
+        // tout seul grâce à l'écoute en direct du document principal.
+        let fbApp = null, fbAuth = null, fbDb = null;
+        let cloudUnsub = null, lastOwnRev = null;
+        let cloudSyncRunning = false, cloudSyncAgain = false, cloudTimer = null;
+        const YEAR_KINDS = ['sorties', 'entrees', 'transferts', 'dettes'];
+
+        function cloudInit() {
+            if (!CLOUD || fbApp) return;
+            fbApp = FB.initializeApp(window.FIREBASE_CONFIG);
+            fbAuth = FB.initializeAuth(fbApp, { persistence: [FB.indexedDBLocalPersistence, FB.browserLocalPersistence] });
+            fbDb = FB.initializeFirestore(fbApp, { experimentalAutoDetectLongPolling: true });
+        }
+
+        // Attend que Firebase ait relu la session enregistrée sur l'appareil (marche hors ligne)
+        function cloudAuthReady() {
+            cloudInit();
+            return new Promise(resolve => {
+                const off = FB.onAuthStateChanged(fbAuth, user => { off(); resolve(user); });
+            });
+        }
+
+        const cloudEmail = name => `${name}@${window.FIREBASE_EMAIL_DOMAIN || 'blessed-money.app'}`;
+        const isNetworkError = e => !navigator.onLine || /network-request-failed|unavailable|deadline-exceeded/.test((e && e.code) || '');
+        const isBadCredentials = e => /invalid-credential|wrong-password|user-not-found|invalid-email|user-disabled|invalid-login-credentials/.test((e && e.code) || '');
+
+        function cloudErrorMessage(e) {
+            const code = (e && e.code) || '';
+            if (isBadCredentials(e)) return "Nom d'utilisateur ou mot de passe incorrect";
+            if (isNetworkError(e)) return 'Pas de connexion internet';
+            if (/too-many-requests/.test(code)) return "Trop d'essais : réessaie dans quelques minutes";
+            if (/weak-password/.test(code)) return 'Mot de passe trop court (6 caractères minimum)';
+            if (/permission-denied/.test(code)) return 'Accès refusé par Firebase (règles de sécurité pas encore publiées ?)';
+            if (/requires-recent-login/.test(code)) return 'Reconnecte-toi puis réessaie';
+            return (e && e.message) || String(e);
+        }
+
+        // JSON stable (clés triées) pour comparer sans dépendre de l'ordre renvoyé par Firestore
+        function stableStringify(v) {
+            if (Array.isArray(v)) return '[' + v.map(stableStringify).join(',') + ']';
+            if (v && typeof v === 'object') return '{' + Object.keys(v).sort().map(k => JSON.stringify(k) + ':' + stableStringify(v[k])).join(',') + '}';
+            return JSON.stringify(v === undefined ? null : v);
+        }
+        const firestoreSafe = v => JSON.parse(JSON.stringify(v)); // Firestore refuse les "undefined"
+
+        async function cloudProfile(uid, username) {
+            const ref = FB.doc(fbDb, 'users', uid);
+            const snap = await FB.getDoc(ref);
+            if (snap.exists()) return { uid, ...snap.data() };
+            // Premier démarrage du compte principal: on crée son profil d'administrateur
+            if (uid === window.FIREBASE_ADMIN_UID) {
+                const p = { username: username || 'blessed', role: 'admin', primary: true, dataId: uid, createdAt: new Date().toISOString() };
+                await FB.setDoc(ref, p);
+                await FB.setDoc(FB.doc(fbDb, 'usernames', p.username), { email: fbAuth.currentUser.email, uid });
+                return { uid, ...p };
+            }
+            throw new Error("Ce compte n'a pas de profil : demande à l'administrateur de le recréer.");
+        }
+
+        async function cloudLogin(username, password) {
+            cloudInit();
+            let email = cloudEmail(username);
+            const mapping = await FB.getDoc(FB.doc(fbDb, 'usernames', username));
+            if (mapping.exists()) email = mapping.data().email;
+            const cred = await FB.signInWithEmailAndPassword(fbAuth, email, password);
+            return cloudProfile(cred.user.uid, username);
+        }
+
+        function cloudSession(profile) {
+            return { username: profile.username, role: profile.role, primary: !!profile.primary, uid: profile.uid, dataId: profile.dataId, cloud: true };
+        }
+
+        // Connecté hors ligne: dès qu'internet revient, on ouvre aussi la session Firebase pour synchroniser
+        async function connectCloudInBackground(username, password) {
+            try {
+                const profile = await cloudLogin(username, password);
+                if (!currentUser || currentUser.username !== username) return;
+                await rememberLocalAccount(profile.username, password, profile.role, profile.primary);
+                writeSession({ ...currentUser, ...cloudSession(profile) });
+                cloudSync();
+            } catch (e) {
+                if (!isNetworkError(e)) console.log('Session Firebase impossible', e);
+                else window.addEventListener('online', () => connectCloudInBackground(username, password), { once: true });
+            }
+        }
+
+        // ----- Synchronisation -----
+        function splitByYear(data) {
+            const years = {};
+            YEAR_KINDS.forEach(kind => (data[kind] || []).forEach(item => {
+                const year = String(item.date || '').slice(0, 4) || 'sans-date';
+                (years[year] = years[year] || { sorties: [], entrees: [], transferts: [], dettes: [] })[kind].push(item);
+            }));
+            return years;
+        }
+
+        async function cloudSyncOnce() {
+            const dataId = currentUser.dataId;
+            const mainRef = FB.doc(fbDb, 'data', dataId);
+            const local = currentData();
+            const rev = newUid();
+            return FB.runTransaction(fbDb, async tx => {
+                const main = await tx.get(mainRef);
+                const mainData = main.exists() ? main.data() : null;
+                const years = mainData ? (mainData.annees || []) : [];
+                const yearSnaps = await Promise.all(years.map(y => tx.get(FB.doc(fbDb, 'data', dataId, 'annees', y))));
+
+                let remote = null;
+                const oldYears = {};
+                if (mainData) {
+                    const { annees, rev: _rev, majCloud, ...rest } = mainData;
+                    remote = { ...rest };
+                    YEAR_KINDS.forEach(k => remote[k] = []);
+                    yearSnaps.forEach((snap, i) => {
+                        if (!snap.exists()) return;
+                        const content = snap.data();
+                        oldYears[years[i]] = stableStringify(content);
+                        YEAR_KINDS.forEach(k => remote[k].push(...(content[k] || [])));
+                    });
+                }
+
+                const { data: merged, stats } = BlessedSync.mergeData(remote, local);
+                const split = splitByYear(merged);
+                let changed = false;
+                Object.entries(split).forEach(([year, content]) => {
+                    const safe = firestoreSafe(content);
+                    if (stableStringify(safe) !== oldYears[year]) {
+                        tx.set(FB.doc(fbDb, 'data', dataId, 'annees', year), safe);
+                        changed = true;
+                    }
+                });
+                years.filter(y => !split[y]).forEach(y => {
+                    tx.delete(FB.doc(fbDb, 'data', dataId, 'annees', y));
+                    changed = true;
+                });
+                const { sorties: _s, entrees: _e, transferts: _t, dettes: _d, ...mainFields } = merged;
+                const safeMain = firestoreSafe(mainFields);
+                const oldMain = mainData ? (({ annees, rev: _r, majCloud, ...rest }) => rest)(mainData) : null;
+                if (changed || !mainData || stableStringify(safeMain) !== stableStringify(oldMain)) {
+                    tx.set(mainRef, { ...safeMain, annees: Object.keys(split).sort(), rev, majCloud: Date.now() });
+                    changed = true;
+                }
+                return { merged, stats, rev: changed ? rev : null };
+            });
+        }
+
+        function startCloudListener() {
+            if (cloudUnsub || !currentUser || !currentUser.dataId) return;
+            cloudUnsub = FB.onSnapshot(FB.doc(fbDb, 'data', currentUser.dataId), snap => {
+                if (!snap.exists() || snap.metadata.hasPendingWrites) return;
+                const rev = snap.data().rev;
+                if (rev && rev !== lastOwnRev) scheduleCloudSync(300);
+            }, err => console.log('Écoute Firebase interrompue', err));
+        }
+
+        function stopCloudListener() {
+            if (cloudUnsub) cloudUnsub();
+            cloudUnsub = null;
+        }
+
+        function scheduleCloudSync(delay = 2500) {
+            if (!CLOUD || !currentUser) return;
+            clearTimeout(cloudTimer);
+            cloudTimer = setTimeout(() => cloudSync(), delay);
+        }
+
+        async function cloudSync({ silent = true } = {}) {
+            if (!CLOUD || !currentUser) return;
+            if (!currentUser.dataId) {
+                if (!silent) alert('Connecte-toi une fois avec internet pour activer la synchronisation.');
+                return;
+            }
+            if (cloudSyncRunning) { cloudSyncAgain = true; return; }
+            cloudInit();
+            if (!fbAuth.currentUser) await cloudAuthReady();
+            if (!fbAuth.currentUser || fbAuth.currentUser.uid !== currentUser.uid) {
+                setSyncStatus('Reconnecte-toi');
+                if (!silent) alert('Ta session Firebase a expiré : déconnecte-toi puis reconnecte-toi avec internet.');
+                return;
+            }
+            cloudSyncRunning = true;
+            setSyncStatus('Synchro...');
+            const before = sorties.length + entrees.length + transferts.length + dettes.length;
+            const version = dataVersion;
+            try {
+                const result = await cloudSyncOnce();
+                if (result.rev) lastOwnRev = result.rev;
+                if (version === dataVersion) applyMerged(result.merged);
+                else cloudSyncAgain = true; // modifié pendant la synchro: on refait un tour
+                const after = sorties.length + entrees.length + transferts.length + dettes.length;
+                setSyncStatus('Synchronisé');
+                startCloudListener();
+                if (!silent) alert(`Synchronisé\n\n${Math.max(0, after - before)} opération(s) reçue(s)\n${result.stats.envoyees} opération(s) envoyée(s)`);
+            } catch (e) {
+                console.log('Synchro Firebase impossible', e);
+                setSyncStatus(isNetworkError(e) ? 'Hors ligne' : 'Synchroniser');
+                if (!silent) alert('Synchro impossible : ' + cloudErrorMessage(e));
+            } finally {
+                cloudSyncRunning = false;
+                setTimeout(() => setSyncStatus('Synchroniser'), 3000);
+                if (cloudSyncAgain) {
+                    cloudSyncAgain = false;
+                    scheduleCloudSync(500);
+                }
+            }
+        }
+
+        window.addEventListener('online', () => { if (CLOUD && currentUser) scheduleCloudSync(500); });
+
+        // ----- Repères partagés -----
+        async function cloudSyncReference() {
+            cloudInit();
+            if (!fbAuth.currentUser) await cloudAuthReady();
+            if (!fbAuth.currentUser) return;
+            const ref = FB.doc(fbDb, 'public', 'reference');
+            if (currentUser.role === 'admin' && hasEnoughData()) {
+                await FB.setDoc(ref, firestoreSafe({ ...buildReference(), updatedAt: new Date().toISOString() }));
+            }
+            const snap = await FB.getDoc(ref);
+            return snap.exists() ? snap.data() : null;
+        }
+
+        // ----- Administration des comptes (sans serveur: un 2e accès Firebase crée le compte) -----
+        const USERNAME_RE = /^[a-z0-9._-]{3,30}$/;
+
+        async function withSecondaryAuth(fn) {
+            const app2 = FB.initializeApp(window.FIREBASE_CONFIG, 'admin-' + Date.now());
+            const auth2 = FB.initializeAuth(app2, { persistence: FB.inMemoryPersistence });
+            try {
+                return await fn(auth2);
+            } finally {
+                try { await FB.signOut(auth2); } catch (e) {}
+                await FB.deleteApp(app2);
+            }
+        }
+
+        async function cloudCreateAuth(username, password) {
+            return withSecondaryAuth(async auth2 => {
+                try {
+                    return (await FB.createUserWithEmailAndPassword(auth2, cloudEmail(username), password)).user;
+                } catch (e) {
+                    if (!/email-already-in-use/.test(e.code || '')) throw e;
+                    // Adresse déjà prise (ancien compte): on en prend une autre, le nom reste le même
+                    return (await FB.createUserWithEmailAndPassword(auth2, cloudEmail(`${username}.${newUid().slice(0, 6)}`), password)).user;
+                }
+            });
+        }
+
+        async function cloudListUsers() {
+            const snap = await FB.getDocs(FB.collection(fbDb, 'users'));
+            return snap.docs.map(d => ({ uid: d.id, ...d.data() })).sort((a, b) => (b.primary ? 1 : 0) - (a.primary ? 1 : 0) || a.username.localeCompare(b.username));
+        }
+
+        async function cloudCreateUser(username, password) {
+            if (!USERNAME_RE.test(username)) throw new Error("Nom d'utilisateur : 3 à 30 caractères (lettres, chiffres, . _ -)");
+            if (String(password).length < 6) throw new Error('Mot de passe : 6 caractères minimum');
+            if ((await FB.getDoc(FB.doc(fbDb, 'usernames', username))).exists()) throw new Error("Ce nom d'utilisateur existe déjà");
+            const user = await cloudCreateAuth(username, password);
+            await FB.setDoc(FB.doc(fbDb, 'users', user.uid), { username, role: 'user', primary: false, dataId: user.uid, createdAt: new Date().toISOString() });
+            await FB.setDoc(FB.doc(fbDb, 'usernames', username), { email: user.email, uid: user.uid });
+        }
+
+        // Nouveau mot de passe: un nouvel accès est créé et rattaché aux mêmes données (dataId)
+        async function cloudResetPassword(username, password) {
+            if (String(password).length < 6) throw new Error('Mot de passe : 6 caractères minimum');
+            const mapping = await FB.getDoc(FB.doc(fbDb, 'usernames', username));
+            if (!mapping.exists()) throw new Error('Utilisateur introuvable');
+            const oldUid = mapping.data().uid;
+            if (oldUid === fbAuth.currentUser.uid) throw new Error('Pour ton propre compte, utilise « Mon compte ».');
+            const old = await FB.getDoc(FB.doc(fbDb, 'users', oldUid));
+            if (!old.exists()) throw new Error('Profil introuvable');
+            const user = await cloudCreateAuth(username, password);
+            await FB.setDoc(FB.doc(fbDb, 'users', user.uid), { ...old.data(), remplace: oldUid });
+            await FB.setDoc(FB.doc(fbDb, 'usernames', username), { email: user.email, uid: user.uid });
+            await FB.deleteDoc(FB.doc(fbDb, 'users', oldUid));
+        }
+
+        async function cloudDeleteUser(username) {
+            const mapping = await FB.getDoc(FB.doc(fbDb, 'usernames', username));
+            if (!mapping.exists()) throw new Error('Utilisateur introuvable');
+            const uid = mapping.data().uid;
+            const profileSnap = await FB.getDoc(FB.doc(fbDb, 'users', uid));
+            const profile = profileSnap.exists() ? profileSnap.data() : {};
+            if (profile.primary || uid === fbAuth.currentUser.uid) throw new Error('Ce compte ne peut pas être supprimé');
+            if (profile.dataId) {
+                const thisYear = new Date().getFullYear();
+                const years = ['sans-date'];
+                for (let y = 2020; y <= thisYear + 1; y++) years.push(String(y));
+                await Promise.all(years.map(y => FB.deleteDoc(FB.doc(fbDb, 'data', profile.dataId, 'annees', y))));
+                await FB.deleteDoc(FB.doc(fbDb, 'data', profile.dataId));
+            }
+            await FB.deleteDoc(FB.doc(fbDb, 'users', uid));
+            await FB.deleteDoc(FB.doc(fbDb, 'usernames', username));
+        }
+
+        // ----- Mon compte (nom / mot de passe) -----
+        async function cloudUpdateAccount(currentPassword, newUsername, newPassword) {
+            cloudInit();
+            const user = fbAuth.currentUser || await cloudAuthReady();
+            if (!user) throw new Error('Il faut être connecté avec internet pour modifier ton compte.');
+            await FB.reauthenticateWithCredential(user, FB.EmailAuthProvider.credential(user.email, currentPassword));
+            if (newPassword) {
+                if (newPassword.length < 6) throw new Error('Nouveau mot de passe : 6 caractères minimum');
+                await FB.updatePassword(user, newPassword);
+            }
+            const oldUsername = currentUser.username;
+            if (newUsername !== oldUsername) {
+                if (!USERNAME_RE.test(newUsername)) throw new Error("Nom d'utilisateur : 3 à 30 caractères (lettres, chiffres, . _ -)");
+                if ((await FB.getDoc(FB.doc(fbDb, 'usernames', newUsername))).exists()) throw new Error("Ce nom d'utilisateur existe déjà");
+                await FB.setDoc(FB.doc(fbDb, 'usernames', newUsername), { email: user.email, uid: user.uid });
+                await FB.updateDoc(FB.doc(fbDb, 'users', user.uid), { username: newUsername });
+                await FB.deleteDoc(FB.doc(fbDb, 'usernames', oldUsername));
+            }
+            return { username: newUsername, role: currentUser.role, primary: currentUser.primary };
+        }
+
+        // ----- Connexion (Firebase d'abord, hors ligne si pas d'internet) -----
+        const CLOUD_PROFILES_KEY = 'porteMonnaie:profilsCloud';
+        function getCloudProfiles() {
+            try { return JSON.parse(localStorage.getItem(CLOUD_PROFILES_KEY) || '{}'); } catch (e) { return {}; }
+        }
+        function rememberCloudProfile(profile, oldUsername) {
+            const all = getCloudProfiles();
+            if (oldUsername && oldUsername !== profile.username) delete all[oldUsername];
+            all[profile.username] = { uid: profile.uid, dataId: profile.dataId, role: profile.role, primary: !!profile.primary };
+            try { localStorage.setItem(CLOUD_PROFILES_KEY, JSON.stringify(all)); } catch (e) {}
+        }
+
+        async function cloudLoginFlow(username, password) {
+            const offline = await checkOffline(username, password);
+            if (navigator.onLine) {
+                try {
+                    const profile = await cloudLogin(username, password);
+                    await rememberLocalAccount(profile.username, password, profile.role, profile.primary);
+                    rememberCloudProfile(profile);
+                    writeSession(cloudSession(profile));
+                    return;
+                } catch (e) {
+                    console.log('Connexion Firebase', e);
+                    const blocked = /permission-denied/.test((e && e.code) || '');
+                    if (isBadCredentials(e) || (!isNetworkError(e) && !(blocked && offline.ok))) throw new Error(cloudErrorMessage(e));
+                }
+            }
+            if (offline.ok) {
+                const cached = getCloudProfiles()[username] || {};
+                writeSession({ username, role: offline.account.role, primary: offline.account.primary, ...cached, cloud: true });
+                if (!cached.uid) connectCloudInBackground(username, password);
+                return;
+            }
+            throw new Error(offline.known ? 'Mot de passe incorrect' : 'Première connexion : il faut internet.');
+        }
+
+
         // ===== Pages =====
         function showPage(page, fromBack = false) {
             const btn = document.querySelector(`.app-nav button[data-page="${page}"]`);
@@ -2011,7 +2393,7 @@
             if (!document.getElementById('new-user').value) document.getElementById('new-user').value = generateUsername();
             if (!document.getElementById('new-pass').value) document.getElementById('new-pass').value = generatePassword();
             try {
-                const { users } = await apiFetch('/api/users');
+                const users = CLOUD ? await cloudListUsers() : (await apiFetch('/api/users')).users;
                 list.innerHTML = users.map(u => `
                     <div class="user-row">
                         <span><svg class="ic"><use href="#i-user"/></svg> <b>${escapeHtml(u.username)}</b> ${u.role === 'admin' ? '· admin' : ''}<br><small>créé le ${formatDate((u.createdAt || '').slice(0, 10))}</small></span>
@@ -2021,7 +2403,7 @@
                         </span>
                     </div>`).join('');
             } catch (e) {
-                if (!handleAuthError(e)) list.innerHTML = `<p style="color:#E74C3C">${escapeHtml(e.message)}</p>`;
+                if (!handleAuthError(e)) list.innerHTML = `<p style="color:#E74C3C">${escapeHtml(CLOUD ? cloudErrorMessage(e) : e.message)}</p>`;
             }
         }
 
@@ -2039,7 +2421,8 @@
             const username = document.getElementById('new-user').value.trim().toLowerCase();
             const password = document.getElementById('new-pass').value;
             try {
-                await apiFetch('/api/users', { method: 'POST', body: JSON.stringify({ username, password }) });
+                if (CLOUD) await cloudCreateUser(username, password);
+                else await apiFetch('/api/users', { method: 'POST', body: JSON.stringify({ username, password }) });
                 lastCreds = `Blessed Money
 Utilisateur: ${username}
 Mot de passe: ${password}`;
@@ -2053,7 +2436,7 @@ Mot de passe: ${password}`;
                 document.getElementById('new-pass').value = generatePassword();
                 renderUsers();
             } catch (e) {
-                if (!handleAuthError(e)) alert('' + e.message);
+                if (!handleAuthError(e)) alert(CLOUD ? cloudErrorMessage(e) : e.message);
             }
         }
 
@@ -2062,7 +2445,8 @@ Mot de passe: ${password}`;
             const password = prompt(`Nouveau mot de passe pour « ${username} » (généré, modifiable) :`, generatePassword());
             if (password === null) return;
             try {
-                await apiFetch(`/api/users/${encodeURIComponent(username)}/password`, { method: 'POST', body: JSON.stringify({ password }) });
+                if (CLOUD) await cloudResetPassword(username, password);
+                else await apiFetch(`/api/users/${encodeURIComponent(username)}/password`, { method: 'POST', body: JSON.stringify({ password }) });
                 lastCreds = `Blessed Money\nUtilisateur: ${username}\nMot de passe: ${password}`;
                 document.getElementById('new-user-result').innerHTML = `
                     <div class="cred-card">Nouveau mot de passe enregistré. Identifiants à lui donner:<br>
@@ -2072,17 +2456,18 @@ Mot de passe: ${password}`;
                     </div>`;
                 document.getElementById('new-user-result').scrollIntoView({ block: 'center' });
             } catch (e) {
-                if (!handleAuthError(e)) alert(e.message);
+                if (!handleAuthError(e)) alert(CLOUD ? cloudErrorMessage(e) : e.message);
             }
         }
 
         async function deleteUser(username) {
-            if (!confirm(`Supprimer le compte « ${username} » et toutes ses données ?\n\nIl ne pourra plus se connecter. Une dernière copie de ses données est gardée dans backups/ sur le PC.`)) return;
+            if (!confirm(`Supprimer le compte « ${username} » et toutes ses données ?\n\nIl ne pourra plus se connecter. ${CLOUD ? 'Ses données seront effacées définitivement.' : 'Une dernière copie de ses données est gardée dans backups/ sur le PC.'}`)) return;
             try {
-                await apiFetch(`/api/users/${encodeURIComponent(username)}`, { method: 'DELETE' });
+                if (CLOUD) await cloudDeleteUser(username);
+                else await apiFetch(`/api/users/${encodeURIComponent(username)}`, { method: 'DELETE' });
                 renderUsers();
             } catch (e) {
-                if (!handleAuthError(e)) alert('' + e.message);
+                if (!handleAuthError(e)) alert(CLOUD ? cloudErrorMessage(e) : e.message);
             }
         }
 
@@ -2295,6 +2680,7 @@ Mot de passe: ${password}`;
         let syncRunning = false;
 
         function scheduleSync() {
+            if (CLOUD) return scheduleCloudSync();
             if (!IS_NATIVE || !currentUser || !currentUser.token) return;
             clearTimeout(syncTimer);
             syncTimer = setTimeout(() => syncWithPC({ silent: true }), 4000);
@@ -2337,6 +2723,7 @@ Mot de passe: ${password}`;
 
         // Bouton "Synchroniser": direct si le PC est déjà connu, sinon demande l'adresse (et le mot de passe)
         async function sendToPC(forceSetup = false) {
+            if (CLOUD) return cloudSync({ silent: false });
             if (!forceSetup && currentUser.token && currentUser.server) return syncWithPC();
             const saved = (await getPcUrl()) || 'http://192.168.1.3:3000';
             const input = prompt('Adresse du PC (affichée au démarrage de server.js) :', saved);
@@ -2385,6 +2772,8 @@ Mot de passe: ${password}`;
             setupAutocomplete();
 
             document.body.classList.add(IS_NATIVE ? 'is-native' : 'is-web');
+            if (IS_NATIVE || CLOUD) document.body.classList.add('can-sync');
+            if (CLOUD) document.body.classList.add('cloud');
             document.getElementById('account-form').addEventListener('submit', saveAccount);
             document.getElementById('transfert-form').addEventListener('submit', addTransfert);
             document.getElementById('dette-form').addEventListener('submit', addDette);
@@ -3478,6 +3867,19 @@ Mot de passe: ${password}`;
 
         // Appelé à la connexion: l'admin met à jour les repères, les autres les récupèrent
         async function syncReference() {
+            if (CLOUD) {
+                try {
+                    const ref = await cloudSyncReference();
+                    if (ref) {
+                        reference = ref;
+                        localStorage.setItem(REFERENCE_KEY, JSON.stringify(ref));
+                        if (useReference()) renderAll();
+                    }
+                } catch (e) {
+                    console.log('Repères indisponibles', e);
+                }
+                return;
+            }
             const base = IS_SERVER ? '' : currentUser && currentUser.server;
             if (!currentUser || !currentUser.token || base === undefined || (!IS_SERVER && !base)) return;
             try {

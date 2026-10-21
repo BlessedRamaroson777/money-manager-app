@@ -14,7 +14,10 @@ const { execSync } = require('child_process');
 const TESTEURS = process.argv.includes('--testeurs');
 const root = path.join(__dirname, '..');
 const www = path.join(root, 'www');
-const WEB_FILES = ['index.html', 'manifest.json', 'sw.js', 'icon.svg', 'DancingScript.ttf'];
+const WEB_FILES = ['index.html', 'manifest.json', 'sw.js', 'icon.svg', 'DancingScript.ttf', 'firebase-config.js', 'firebase-sdk.js', 'sync.js'];
+
+// SDK Firebase regroupé en un fichier (embarqué: l'app marche hors ligne)
+require('./build-firebase');
 const readJson = (file, fallback) => {
     try { return JSON.parse(fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '')); } catch (e) { return fallback; }
 };

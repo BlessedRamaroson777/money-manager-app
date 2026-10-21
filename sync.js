@@ -4,12 +4,16 @@
 //  - opération sans uid (données d'avant la synchro) -> reconnue par son contenu
 //    (date + description + montant + source), pour ne pas créer de doublons
 //  - suppressions -> gardées dans "supprimes" pour ne pas ressusciter une opération effacée
-const crypto = require('crypto');
+// Ce fichier sert à la fois au serveur Node (require) et à l'app (balise <script>, window.BlessedSync)
+(function (root) {
+const webCrypto = (typeof globalThis !== 'undefined' && globalThis.crypto && globalThis.crypto.getRandomValues)
+    ? globalThis.crypto
+    : require('crypto').webcrypto;
 
 const MAX_TOMBSTONES = 5000;
 
 function newUid() {
-    return crypto.randomBytes(8).toString('hex');
+    return [...webCrypto.getRandomValues(new Uint8Array(8))].map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
 function norm(s) {
@@ -113,4 +117,7 @@ function mergeData(stored, incoming) {
     };
 }
 
-module.exports = { mergeData, signature };
+const api = { mergeData, signature };
+if (typeof module !== 'undefined' && module.exports) module.exports = api;
+else root.BlessedSync = api;
+})(typeof window !== 'undefined' ? window : globalThis);

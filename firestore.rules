@@ -1,0 +1,72 @@
+rules_version = '2';
+
+// Règles de sécurité Firestore de Blessed Money.
+// À coller dans la console Firebase: Firestore Database -> Règles -> Publier.
+//
+//   usernames/{nom}            nom d'utilisateur -> adresse de connexion (lisible pour se connecter)
+//   users/{uid}                profil: nom, rôle, compte principal, dataId (où sont ses données)
+//   data/{dataId}              réglages, soldes, planification de l'utilisateur
+//   data/{dataId}/annees/{an}  dépenses, revenus, transferts, dettes de l'année
+//   public/reference           repères anonymes pour les nouveaux utilisateurs
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function profile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function hasProfile() {
+      return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return signedIn() && (
+        request.auth.uid == 'P1oF3qxA6KOq7mwm1pUTtkbVgMo2'
+        || (hasProfile() && profile().role == 'admin')
+      );
+    }
+
+    // Seul le propriétaire du profil qui pointe vers ces données y a accès (l'admin ne les lit pas)
+    function ownsData(dataId) {
+      return hasProfile() && profile().dataId == dataId;
+    }
+
+    match /usernames/{name} {
+      allow get: if true;
+      allow list: if isAdmin();
+      allow create: if isAdmin() || (signedIn() && request.resource.data.uid == request.auth.uid);
+      allow update: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid
+                                     && request.resource.data.uid == request.auth.uid);
+      allow delete: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow create, delete: if isAdmin();
+      // Un utilisateur peut changer son nom, pas son rôle ni l'endroit de ses données
+      allow update: if isAdmin() || (signedIn() && request.auth.uid == uid
+                                     && request.resource.data.role == resource.data.role
+                                     && request.resource.data.dataId == resource.data.dataId
+                                     && request.resource.data.get('primary', false) == resource.data.get('primary', false));
+    }
+
+    match /data/{dataId} {
+      allow read, write: if ownsData(dataId);
+      allow delete: if isAdmin();
+
+      match /annees/{annee} {
+        allow read, write: if ownsData(dataId);
+        allow delete: if isAdmin();
+      }
+    }
+
+    match /public/{docId} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+  }
+}

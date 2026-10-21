@@ -47,3 +47,7 @@ apk/
 www/accounts.json
 www/pc.json
 www/reference.json
+
+# SDK Firebase regroupé (généré par scripts/build-firebase.js)
+firebase-sdk.js
+www/firebase-sdk.js

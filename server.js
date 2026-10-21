@@ -23,7 +23,7 @@ const MIME_TYPES = {
 };
 
 // Seuls ces fichiers sont publics: data.json, users.json et backups/ ne doivent jamais être servis
-const PUBLIC_FILES = ['/index.html', '/manifest.json', '/sw.js', '/icon.svg', '/DancingScript.ttf'];
+const PUBLIC_FILES = ['/index.html', '/manifest.json', '/sw.js', '/icon.svg', '/DancingScript.ttf', '/firebase-config.js', '/firebase-sdk.js', '/sync.js'];
 
 // ===== Utilisateurs =====
 const USERNAME_RE = /^[a-z0-9._-]{3,30}$/;
