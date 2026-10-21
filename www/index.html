@@ -976,6 +976,11 @@
         .icon-btn { line-height: 0; }
         .is-native .web-only, .is-web .native-only { display: none !important; }
         body:not(.can-sync) .sync-only { display: none !important; }
+        .period-filter { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; flex-wrap: wrap; }
+        .period-filter select { padding: 9px 12px; border: 2px solid #EEE; border-radius: 12px; font-family: inherit; background: white; }
+        .period-arrow { width: 38px; height: 38px; border: none; border-radius: 50%; background: white; font-size: 1.3em; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+        .period-arrow:disabled { opacity: 0.35; cursor: default; }
+        .period-label { flex: 1; text-align: center; font-weight: 600; color: #555; text-transform: capitalize; min-width: 140px; }
         .cloud .login-pc { display: none !important; }
         /* Pas de rectangle gris au toucher sur mobile; contour arrondi au clavier */
         * { -webkit-tap-highlight-color: transparent; }
@@ -1301,6 +1306,18 @@
                 </form>
             </div>
 
+
+            <div class="period-filter">
+                <select id="period-sortie" onchange="periodNav('sortie', 0)" aria-label="Période">
+                    <option value="all">Tout</option>
+                    <option value="day">Jour</option>
+                    <option value="week">Semaine</option>
+                    <option value="month">Mois</option>
+                </select>
+                <button type="button" class="period-arrow" onclick="periodNav('sortie', -1)" aria-label="Période précédente">‹</button>
+                <span class="period-label" id="period-label-sortie">Toutes les dates</span>
+                <button type="button" class="period-arrow" onclick="periodNav('sortie', 1)" aria-label="Période suivante">›</button>
+            </div>
             <div class="controls">
                 <input type="text" class="search-box" id="search-sortie" placeholder="Rechercher..." oninput="renderSorties()">
                 <select class="sort-select" id="sort-sortie" onchange="renderSorties()">
@@ -1355,6 +1372,18 @@
                 </form>
             </div>
 
+
+            <div class="period-filter">
+                <select id="period-entree" onchange="periodNav('entree', 0)" aria-label="Période">
+                    <option value="all">Tout</option>
+                    <option value="day">Jour</option>
+                    <option value="week">Semaine</option>
+                    <option value="month">Mois</option>
+                </select>
+                <button type="button" class="period-arrow" onclick="periodNav('entree', -1)" aria-label="Période précédente">‹</button>
+                <span class="period-label" id="period-label-entree">Toutes les dates</span>
+                <button type="button" class="period-arrow" onclick="periodNav('entree', 1)" aria-label="Période suivante">›</button>
+            </div>
             <div class="controls">
                 <input type="text" class="search-box" id="search-entree" placeholder="Rechercher..." oninput="renderEntrees()">
                 <select class="sort-select" id="sort-entree" onchange="renderEntrees()">
@@ -3604,10 +3633,52 @@ Mot de passe: ${password}`;
             setupPlanAutocomplete();
         }
 
+        // ----- Filtre par période des listes (jour / semaine / mois) -----
+        const periodRefs = {};
+        function getPeriodFilter(kind) {
+            const mode = document.getElementById('period-' + kind).value;
+            if (mode === 'all') return null;
+            const ref = periodRefs[kind] || isoDate(new Date());
+            if (mode === 'day') return { start: ref, end: ref };
+            if (mode === 'week') {
+                const start = weekStart(ref);
+                const end = parseDate(start);
+                end.setDate(end.getDate() + 6);
+                return { start, end: isoDate(end) };
+            }
+            const d = parseDate(ref);
+            return { start: ref.slice(0, 8) + '01', end: isoDate(new Date(d.getFullYear(), d.getMonth() + 1, 0, 12)) };
+        }
+
+        function periodNav(kind, step) {
+            const mode = document.getElementById('period-' + kind).value;
+            if (step === 0) periodRefs[kind] = isoDate(new Date());
+            else if (mode !== 'all') {
+                const d = parseDate(periodRefs[kind] || isoDate(new Date()));
+                if (mode === 'day') d.setDate(d.getDate() + step);
+                else if (mode === 'week') d.setDate(d.getDate() + 7 * step);
+                else d.setMonth(d.getMonth() + step, 1);
+                periodRefs[kind] = isoDate(d);
+            }
+            const range = getPeriodFilter(kind);
+            const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+            document.getElementById('period-label-' + kind).textContent = !range ? 'Toutes les dates'
+                : mode === 'day' ? `${WEEKDAYS[parseDate(range.start).getDay()]} ${formatDate(range.start)}`
+                : mode === 'week' ? `du ${formatDate(range.start)} au ${formatDate(range.end)}`
+                : `${months[parseDate(range.start).getMonth()]} ${range.start.slice(0, 4)}`;
+            document.querySelectorAll(`#${kind}-section .period-arrow`).forEach(b => b.disabled = !range);
+            kind === 'sortie' ? renderSorties() : renderEntrees();
+        }
+
+        function inPeriod(kind, date) {
+            const range = getPeriodFilter(kind);
+            return !range || (date >= range.start && date <= range.end);
+        }
+
         function getFilteredSorties() {
             const search = document.getElementById('search-sortie').value.toLowerCase();
             const sort = document.getElementById('sort-sortie').value;
-            let filtered = sorties.filter(s => s.description.toLowerCase().includes(search) || s.date.includes(search));
+            let filtered = sorties.filter(s => inPeriod('sortie', s.date) && (s.description.toLowerCase().includes(search) || s.date.includes(search)));
             filtered.sort((a, b) => {
                 if (sort === 'date-desc') return new Date(b.date) - new Date(a.date);
                 if (sort === 'date-asc') return new Date(a.date) - new Date(b.date);
@@ -3621,7 +3692,7 @@ Mot de passe: ${password}`;
         function getFilteredEntrees() {
             const search = document.getElementById('search-entree').value.toLowerCase();
             const sort = document.getElementById('sort-entree').value;
-            let filtered = entrees.filter(e => e.source.toLowerCase().includes(search) || e.date.includes(search));
+            let filtered = entrees.filter(e => inPeriod('entree', e.date) && (e.source.toLowerCase().includes(search) || e.date.includes(search)));
             filtered.sort((a, b) => {
                 if (sort === 'date-desc') return new Date(b.date) - new Date(a.date);
                 if (sort === 'date-asc') return new Date(a.date) - new Date(b.date);
@@ -3635,7 +3706,7 @@ Mot de passe: ${password}`;
         function renderSorties() {
             const tbody = document.getElementById('sortie-tbody');
             const filtered = getFilteredSorties();
-            document.getElementById('count-sortie').textContent = filtered.length + ' résultats';
+            document.getElementById('count-sortie').textContent = `${filtered.length} dépense(s) · ${formatNumber(sumMontant(filtered))} Ar`;
             tbody.innerHTML = filtered.map(s => `
                 <tr>
                     <td>${formatDate(s.date)}</td>
@@ -3653,7 +3724,7 @@ Mot de passe: ${password}`;
         function renderEntrees() {
             const tbody = document.getElementById('entree-tbody');
             const filtered = getFilteredEntrees();
-            document.getElementById('count-entree').textContent = filtered.length + ' résultats';
+            document.getElementById('count-entree').textContent = `${filtered.length} revenu(s) · ${formatNumber(sumMontant(filtered))} Ar`;
             tbody.innerHTML = filtered.map(e => `
                 <tr>
                     <td>${formatDate(e.date)}</td>
