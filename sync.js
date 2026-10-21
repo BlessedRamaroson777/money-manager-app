@@ -17,9 +17,10 @@ function norm(s) {
 }
 
 function signature(item, kind) {
-    return kind === 'sorties'
-        ? `${item.date}|${norm(item.description)}|${item.montant}|${item.source}`
-        : `${item.date}|${norm(item.source)}|${item.montant}|${item.destinataire}`;
+    if (kind === 'sorties') return `${item.date}|${norm(item.description)}|${item.montant}|${item.source}`;
+    if (kind === 'entrees') return `${item.date}|${norm(item.source)}|${item.montant}|${item.destinataire}`;
+    // transferts, dettes: toujours créés avec un uid, la signature ne sert qu'en secours
+    return `${item.date}|${item.montant}|${norm(item.de || item.personne)}|${norm(item.vers || item.sens)}`;
 }
 
 function mergeList(stored, incoming, kind, dead) {
@@ -84,23 +85,31 @@ function mergeData(stored, incoming) {
 
     const s = mergeList(stored.sorties, incoming.sorties, 'sorties', tombstones);
     const e = mergeList(stored.entrees, incoming.entrees, 'entrees', tombstones);
+    const t = mergeList(stored.transferts, incoming.transferts, 'transferts', tombstones);
+    const d = mergeList(stored.dettes, incoming.dettes, 'dettes', tombstones);
 
     // Soldes et planification: la version modifiée en dernier gagne (égalité -> le PC)
     const soldesFromIncoming = (incoming.majSoldes || 0) > (stored.majSoldes || 0);
     const planFromIncoming = (incoming.majPlan || 0) > (stored.majPlan || 0) || (!stored.plan && incoming.plan);
+    // Réglages (comptes, prix de base): la version modifiée en dernier gagne
+    const reglagesFromIncoming = (incoming.majReglages || 0) > (stored.majReglages || 0) || (!stored.reglages && incoming.reglages);
 
     const data = {
         sorties: s.list,
         entrees: e.list,
+        transferts: t.list,
+        dettes: d.list,
+        reglages: (reglagesFromIncoming ? incoming.reglages : stored.reglages) || incoming.reglages,
         soldesInitiaux: (soldesFromIncoming ? incoming.soldesInitiaux : stored.soldesInitiaux) || incoming.soldesInitiaux || {},
         plan: (planFromIncoming ? incoming.plan : stored.plan) || incoming.plan,
         majSoldes: Math.max(stored.majSoldes || 0, incoming.majSoldes || 0),
         majPlan: Math.max(stored.majPlan || 0, incoming.majPlan || 0),
+        majReglages: Math.max(stored.majReglages || 0, incoming.majReglages || 0),
         supprimes,
     };
     return {
         data,
-        stats: { envoyees: s.added + e.added, supprimees: s.removed + e.removed }
+        stats: { envoyees: s.added + e.added + t.added + d.added, supprimees: s.removed + e.removed + t.removed + d.removed }
     };
 }
 

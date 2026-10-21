@@ -57,3 +57,6 @@ suggestions juste en dessous. Si ça arrive encore sur un écran précis, le sig
 | Données de février introuvables | L'app avait changé d'identifiant et de clé de stockage | Récupération depuis l'écran du téléphone, relecture de l'ancienne clé |
 | Accents cassés (« GoÃƒÂ»ter ») | Double encodage d'anciennes données | Corrigés lors de la récupération |
 | N'importe qui sur le Wi-Fi pouvait lire `data.json` | Le serveur servait tous les fichiers | Liste blanche de fichiers publics + connexion obligatoire |
+| Le bouton retour fermait l'app | Capacitor ne gère pas le retour par défaut | `MainActivity.java` demande à la page de revenir en arrière |
+| Rectangle gris au toucher d'un bouton | Surbrillance par défaut d'Android | `-webkit-tap-highlight-color: transparent` |
+| Indrive proposé à 2 500 Ar | Le « prix habituel » prenait un vieux montant isolé | Montant le plus fréquent s'il revient vraiment, sinon médiane, ou prix de base choisi |

@@ -25,7 +25,8 @@ Chaque dépense / revenu porte :
 | Opération sans `uid` (données d'avant la synchro) | Reconnue par son **contenu** (date + description + montant + source), une pour une : pas de doublon |
 | Opération nouvelle (uid inconnu) | Ajoutée, même si une opération identique existe (deux vrais trajets en bus le même jour restent deux) |
 | Opération supprimée | Mémorisée dans `supprimes` (uid + date) pour ne pas revenir à la synchro suivante |
-| Soldes initiaux, planification | La version modifiée en dernier (`majSoldes`, `majPlan`) gagne ; à égalité, celle du PC |
+| Transferts, dettes | Mêmes règles que les dépenses (uid, `maj`, suppressions mémorisées) ; un remboursement met à jour le `maj` de sa dette |
+| Soldes initiaux, planification, réglages (comptes, prix de base) | La version modifiée en dernier (`majSoldes`, `majPlan`, `majReglages`) gagne ; à égalité, celle du PC |
 
 Les `id` (utilisés par l'interface pour modifier / supprimer) sont rendus uniques après fusion.
 Les suppressions mémorisées sont limitées aux 5 000 plus récentes.

@@ -975,6 +975,112 @@
         .quick-actions button { display: inline-flex; align-items: center; gap: 6px; }
         .icon-btn { line-height: 0; }
         .is-native .web-only, .is-web .native-only { display: none !important; }
+        /* Pas de rectangle gris au toucher sur mobile; contour arrondi au clavier */
+        * { -webkit-tap-highlight-color: transparent; }
+        button:focus { outline: none; }
+        button:focus-visible, a:focus-visible { outline: 2px solid rgba(233, 30, 99, 0.45); outline-offset: 2px; }
+        button:active { filter: brightness(0.94); }
+
+        /* Comptes personnalisés */
+        .balance-card.custom { border: 4px solid; background: linear-gradient(to bottom, #FAF7FC, white); }
+        .balance-card .compte-type { font-size: 0.72em; color: #999; margin: -6px 0 6px; }
+        .balance-card.add-compte {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+            border: 2px dashed #E0C3D0; background: transparent; box-shadow: none; color: #E91E63;
+            font-family: inherit; font-weight: 600; cursor: pointer; min-height: 140px;
+        }
+        .balance-card.add-compte small { color: #999; font-weight: 400; }
+        .mini-card {
+            display: flex; align-items: center; gap: 10px; background: white; border-radius: 14px;
+            padding: 11px 14px; margin-bottom: 10px; font-size: 0.88em; cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .mini-card .ic { color: #E91E63; width: 1.3em; height: 1.3em; }
+        .pos { color: #27AE60; }
+        .neg { color: #E74C3C; }
+        .muted { color: #999; }
+        .empty-row { text-align: center; color: #999; padding: 14px; }
+        .form-hint { text-align: center; color: #888; font-size: 0.85em; margin: -6px 0 14px; }
+
+        /* Onglets d'Opérations: 5 onglets, défilables sur petit écran */
+        .tabs { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { white-space: nowrap; }
+        .tab-btn.transfert { background: #3498DB; color: white; }
+        .tab-btn.dette { background: #9B59B6; color: white; }
+        .tab-btn.journal { background: #FF9800; color: white; }
+        .form-container.transfert-form { border: 5px solid #3498DB; }
+        .form-container.dette-form { border: 5px solid #9B59B6; }
+        .form-container.journal-box { border: 5px solid #FF9800; }
+        .form-title.transfert { color: #3498DB; }
+        .form-title.dette { color: #9B59B6; }
+        .form-title.journal { color: #FF9800; }
+        .submit-btn.transfert { background: linear-gradient(135deg, #3498DB, #5DADE2); color: white; }
+        .submit-btn.dette { background: linear-gradient(135deg, #9B59B6, #BB8FCE); color: white; }
+
+        /* Dettes */
+        .dette-card { background: white; border-radius: 16px; padding: 14px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid #FF6B6B; }
+        .dette-card.pret { border-left-color: #4ECDC4; }
+        .dette-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .dette-badge { font-size: 0.72em; background: #F5F0FF; color: #9B59B6; border-radius: 999px; padding: 2px 8px; margin-left: 4px; }
+        .dette-amount { font-weight: 700; font-size: 1.1em; }
+        .dette-meta, .dette-paiements { font-size: 0.8em; color: #888; margin-top: 6px; }
+        .dette-actions { display: flex; gap: 8px; margin-top: 10px; align-items: center; flex-wrap: wrap; }
+        .dettes-soldees summary { cursor: pointer; color: #888; margin: 10px 0; }
+
+        /* Journal */
+        .journal-controls { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 14px; }
+        .journal-controls select, .journal-controls input { padding: 8px 10px; border: 2px solid #EEE; border-radius: 10px; font-family: inherit; }
+        .journal-week { display: flex; justify-content: space-between; gap: 8px; background: #FFF3E0; color: #E67E22; border-radius: 10px; padding: 8px 12px; margin: 16px 0 6px; font-size: 0.85em; font-weight: 600; }
+        .journal-day { margin-bottom: 10px; }
+        .journal-day-head { display: flex; justify-content: space-between; font-size: 0.82em; font-weight: 700; color: #666; text-transform: capitalize; padding: 6px 4px; border-bottom: 1px solid #F0E4EA; }
+        .journal-row { display: flex; justify-content: space-between; gap: 10px; padding: 7px 4px; border-bottom: 1px dashed #F3EEF1; font-size: 0.9em; }
+        .journal-label small { display: block; color: #aaa; font-size: 0.78em; }
+        .journal-amount { white-space: nowrap; font-weight: 600; }
+        .journal-row.transfert .journal-label::before { content: '⇄ '; color: #3498DB; }
+        .situation-card { background: linear-gradient(135deg, #FFF0F5, #F5F0FF); border-radius: 16px; padding: 14px; margin-bottom: 16px; }
+        .situation-title { font-size: 0.8em; color: #888; text-transform: uppercase; letter-spacing: 0.6px; }
+        .situation-total { font-size: 1.5em; font-weight: 700; color: #E91E63; margin: 4px 0 8px; }
+        .situation-total small { font-size: 0.55em; color: #888; font-weight: 500; }
+        .situation-epargne { font-size: 0.55em; color: #9B59B6; font-weight: 600; }
+        .situation-comptes { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.85em; color: #666; }
+
+        /* Revenus / provenance */
+        .revenus-section { border-color: #4ECDC4; }
+        .revenus-section .stats-title { color: #26A69A; }
+        .month-row { display: grid; grid-template-columns: 1fr auto auto auto; gap: 12px; padding: 7px 0; border-bottom: 1px dashed #EEE; font-size: 0.88em; }
+        .provenance-mode { display: flex; flex-direction: column; gap: 4px; font-size: 0.82em; color: #666; margin-bottom: 10px; }
+        .provenance-item { background: white; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 1px 5px rgba(0,0,0,0.05); }
+        .provenance-item summary { display: flex; justify-content: space-between; gap: 8px; cursor: pointer; font-size: 0.88em; list-style: none; flex-wrap: wrap; }
+        .provenance-item summary::-webkit-details-marker { display: none; }
+        .provenance-item .bar-track { margin: 8px 0 6px; height: 8px; }
+        .provenance-spent { font-size: 0.8em; color: #888; }
+
+        /* Réglages */
+        .reglages-section { border-color: #E91E63; }
+        .reglage-compte { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding: 8px 0; border-bottom: 1px dashed #EEE; }
+        .reglage-compte.masque { opacity: 0.55; }
+        .reglage-compte input[type="text"] { flex: 2 1 140px; padding: 8px 10px; border: 2px solid #EEE; border-radius: 10px; font-family: inherit; }
+        .reglage-compte select { flex: 1 1 110px; padding: 8px; border: 2px solid #EEE; border-radius: 10px; font-family: inherit; }
+        .reglage-check { font-size: 0.82em; color: #888; display: flex; align-items: center; gap: 4px; }
+        .prix-search { width: 100%; padding: 10px 12px; border: 2px solid #EEE; border-radius: 12px; font-family: inherit; margin-bottom: 8px; }
+        .prix-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px dashed #EEE; font-size: 0.9em; }
+        .prix-row small { display: block; color: #aaa; font-size: 0.78em; }
+        .prix-row input { width: 100px; padding: 6px 8px; border: 2px solid #EEE; border-radius: 8px; text-align: right; font-family: inherit; }
+
+        @media (max-width: 600px) {
+            .tab-btn { padding: 9px 14px; font-size: 0.85em; }
+            .month-row { grid-template-columns: 1fr auto auto; }
+            .month-row b { grid-column: 1 / -1; text-align: right; }
+            /* Comptes: deux par ligne sur téléphone */
+            .balance-section { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .balance-card { padding: 12px 10px; }
+            .balance-card .amount { font-size: 1.15em; }
+            .balance-card input { font-size: 0.85em; padding: 6px; }
+            .balance-card .edit-balance-btn { padding: 6px 12px; font-size: 0.85em; }
+            .balance-card.add-compte { min-height: 110px; }
+        }
+
         .user-box .header-send { background: #E91E63; color: white; border-color: #E91E63; font-weight: 600; }
         .user-box .who b { font-weight: 600; }
         .account-field { margin-bottom: 12px; }
@@ -1021,6 +1127,8 @@
         <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
         <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
         <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></symbol>
+        <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+        <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 21h14M5 7h14M5 7l-3 7a4 4 0 0 0 6 0L5 7zM19 7l-3 7a4 4 0 0 0 6 0l-3-7z"/></symbol>
         <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-14"/></symbol>
     </svg>
     <!-- Écran de chargement -->
@@ -1052,6 +1160,7 @@
             <div class="brand-logo small">Blessed Money</div>
             <div class="user-box">
                 <button class="native-only header-send" onclick="sendToPC()" title="Synchroniser avec le PC"><svg class="ic"><use href="#i-send"/></svg><span class="sync-label">Synchroniser</span></button>
+                <button onclick="showPage('reglages')" title="Réglages"><svg class="ic"><use href="#i-settings"/></svg></button>
                 <button class="who" onclick="openAccount()" title="Mon compte"><svg class="ic"><use href="#i-user"/></svg><b id="current-user"></b></button>
                 <button onclick="logout()" title="Déconnexion"><svg class="ic"><use href="#i-logout"/></svg><span class="label">Déconnexion</span></button>
             </div>
@@ -1090,36 +1199,13 @@
             </div>
         </div>
 
-        <!-- Soldes modifiables -->
-        <div class="balance-section">
-            <div class="balance-card chambre">
-                <h3>Argent Chambre</h3>
-                <div class="amount" id="display-chambre">0 Ar</div>
-                <input type="number" id="input-chambre" placeholder="Nouveau solde...">
-                <button class="edit-balance-btn" onclick="updateBalance('chambre')">Modifier</button>
-                <div class="calculated" id="calc-chambre">Initial: 0 Ar</div>
-            </div>
-            <div class="balance-card wallet">
-                <h3>Porte-feuille</h3>
-                <div class="amount" id="display-wallet">0 Ar</div>
-                <input type="number" id="input-wallet" placeholder="Nouveau solde...">
-                <button class="edit-balance-btn" onclick="updateBalance('wallet')">Modifier</button>
-                <div class="calculated" id="calc-wallet">Initial: 0 Ar</div>
-            </div>
-            <div class="balance-card mvola">
-                <h3>Mvola</h3>
-                <div class="amount" id="display-mvola">0 Ar</div>
-                <input type="number" id="input-mvola" placeholder="Nouveau solde...">
-                <button class="edit-balance-btn" onclick="updateBalance('mvola')">Modifier</button>
-                <div class="calculated" id="calc-mvola">Initial: 0 Ar</div>
-            </div>
-            <div class="balance-card airtel">
-                <h3>Airtel Money</h3>
-                <div class="amount" id="display-airtel">0 Ar</div>
-                <input type="number" id="input-airtel" placeholder="Nouveau solde...">
-                <button class="edit-balance-btn" onclick="updateBalance('airtel')">Modifier</button>
-                <div class="calculated" id="calc-airtel">Initial: 0 Ar</div>
-            </div>
+        <!-- Soldes (un par compte, générés) -->
+        <div class="balance-section" id="balance-section"></div>
+        <div id="dettes-accueil"></div>
+        <div id="provenance-card"></div>
+        <div class="mini-card" onclick="openSituation()">
+            <svg class="ic"><use href="#i-calendar"/></svg>
+            <span>Voir ma situation à une date, ou tout ce qui s'est passé un jour / une semaine</span>
         </div>
 
         <!-- Alertes d'habitudes inhabituelles -->
@@ -1153,6 +1239,13 @@
             <div id="analyse-content"></div>
         </div>
 
+        <!-- Section Revenus -->
+        <div class="stats-section revenus-section" id="revenus-section">
+            <h2 class="stats-title">Analyse de mes revenus</h2>
+            <p class="analyse-note" style="text-align:center;margin:-8px 0 14px">Même période que l'analyse des dépenses</p>
+            <div id="revenus-content"></div>
+        </div>
+
         </section>
 
         <!-- ===== Page Planifier ===== -->
@@ -1172,8 +1265,11 @@
         <section class="page" data-page="operations">
         <!-- Tabs -->
         <div class="tabs">
-            <button class="tab-btn sortie active" onclick="showTab('sortie')">Dépenses</button>
-            <button class="tab-btn entree" onclick="showTab('entree')">Revenus</button>
+            <button class="tab-btn sortie active" data-tab="sortie" onclick="showTab('sortie')">Dépenses</button>
+            <button class="tab-btn entree" data-tab="entree" onclick="showTab('entree')">Revenus</button>
+            <button class="tab-btn transfert" data-tab="transfert" onclick="showTab('transfert')">Transferts</button>
+            <button class="tab-btn dette" data-tab="dette" onclick="showTab('dette')">Dettes</button>
+            <button class="tab-btn journal" data-tab="journal" onclick="showTab('journal')">Journal</button>
         </div>
 
         <!-- Formulaire Sortie -->
@@ -1196,12 +1292,7 @@
                         </div>
                         <div class="form-group">
                             <label>Source</label>
-                            <select id="sortie-source" class="source-select" required>
-                                <option value="Wallet">Porte-feuille</option>
-                                <option value="Chambre">Chambre</option>
-                                <option value="Mvola">Mvola</option>
-                                <option value="Airtel">Airtel Money</option>
-                            </select>
+                            <select id="sortie-source" class="source-select account-select" data-default="Wallet" required></select>
                         </div>
                     </div>
                     <button type="submit" class="submit-btn sortie">Ajouter</button>
@@ -1255,12 +1346,7 @@
                         </div>
                         <div class="form-group">
                             <label>Destination</label>
-                            <select id="entree-dest" class="dest-select" required>
-                                <option value="Wallet">Porte-feuille</option>
-                                <option value="Chambre">Chambre</option>
-                                <option value="Mvola">Mvola</option>
-                                <option value="Airtel">Airtel Money</option>
-                            </select>
+                            <select id="entree-dest" class="dest-select account-select" data-default="Wallet" required></select>
                         </div>
                     </div>
                     <button type="submit" class="submit-btn entree">Ajouter</button>
@@ -1294,8 +1380,76 @@
             </div>
         </div>
 
+        <!-- Transferts entre comptes -->
+        <div id="transfert-section" class="hidden">
+            <div class="form-container transfert-form">
+                <h2 class="form-title transfert">Transfert entre comptes</h2>
+                <p class="form-hint">Déplacer de l'argent d'un compte à un autre (ex: Chambre → Mvola). Ce n'est ni une dépense ni un revenu.</p>
+                <form id="transfert-form">
+                    <div class="form-row">
+                        <div class="form-group"><label>Date</label><input type="date" id="transfert-date" required></div>
+                        <div class="form-group"><label>De</label><select id="transfert-de" class="account-select" data-default="Chambre" required></select></div>
+                        <div class="form-group"><label>Vers</label><select id="transfert-vers" class="account-select" data-default="Mvola" required></select></div>
+                        <div class="form-group"><label>Montant (Ar)</label><input type="number" id="transfert-montant" placeholder="10000" required></div>
+                        <div class="form-group"><label>Frais (facultatif)</label><input type="number" id="transfert-frais" placeholder="0"></div>
+                        <div class="form-group"><label>Note (facultatif)</label><input type="text" id="transfert-note" placeholder="Ex: dépôt Mvola"></div>
+                    </div>
+                    <button type="submit" class="submit-btn transfert">Transférer</button>
+                </form>
+            </div>
+            <div class="table-container transfert-table">
+                <table>
+                    <thead><tr><th>Date</th><th>De → Vers</th><th>Montant</th><th>Note</th><th></th></tr></thead>
+                    <tbody id="transfert-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Dettes -->
+        <div id="dette-section" class="hidden">
+            <div class="form-container dette-form">
+                <h2 class="form-title dette">Nouvelle dette</h2>
+                <form id="dette-form">
+                    <div class="form-row">
+                        <div class="form-group"><label>Type</label>
+                            <select id="dette-sens"><option value="emprunt">J'ai emprunté (je dois)</option><option value="pret">J'ai prêté (on me doit)</option></select>
+                        </div>
+                        <div class="form-group"><label>Personne</label><input type="text" id="dette-personne" placeholder="Ex: Aunty Favour" required></div>
+                        <div class="form-group"><label>Montant (Ar)</label><input type="number" id="dette-montant" placeholder="20000" required></div>
+                        <div class="form-group"><label>Argent reçu / donné via</label><select id="dette-compte" class="account-select" data-default="Wallet" data-none="1"></select></div>
+                        <div class="form-group"><label>Date</label><input type="date" id="dette-date" required></div>
+                        <div class="form-group"><label>À rendre le (facultatif)</label><input type="date" id="dette-echeance"></div>
+                        <div class="form-group"><label>Note (facultatif)</label><input type="text" id="dette-note" placeholder="Ex: pour le loyer"></div>
+                    </div>
+                    <button type="submit" class="submit-btn dette">Ajouter</button>
+                </form>
+            </div>
+            <div id="dettes-list"></div>
+        </div>
+
+        <!-- Journal: tout ce qui s'est passé, par date -->
+        <div id="journal-section" class="hidden">
+            <div class="form-container journal-box">
+                <h2 class="form-title journal">Journal</h2>
+                <div class="journal-controls">
+                    <select id="journal-mode" onchange="journalNav(0)">
+                        <option value="day">Jour</option>
+                        <option value="week" selected>Semaine</option>
+                        <option value="month">Mois</option>
+                        <option value="range">Période</option>
+                    </select>
+                    <button type="button" class="plan-btn secondary" onclick="journalNav(-1)" aria-label="Précédent">‹</button>
+                    <input type="date" id="journal-date" onchange="renderJournal()">
+                    <input type="date" id="journal-end" class="hidden" onchange="renderJournal()">
+                    <button type="button" class="plan-btn secondary" onclick="journalNav(1)" aria-label="Suivant">›</button>
+                    <button type="button" class="plan-btn secondary" onclick="journalToday()">Aujourd'hui</button>
+                </div>
+                <div id="journal-content"></div>
+            </div>
+        </div>
+
         <div class="emoji-decoration"></div>
-        
+
         <div style="text-align: center; margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
             <label class="web-only" style="background: #9B59B6; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">
                 Importer
@@ -1305,6 +1459,34 @@
             <button class="native-only" id="send-pc-btn" onclick="sendToPC()" style="background: #3498DB; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;"><span class="sync-label">Synchroniser</span> avec le PC</button>
             <button class="web-only" onclick="clearAllData()" style="background: #FF6B6B; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 500;">Effacer</button>
         </div>
+        </section>
+
+        <!-- ===== Page Réglages ===== -->
+        <section class="page" data-page="reglages">
+            <div class="stats-section reglages-section">
+                <h2 class="stats-title">Réglages</h2>
+                <div class="analyse-block">
+                    <h4>Mes comptes</h4>
+                    <p class="analyse-note">Renomme, change le type, masque ou ajoute un compte (épargne, banque, Orange Money...).</p>
+                    <div id="reglages-comptes"></div>
+                    <button class="plan-btn" onclick="addCompte()" style="margin-top:10px"><svg class="ic"><use href="#i-plus"/></svg> Ajouter un compte</button>
+                </div>
+                <div class="analyse-block">
+                    <h4>Prix de base</h4>
+                    <p class="analyse-note">Le prix proposé dans les suggestions et les activités types. Laisse vide pour garder le prix habituel calculé (ex: mets 6000 pour Indrive).</p>
+                    <input type="text" id="prix-search" class="prix-search" placeholder="Chercher un article..." oninput="renderReglages()">
+                    <div id="reglages-prix"></div>
+                    <div class="plan-form" style="margin-top:10px">
+                        <input id="prix-new-label" placeholder="Autre article (ex: Indrive)" style="flex:2 1 140px">
+                        <input id="prix-new-montant" type="number" placeholder="Prix (Ar)" style="flex:1 1 90px">
+                        <button onclick="addPrixBase()">Ajouter</button>
+                    </div>
+                </div>
+                <div class="analyse-block">
+                    <h4>Mon compte</h4>
+                    <button class="plan-btn secondary" onclick="openAccount()">Changer mon nom d'utilisateur ou mon mot de passe</button>
+                </div>
+            </div>
         </section>
 
         <!-- ===== Page Utilisateurs (web, admin) ===== -->
@@ -1334,6 +1516,22 @@
                 <div class="modal-buttons">
                     <button type="button" class="action-btn cancel-btn" onclick="closeModal()">Annuler</button>
                     <button type="submit" class="action-btn save-btn">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Remboursement d'une dette -->
+    <div class="modal" id="paiement-modal">
+        <div class="modal-content">
+            <h2 class="modal-title" id="paiement-title">Remboursement</h2>
+            <form id="paiement-form">
+                <div class="form-group account-field"><label>Montant (Ar)</label><input type="number" id="paiement-montant" required></div>
+                <div class="form-group account-field"><label id="paiement-compte-label">Compte</label><select id="paiement-compte"></select></div>
+                <div class="form-group account-field"><label>Date</label><input type="date" id="paiement-date" required></div>
+                <div class="modal-buttons">
+                    <button type="button" class="action-btn cancel-btn" onclick="closePaiement()">Annuler</button>
+                    <button type="submit" class="action-btn save-btn">Enregistrer</button>
                 </div>
             </form>
         </div>
@@ -1388,7 +1586,10 @@
         let soldesInitiaux = { Chambre: 0, Wallet: 0, Mvola: 0, Airtel: 0 };
         let plan = { revenus: {}, budgets: {}, objectifs: [], activites: [] };
         // Synchro téléphone <-> PC: dates de modification et opérations supprimées
-        let syncMeta = { majSoldes: 0, majPlan: 0, supprimes: [] };
+        let syncMeta = { majSoldes: 0, majPlan: 0, majReglages: 0, supprimes: [] };
+        let transferts = [];
+        let dettes = [];
+        let reglages = { comptes: [], prixPerso: {} };
         let dataVersion = 0;
         let editingId = null;
         let editingType = null;
@@ -1773,13 +1974,19 @@
         }
 
         // ===== Pages =====
-        function showPage(page) {
+        function showPage(page, fromBack = false) {
             const btn = document.querySelector(`.app-nav button[data-page="${page}"]`);
-            if (!btn || btn.classList.contains('hidden')) page = 'accueil';
+            if (page !== 'reglages' && (!btn || btn.classList.contains('hidden'))) page = 'accueil';
+            const current = (document.querySelector('.page.active') || {}).dataset?.page;
+            if (!fromBack && current && current !== page) {
+                pageStack.push(current);
+                if (!IS_NATIVE) history.pushState({ page }, '', '#' + page);
+            }
             document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.dataset.page === page));
             document.querySelectorAll('.app-nav button').forEach(b => b.classList.toggle('active', b.dataset.page === page));
             try { localStorage.setItem('porteMonnaie:page', page); } catch (e) {}
             if (page === 'users') renderUsers();
+            if (page === 'reglages') renderReglages();
             window.scrollTo({ top: 0 });
         }
 
@@ -1900,6 +2107,14 @@ Mot de passe: ${password}`;
                 }
             };
 
+            normalized.transferts = Array.isArray(data?.transferts) ? data.transferts : [];
+            normalized.dettes = Array.isArray(data?.dettes) ? data.dettes : [];
+            const savedComptes = Array.isArray(data?.reglages?.comptes) && data.reglages.comptes.length ? data.reglages.comptes : null;
+            normalized.reglages = {
+                comptes: (savedComptes || DEFAULT_COMPTES).map(c => ({ ...c })),
+                prixPerso: { ...(data?.reglages?.prixPerso || {}) }
+            };
+            normalized.majReglages = Number(data?.majReglages) || 0;
             normalized.majSoldes = Number(data?.majSoldes) || 0;
             normalized.majPlan = Number(data?.majPlan) || 0;
             normalized.supprimes = Array.isArray(data?.supprimes) ? data.supprimes : [];
@@ -1916,11 +2131,14 @@ Mot de passe: ${password}`;
             entrees = data.entrees;
             soldesInitiaux = data.soldesInitiaux;
             plan = data.plan;
-            syncMeta = { majSoldes: data.majSoldes || 0, majPlan: data.majPlan || 0, supprimes: data.supprimes || [] };
+            transferts = data.transferts || [];
+            dettes = data.dettes || [];
+            reglages = data.reglages || { comptes: DEFAULT_COMPTES.map(c => ({ ...c })), prixPerso: {} };
+            syncMeta = { majSoldes: data.majSoldes || 0, majPlan: data.majPlan || 0, majReglages: data.majReglages || 0, supprimes: data.supprimes || [] };
         }
 
         function currentData() {
-            return { sorties, entrees, soldesInitiaux, plan, ...syncMeta };
+            return { sorties, entrees, soldesInitiaux, plan, transferts, dettes, reglages, ...syncMeta };
         }
 
         function newUid() {
@@ -1935,7 +2153,7 @@ Mot de passe: ${password}`;
         // Adopter le résultat fusionné renvoyé par le PC (sans renvoyer de synchro)
         function applyMerged(data) {
             const merged = normalizeData(data);
-            const visible = d => JSON.stringify([d.sorties.map(x => [x.id, x.date, x.description, x.montant, x.source]), d.entrees.map(x => [x.id, x.date, x.source, x.montant, x.destinataire]), d.soldesInitiaux, d.plan]);
+            const visible = d => JSON.stringify([d.sorties.map(x => [x.id, x.date, x.description, x.montant, x.source]), d.entrees.map(x => [x.id, x.date, x.source, x.montant, x.destinataire]), d.soldesInitiaux, d.plan, d.transferts.map(x => [x.id, x.date, x.de, x.vers, x.montant]), d.dettes.map(x => [x.id, x.montant, x.maj]), d.reglages]);
             const changed = visible(merged) !== visible(currentData());
             setState(merged);
             localStorage.setItem(userStorageKey(), JSON.stringify(currentData()));
@@ -1993,23 +2211,6 @@ Mot de passe: ${password}`;
         }
 
         // Calculer les soldes actuels
-        function getBalances() {
-            let balances = { ...soldesInitiaux };
-            
-            entrees.forEach(e => {
-                if (balances[e.destinataire] !== undefined) {
-                    balances[e.destinataire] += e.montant;
-                }
-            });
-            
-            sorties.forEach(s => {
-                if (balances[s.source] !== undefined) {
-                    balances[s.source] -= s.montant;
-                }
-            });
-            
-            return balances;
-        }
 
         // Importer un fichier JSON
         function importJSON(event) {
@@ -2164,9 +2365,11 @@ Mot de passe: ${password}`;
         // Effacer toutes les données
         function clearAllData() {
             if (confirm('Supprimer TOUTES les données?\n\nCette action est irréversible!')) {
-                [...sorties, ...entrees].forEach(rememberDeletion);
+                [...sorties, ...entrees, ...transferts, ...dettes].forEach(rememberDeletion);
                 sorties = [];
                 entrees = [];
+                transferts = [];
+                dettes = [];
                 soldesInitiaux = { Chambre: 0, Wallet: 0, Mvola: 0, Airtel: 0 };
                 syncMeta.majSoldes = Date.now();
                 saveData();
@@ -2183,6 +2386,10 @@ Mot de passe: ${password}`;
 
             document.body.classList.add(IS_NATIVE ? 'is-native' : 'is-web');
             document.getElementById('account-form').addEventListener('submit', saveAccount);
+            document.getElementById('transfert-form').addEventListener('submit', addTransfert);
+            document.getElementById('dette-form').addEventListener('submit', addDette);
+            document.getElementById('paiement-form').addEventListener('submit', savePaiement);
+            ['transfert-date', 'dette-date'].forEach(id => document.getElementById(id).value = today);
             document.getElementById('login-form').addEventListener('submit', async e => {
                 e.preventDefault();
                 const btn = document.getElementById('login-btn');
@@ -2209,12 +2416,18 @@ Mot de passe: ${password}`;
             setTimeout(() => splash.remove(), 600);
         });
 
+
         function showTab(tab) {
-            document.getElementById('sortie-section').classList.toggle('hidden', tab !== 'sortie');
-            document.getElementById('entree-section').classList.toggle('hidden', tab !== 'entree');
-            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
-                btn.classList.toggle('active', (tab === 'sortie' && i === 0) || (tab === 'entree' && i === 1));
+            ['sortie', 'entree', 'transfert', 'dette', 'journal'].forEach(t => {
+                const el = document.getElementById(t + '-section');
+                if (el) el.classList.toggle('hidden', t !== tab);
             });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tab);
+                // L'onglet choisi reste visible dans la barre (elle défile sur téléphone)
+                if (btn.dataset.tab === tab) btn.scrollIntoView({ block: 'nearest', inline: 'center' });
+            });
+            if (tab === 'journal') renderJournal();
         }
 
         function showStats(view) {
@@ -2304,7 +2517,7 @@ Mot de passe: ${password}`;
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
                     <label>Description</label>
-                    <input type="text" id="edit-desc" value="${item.description}" required style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
+                    <input type="text" id="edit-desc" value="${escapeHtml(item.description)}" required style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
                     <label>Montant</label>
@@ -2312,12 +2525,7 @@ Mot de passe: ${password}`;
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
                     <label>Source</label>
-                    <select id="edit-source" style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
-                        <option value="Wallet" ${item.source==='Wallet'?'selected':''}>Porte-feuille</option>
-                        <option value="Chambre" ${item.source==='Chambre'?'selected':''}>Chambre</option>
-                        <option value="Mvola" ${item.source==='Mvola'?'selected':''}>Mvola</option>
-                        <option value="Airtel" ${item.source==='Airtel'?'selected':''}>Airtel Money</option>
-                    </select>
+                    <select id="edit-source" style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">${accountOptions(item.source)}</select>
                 </div>`;
             document.getElementById('edit-modal').classList.add('active');
         }
@@ -2335,7 +2543,7 @@ Mot de passe: ${password}`;
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
                     <label>Source</label>
-                    <input type="text" id="edit-source-text" value="${item.source}" required style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
+                    <input type="text" id="edit-source-text" value="${escapeHtml(item.source)}" required style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
                     <label>Montant</label>
@@ -2343,12 +2551,7 @@ Mot de passe: ${password}`;
                 </div>
                 <div class="form-group" style="margin-bottom:15px">
                     <label>Destinataire</label>
-                    <select id="edit-dest" style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">
-                        <option value="Wallet" ${item.destinataire==='Wallet'?'selected':''}>Porte-feuille</option>
-                        <option value="Chambre" ${item.destinataire==='Chambre'?'selected':''}>Chambre</option>
-                        <option value="Mvola" ${item.destinataire==='Mvola'?'selected':''}>Mvola</option>
-                        <option value="Airtel" ${item.destinataire==='Airtel'?'selected':''}>Airtel Money</option>
-                    </select>
+                    <select id="edit-dest" style="width:100%;padding:10px;border:2px solid #DDD;border-radius:10px;">${accountOptions(item.destinataire)}</select>
                 </div>`;
             document.getElementById('edit-modal').classList.add('active');
         }
@@ -2391,11 +2594,13 @@ Mot de passe: ${password}`;
             closeModal();
         });
 
-        function updateBalance(type) {
-            const input = document.getElementById('input-' + type);
+        // Saisir le solde réel d'un compte: on ajuste son solde initial pour tomber juste
+        function updateBalance(id) {
+            const input = document.getElementById('input-' + id);
             const val = parseFloat(input.value);
             if (!isNaN(val)) {
-                soldesInitiaux[type.charAt(0).toUpperCase() + type.slice(1)] = val;
+                const current = getBalances()[id] || 0;
+                soldesInitiaux[id] = (Number(soldesInitiaux[id]) || 0) + (val - current);
                 syncMeta.majSoldes = Date.now();
                 saveData();
                 renderAll();
@@ -2404,8 +2609,15 @@ Mot de passe: ${password}`;
         }
 
         function renderAll() {
+            fillAccountSelects();
             renderSorties();
             renderEntrees();
+            renderTransferts();
+            renderDettes();
+            renderJournal();
+            renderProvenanceCard();
+            renderRevenus();
+            if (document.querySelector('.page.active[data-page="reglages"]')) renderReglages();
             calculateCompte();
             renderStats();
             renderAnalyse();
@@ -2686,6 +2898,8 @@ Mot de passe: ${password}`;
         function getPresets() {
             if (useReference() && reference.presets) return reference.presets;
             const avg = (re, min, fallback) => {
+                const perso = Object.entries(reglages.prixPerso || {}).find(([key]) => re.test(key));
+                if (perso) return perso[1].montant;
                 const list = sorties.filter(s => re.test(normalizeText(s.description)) && s.montant >= min);
                 return list.length ? round500(sumMontant(list) / list.length) : fallback;
             };
@@ -3075,21 +3289,18 @@ Mot de passe: ${password}`;
             document.getElementById('total-sorties-check').textContent = formatNumber(totalSorties) + ' Ar';
             document.getElementById('solde-check').textContent = formatNumber(solde) + ' Ar';
 
-            // Afficher les soldes calculés
-            document.getElementById('display-chambre').textContent = formatNumber(balances.Chambre) + ' Ar';
-            document.getElementById('display-wallet').textContent = formatNumber(balances.Wallet) + ' Ar';
-            document.getElementById('display-mvola').textContent = formatNumber(balances.Mvola) + ' Ar';
-            document.getElementById('display-airtel').textContent = formatNumber(balances.Airtel) + ' Ar';
-            
-            document.getElementById('calc-wallet').textContent = `Initial: ${formatNumber(soldesInitiaux.Wallet)} Ar`;
-            document.getElementById('calc-chambre').textContent = `Initial: ${formatNumber(soldesInitiaux.Chambre)} Ar`;
-            document.getElementById('calc-mvola').textContent = `Initial: ${formatNumber(soldesInitiaux.Mvola)} Ar`;
-            document.getElementById('calc-airtel').textContent = `Initial: ${formatNumber(soldesInitiaux.Airtel)} Ar`;
+            renderBalanceCards();
 
             // Vérification compte est bon
-            const totalInitiaux = soldesInitiaux.Wallet + soldesInitiaux.Chambre + soldesInitiaux.Mvola + soldesInitiaux.Airtel;
-            const totalComptes = balances.Chambre + balances.Wallet + balances.Mvola + balances.Airtel;
-            const diff = (solde + totalInitiaux) - totalComptes;
+            const ids = reglages.comptes.map(c => c.id);
+            const totalInitiaux = ids.reduce((s, id) => s + (Number(soldesInitiaux[id]) || 0), 0);
+            const totalComptes = ids.reduce((s, id) => s + (balances[id] || 0), 0);
+            // Les dettes déplacent de l'argent sans être des revenus ou des dépenses
+            const netDettes = dettes.reduce((s, d) => {
+                const sign = d.sens === 'emprunt' ? 1 : -1;
+                return s + (d.compte ? sign * d.montant : 0) - sign * (d.paiements || []).reduce((t, p) => t + (p.compte ? p.montant : 0), 0);
+            }, 0);
+            const diff = (solde + totalInitiaux + netDettes) - totalComptes;
 
             const section = document.getElementById('compte-section');
             const title = document.getElementById('compte-title');
@@ -3206,9 +3417,6 @@ Mot de passe: ${password}`;
             return {Chambre:'🏠', Airtel:'📱', Mvola:'📲', Wallet:'👛'}[s] || '💰'; 
         }
         
-        function getLabel(s) { 
-            return {Chambre:'Chambre', Airtel:'Airtel', Mvola:'Mvola', Wallet:'Porte-feuille'}[s] || s; 
-        }
 
         async function reloadFromJSON() {
             if (confirm('Recharger les données depuis data.json?')) {
@@ -3327,6 +3535,755 @@ Mot de passe: ${password}`;
                 </div>`;
         }
 
+        // ===================================================================
+        // ===== Comptes personnalisables, transferts, dettes, journal, =====
+        // ===== provenance de l'argent, analyse des revenus, réglages   =====
+        // ===================================================================
+        const DEFAULT_COMPTES = [
+            { id: 'Wallet', nom: 'Porte-feuille', type: 'especes' },
+            { id: 'Chambre', nom: 'Argent Chambre', type: 'especes' },
+            { id: 'Mvola', nom: 'Mvola', type: 'mobile' },
+            { id: 'Airtel', nom: 'Airtel Money', type: 'mobile' },
+        ];
+        const COMPTE_TYPES = { especes: 'Espèces', mobile: 'Mobile money', banque: 'Banque', epargne: 'Épargne', autre: 'Autre' };
+        const COMPTE_COLORS = { especes: '#FFD93D', mobile: '#FF9800', banque: '#3498DB', epargne: '#9B59B6', autre: '#95A5A6' };
+
+        function getComptes(includeHidden = false) {
+            return reglages.comptes.filter(c => includeHidden || !c.masque);
+        }
+
+        function getLabel(id) {
+            const compte = reglages.comptes.find(c => c.id === id);
+            return compte ? compte.nom : id;
+        }
+
+        function accountOptions(selected, { none = false } = {}) {
+            const list = getComptes();
+            if (selected && !list.some(c => c.id === selected)) {
+                const hidden = reglages.comptes.find(c => c.id === selected);
+                if (hidden) list.push(hidden);
+            }
+            return (none ? `<option value="" ${!selected ? 'selected' : ''}>Aucun compte (achat à crédit...)</option>` : '') +
+                list.map(c => `<option value="${escapeHtml(c.id)}" ${c.id === selected ? 'selected' : ''}>${escapeHtml(c.nom)}</option>`).join('');
+        }
+
+        // Remplit toutes les listes de comptes en gardant le choix actuel
+        function fillAccountSelects() {
+            document.querySelectorAll('select.account-select').forEach(sel => {
+                // Première fois (liste vide): le compte par défaut; ensuite on garde le choix (même "aucun")
+                const current = sel.options.length ? sel.value : (sel.dataset.default || 'Wallet');
+                sel.innerHTML = accountOptions(current, { none: sel.dataset.none === '1' });
+                sel.value = current;
+            });
+        }
+
+        function resetAccountSelects(ids) {
+            ids.forEach(id => document.getElementById(id).innerHTML = '');
+            fillAccountSelects();
+        }
+
+        function touchReglages() {
+            syncMeta.majReglages = Date.now();
+        }
+
+        function guessCompteType(nom) {
+            const n = normalizeText(nom);
+            if (/epargne|tsinjo|economie|cagnotte/.test(n)) return 'epargne';
+            if (/banque|bank|bni|boa|bfv|bmoi|sbm|cep|compte courant/.test(n)) return 'banque';
+            if (/orange|mvola|airtel|money|telma/.test(n)) return 'mobile';
+            if (/poche|liquide|cash|chambre|porte/.test(n)) return 'especes';
+            return 'autre';
+        }
+
+        function addCompte() {
+            const nom = prompt('Nom du nouveau compte (ex: Épargne, Banque BNI, Orange Money) :');
+            if (!nom || !nom.trim()) return;
+            const solde = parseFloat(prompt(`Combien il y a actuellement sur « ${nom.trim()} » ? (Ar)`, '0'));
+            const id = 'c_' + newUid();
+            reglages.comptes.push({ id, nom: nom.trim(), type: guessCompteType(nom) });
+            soldesInitiaux[id] = isNaN(solde) ? 0 : solde;
+            syncMeta.majSoldes = Date.now();
+            touchReglages();
+            saveData();
+            renderAll();
+        }
+
+        function compteUsed(id) {
+            return sorties.some(s => s.source === id) || entrees.some(e => e.destinataire === id) ||
+                transferts.some(t => t.de === id || t.vers === id) ||
+                dettes.some(d => d.compte === id || (d.paiements || []).some(p => p.compte === id));
+        }
+
+        function updateCompte(id, field, value) {
+            const compte = reglages.comptes.find(c => c.id === id);
+            if (!compte) return;
+            if (field === 'nom' && !String(value).trim()) return renderReglages();
+            compte[field] = field === 'masque' ? !!value : String(value).trim();
+            touchReglages();
+            saveData();
+            renderAll();
+        }
+
+        function deleteCompte(id) {
+            if (compteUsed(id)) {
+                alert('Ce compte a déjà des opérations: il ne peut pas être supprimé. Tu peux le masquer.');
+                return;
+            }
+            if (!confirm(`Supprimer le compte « ${getLabel(id)} » ?`)) return;
+            reglages.comptes = reglages.comptes.filter(c => c.id !== id);
+            delete soldesInitiaux[id];
+            syncMeta.majSoldes = Date.now();
+            touchReglages();
+            saveData();
+            renderAll();
+        }
+
+        // Solde de chaque compte, éventuellement à la fin d'une date donnée (incluse)
+        function getBalances(until) {
+            const balances = {};
+            reglages.comptes.forEach(c => balances[c.id] = Number(soldesInitiaux[c.id]) || 0);
+            const ok = d => !until || d <= until;
+            const add = (id, v) => {
+                if (!id) return;
+                balances[id] = (balances[id] || 0) + v;
+            };
+            entrees.forEach(e => ok(e.date) && add(e.destinataire, e.montant));
+            sorties.forEach(s => ok(s.date) && add(s.source, -s.montant));
+            transferts.forEach(t => {
+                if (!ok(t.date)) return;
+                add(t.de, -t.montant);
+                add(t.vers, t.montant);
+            });
+            dettes.forEach(d => {
+                // Emprunt: l'argent arrive sur le compte, puis repart en remboursant. Prêt: l'inverse.
+                const sign = d.sens === 'emprunt' ? 1 : -1;
+                if (ok(d.date)) add(d.compte, sign * d.montant);
+                (d.paiements || []).forEach(p => ok(p.date) && add(p.compte, -sign * p.montant));
+            });
+            return balances;
+        }
+
+        function detteReste(d) {
+            return d.montant - (d.paiements || []).reduce((s, p) => s + p.montant, 0);
+        }
+
+        // ----- Accueil: cartes des comptes -----
+        function renderBalanceCards() {
+            const box = document.getElementById('balance-section');
+            if (!box) return;
+            const balances = getBalances();
+            const legacy = { Wallet: 'wallet', Chambre: 'chambre', Mvola: 'mvola', Airtel: 'airtel' };
+            box.innerHTML = getComptes().map(c => `
+                <div class="balance-card ${legacy[c.id] || 'custom'}" ${legacy[c.id] ? '' : `style="border-color:${COMPTE_COLORS[c.type] || '#95A5A6'}"`}>
+                    <h3>${escapeHtml(c.nom)}</h3>
+                    ${legacy[c.id] ? '' : `<div class="compte-type">${COMPTE_TYPES[c.type] || ''}</div>`}
+                    <div class="amount">${formatNumber(balances[c.id] || 0)} Ar</div>
+                    <input type="number" id="input-${escapeHtml(c.id)}" placeholder="Nouveau solde...">
+                    <button class="edit-balance-btn" onclick="updateBalance('${escapeHtml(c.id)}')">Modifier</button>
+                    <div class="calculated">Initial: ${formatNumber(Number(soldesInitiaux[c.id]) || 0)} Ar</div>
+                </div>`).join('') + `
+                <button class="balance-card add-compte" onclick="addCompte()">
+                    <svg class="ic"><use href="#i-plus"/></svg><span>Ajouter un compte</span>
+                    <small>Épargne, banque, Orange Money...</small>
+                </button>`;
+
+            // Dettes en cours (rappel discret)
+            const jeDois = dettes.filter(d => d.sens === 'emprunt').reduce((s, d) => s + Math.max(detteReste(d), 0), 0);
+            const onMeDoit = dettes.filter(d => d.sens === 'pret').reduce((s, d) => s + Math.max(detteReste(d), 0), 0);
+            const debtBox = document.getElementById('dettes-accueil');
+            if (debtBox) {
+                debtBox.innerHTML = jeDois || onMeDoit ? `
+                    <div class="mini-card" onclick="showPage('operations'); showTab('dette')">
+                        <svg class="ic"><use href="#i-scale"/></svg>
+                        <span>Dettes : ${jeDois ? `je dois <b class="neg">${formatNumber(jeDois)} Ar</b>` : ''}${jeDois && onMeDoit ? ' · ' : ''}${onMeDoit ? `on me doit <b class="pos">${formatNumber(onMeDoit)} Ar</b>` : ''}</span>
+                    </div>` : '';
+            }
+        }
+
+        // ----- Transferts -----
+        function addTransfert(e) {
+            e.preventDefault();
+            const de = document.getElementById('transfert-de').value;
+            const vers = document.getElementById('transfert-vers').value;
+            const montant = parseFloat(document.getElementById('transfert-montant').value);
+            const frais = parseFloat(document.getElementById('transfert-frais').value) || 0;
+            const date = document.getElementById('transfert-date').value;
+            if (de === vers) return alert('Choisis deux comptes différents.');
+            if (!montant || montant <= 0) return alert('Indique le montant transféré.');
+            const now = Date.now();
+            transferts.push({ id: now, uid: newUid(), maj: now, date, de, vers, montant, note: document.getElementById('transfert-note').value.trim() });
+            // Les frais (retrait Mvola...) sont une vraie dépense, prise sur le compte de départ
+            if (frais > 0) sorties.push({ id: now + 1, uid: newUid(), maj: now, date, description: 'Frais de transfert', montant: frais, source: de });
+            saveData();
+            renderAll();
+            e.target.reset();
+            document.getElementById('transfert-date').value = new Date().toISOString().split('T')[0];
+            resetAccountSelects(['transfert-de', 'transfert-vers']);
+        }
+
+        function deleteTransfert(id) {
+            if (!confirm('Supprimer ce transfert ?')) return;
+            rememberDeletion(transferts.find(t => t.id === id));
+            transferts = transferts.filter(t => t.id !== id);
+            saveData();
+            renderAll();
+        }
+
+        function renderTransferts() {
+            const tbody = document.getElementById('transfert-tbody');
+            if (!tbody) return;
+            const list = [...transferts].sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
+            tbody.innerHTML = list.map(t => `
+                <tr>
+                    <td>${formatDate(t.date)}</td>
+                    <td>${escapeHtml(getLabel(t.de))} → ${escapeHtml(getLabel(t.vers))}</td>
+                    <td>${formatNumber(t.montant)} Ar</td>
+                    <td>${escapeHtml(t.note || '')}</td>
+                    <td><button class="action-btn delete-btn" onclick="deleteTransfert(${t.id})">×</button></td>
+                </tr>`).join('') || '<tr><td colspan="5" class="empty-row">Aucun transfert pour l\'instant.</td></tr>';
+        }
+
+        // ----- Dettes -----
+        function addDette(e) {
+            e.preventDefault();
+            const montant = parseFloat(document.getElementById('dette-montant').value);
+            const personne = document.getElementById('dette-personne').value.trim();
+            if (!personne || !montant || montant <= 0) return alert('Indique la personne et le montant.');
+            const now = Date.now();
+            dettes.push({
+                id: now, uid: newUid(), maj: now,
+                date: document.getElementById('dette-date').value,
+                sens: document.getElementById('dette-sens').value,
+                personne, montant,
+                compte: document.getElementById('dette-compte').value,
+                echeance: document.getElementById('dette-echeance').value || '',
+                note: document.getElementById('dette-note').value.trim(),
+                paiements: []
+            });
+            saveData();
+            renderAll();
+            e.target.reset();
+            document.getElementById('dette-date').value = new Date().toISOString().split('T')[0];
+            resetAccountSelects(['dette-compte']);
+        }
+
+        let payingDetteId = null;
+        function openPaiement(id) {
+            const d = dettes.find(x => x.id === id);
+            if (!d) return;
+            payingDetteId = id;
+            document.getElementById('paiement-title').textContent = d.sens === 'emprunt' ? `Je rembourse ${d.personne}` : `${d.personne} me rembourse`;
+            document.getElementById('paiement-montant').value = Math.max(detteReste(d), 0);
+            document.getElementById('paiement-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('paiement-compte').innerHTML = accountOptions(d.compte || 'Wallet');
+            document.getElementById('paiement-compte-label').textContent = d.sens === 'emprunt' ? 'Payé depuis' : 'Reçu sur';
+            document.getElementById('paiement-modal').classList.add('active');
+        }
+
+        function closePaiement() {
+            document.getElementById('paiement-modal').classList.remove('active');
+            payingDetteId = null;
+        }
+
+        function savePaiement(e) {
+            e.preventDefault();
+            const d = dettes.find(x => x.id === payingDetteId);
+            const montant = parseFloat(document.getElementById('paiement-montant').value);
+            if (!d || !montant || montant <= 0) return;
+            d.paiements = [...(d.paiements || []), { date: document.getElementById('paiement-date').value, montant, compte: document.getElementById('paiement-compte').value }];
+            d.maj = Date.now();
+            closePaiement();
+            saveData();
+            renderAll();
+        }
+
+        function deleteDette(id) {
+            if (!confirm('Supprimer cette dette et ses remboursements ?')) return;
+            rememberDeletion(dettes.find(d => d.id === id));
+            dettes = dettes.filter(d => d.id !== id);
+            saveData();
+            renderAll();
+        }
+
+        function renderDettes() {
+            const box = document.getElementById('dettes-list');
+            if (!box) return;
+            const today = new Date().toISOString().split('T')[0];
+            const open = dettes.filter(d => detteReste(d) > 0);
+            const closed = dettes.filter(d => detteReste(d) <= 0);
+            const total = sens => open.filter(d => d.sens === sens).reduce((s, d) => s + detteReste(d), 0);
+            const card = d => {
+                const paid = d.montant - detteReste(d);
+                const late = d.echeance && d.echeance < today && detteReste(d) > 0;
+                return `
+                <div class="dette-card ${d.sens}">
+                    <div class="dette-head">
+                        <span><b>${escapeHtml(d.personne)}</b> <span class="dette-badge">${d.sens === 'emprunt' ? 'je dois' : 'on me doit'}</span></span>
+                        <span class="dette-amount">${formatNumber(Math.max(detteReste(d), 0))} Ar</span>
+                    </div>
+                    <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, paid / d.montant * 100).toFixed(1)}%;background:${d.sens === 'emprunt' ? '#FF6B6B' : '#4ECDC4'}"></div></div>
+                    <div class="dette-meta">
+                        ${formatNumber(paid)} / ${formatNumber(d.montant)} Ar remboursés · depuis le ${formatDate(d.date)}
+                        ${d.echeance ? ` · <span class="${late ? 'neg' : ''}">à rendre le ${formatDate(d.echeance)}${late ? ' (en retard)' : ''}</span>` : ''}
+                        ${d.note ? `<br>${escapeHtml(d.note)}` : ''}
+                    </div>
+                    ${(d.paiements || []).length ? `<div class="dette-paiements">${d.paiements.map(p => `${formatDate(p.date)} : ${formatNumber(p.montant)} Ar`).join(' · ')}</div>` : ''}
+                    <div class="dette-actions">
+                        ${detteReste(d) > 0 ? `<button class="plan-btn" onclick="openPaiement(${d.id})">${d.sens === 'emprunt' ? 'Je rembourse' : 'On me rembourse'}</button>` : '<span class="pos">Soldée ✓</span>'}
+                        <button class="plan-btn secondary" onclick="deleteDette(${d.id})">Supprimer</button>
+                    </div>
+                </div>`;
+            };
+            box.innerHTML = `
+                <div class="kpi-grid">
+                    <div class="kpi"><div class="kpi-label">Je dois</div><div class="kpi-value" style="color:#FF6B6B">${formatNumber(total('emprunt'))} Ar</div></div>
+                    <div class="kpi"><div class="kpi-label">On me doit</div><div class="kpi-value" style="color:#4ECDC4">${formatNumber(total('pret'))} Ar</div></div>
+                </div>
+                ${open.map(card).join('') || '<p class="empty-row">Aucune dette en cours.</p>'}
+                ${closed.length ? `<details class="dettes-soldees"><summary>Dettes soldées (${closed.length})</summary>${closed.map(card).join('')}</details>` : ''}`;
+        }
+
+        // ----- Journal: toutes les opérations par date, regroupées par jour et par semaine -----
+        const WEEKDAYS = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+        const isoDate = d => {
+            const z = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+            return z.toISOString().split('T')[0];
+        };
+        const parseDate = s => new Date(s + 'T12:00:00');
+        function weekStart(dateStr) {
+            const d = parseDate(dateStr);
+            d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); // lundi
+            return isoDate(d);
+        }
+
+        function getJournalRange() {
+            const mode = document.getElementById('journal-mode').value;
+            const ref = document.getElementById('journal-date').value || isoDate(new Date());
+            if (mode === 'day') return { start: ref, end: ref };
+            if (mode === 'week') {
+                const start = weekStart(ref);
+                const end = parseDate(start);
+                end.setDate(end.getDate() + 6);
+                return { start, end: isoDate(end) };
+            }
+            if (mode === 'month') {
+                const d = parseDate(ref);
+                return { start: ref.slice(0, 8) + '01', end: isoDate(new Date(d.getFullYear(), d.getMonth() + 1, 0, 12)) };
+            }
+            const end = document.getElementById('journal-end').value || ref;
+            return end < ref ? { start: end, end: ref } : { start: ref, end };
+        }
+
+        function journalNav(step) {
+            const mode = document.getElementById('journal-mode').value;
+            const input = document.getElementById('journal-date');
+            document.getElementById('journal-end').classList.toggle('hidden', mode !== 'range');
+            if (!input.value) input.value = isoDate(new Date());
+            if (step) {
+                const d = parseDate(input.value);
+                if (mode === 'day') d.setDate(d.getDate() + step);
+                else if (mode === 'week') d.setDate(d.getDate() + 7 * step);
+                else if (mode === 'month') d.setMonth(d.getMonth() + step, 1);
+                else {
+                    const r = getJournalRange();
+                    const len = daysBetween(r.start, r.end) * step;
+                    d.setDate(d.getDate() + len);
+                    const e = parseDate(r.end);
+                    e.setDate(e.getDate() + len);
+                    document.getElementById('journal-end').value = isoDate(e);
+                }
+                input.value = isoDate(d);
+            }
+            renderJournal();
+        }
+
+        function journalToday() {
+            document.getElementById('journal-date').value = isoDate(new Date());
+            renderJournal();
+        }
+
+        function openSituation() {
+            showPage('operations');
+            showTab('journal');
+            document.getElementById('journal-mode').value = 'day';
+            journalToday();
+            journalNav(0);
+        }
+
+        // Tous les mouvements sous une même forme: { date, label, detail, in, out, kind }
+        function getMovements(start, end) {
+            const inRange = d => d >= start && d <= end;
+            const list = [];
+            sorties.forEach(s => inRange(s.date) && list.push({ date: s.date, order: s.id, kind: 'sortie', label: s.description, detail: getLabel(s.source), out: s.montant, cat: getCategory(s) }));
+            entrees.forEach(e => inRange(e.date) && list.push({ date: e.date, order: e.id, kind: 'entree', label: e.source, detail: getLabel(e.destinataire), in: e.montant }));
+            transferts.forEach(t => inRange(t.date) && list.push({ date: t.date, order: t.id, kind: 'transfert', label: 'Transfert', detail: `${getLabel(t.de)} → ${getLabel(t.vers)}${t.note ? ' · ' + t.note : ''}`, neutral: t.montant }));
+            dettes.forEach(d => {
+                const emprunt = d.sens === 'emprunt';
+                if (inRange(d.date)) list.push({ date: d.date, order: d.id, kind: 'dette', label: emprunt ? `Emprunt à ${d.personne}` : `Prêt à ${d.personne}`, detail: d.compte ? getLabel(d.compte) : 'sans mouvement d\'argent', [emprunt ? 'in' : 'out']: d.compte ? d.montant : 0, debt: true });
+                (d.paiements || []).forEach((p, i) => inRange(p.date) && list.push({ date: p.date, order: d.id + i + 1, kind: 'dette', label: emprunt ? `Remboursement à ${d.personne}` : `Remboursement de ${d.personne}`, detail: getLabel(p.compte), [emprunt ? 'out' : 'in']: p.montant, debt: true }));
+            });
+            return list.sort((a, b) => b.date.localeCompare(a.date) || b.order - a.order);
+        }
+
+        function renderJournal() {
+            const box = document.getElementById('journal-content');
+            if (!box || !document.getElementById('journal-date')) return;
+            if (!document.getElementById('journal-date').value) document.getElementById('journal-date').value = isoDate(new Date());
+            const { start, end } = getJournalRange();
+            const moves = getMovements(start, end);
+            const sum = (list, f) => list.reduce((s, m) => s + (m[f] || 0), 0);
+            // Les vraies dépenses/revenus (sans dettes) pour les totaux
+            const real = moves.filter(m => !m.debt);
+            const totalIn = sum(real, 'in'), totalOut = sum(real, 'out');
+
+            // Situation à la fin de la période (l'argent qu'on a à cette date)
+            const balances = getBalances(end);
+            const comptes = getComptes();
+            const totalDispo = comptes.filter(c => c.type !== 'epargne').reduce((s, c) => s + (balances[c.id] || 0), 0);
+            const totalEpargne = comptes.filter(c => c.type === 'epargne').reduce((s, c) => s + (balances[c.id] || 0), 0);
+
+            // Top des catégories de la période
+            const byCat = {};
+            real.filter(m => m.kind === 'sortie').forEach(m => byCat[m.cat.name] = (byCat[m.cat.name] || 0) + m.out);
+            const topCats = Object.entries(byCat).sort((a, b) => b[1] - a[1]).slice(0, 5)
+                .map(([name, value]) => ({ label: name, value, color: (CATEGORIES.find(c => c.name === name) || {}).color }));
+
+            // Regroupement par jour, et par semaine quand la période dépasse 7 jours
+            const days = {};
+            moves.forEach(m => (days[m.date] = days[m.date] || []).push(m));
+            const longPeriod = daysBetween(start, end) > 7;
+            let html = '';
+            let currentWeek = null;
+            Object.keys(days).sort().reverse().forEach(date => {
+                const list = days[date];
+                if (longPeriod && weekStart(date) !== currentWeek) {
+                    currentWeek = weekStart(date);
+                    const weekEnd = parseDate(currentWeek);
+                    weekEnd.setDate(weekEnd.getDate() + 6);
+                    const wk = moves.filter(m => !m.debt && weekStart(m.date) === currentWeek);
+                    html += `<div class="journal-week">Semaine du ${formatDate(currentWeek)} au ${formatDate(isoDate(weekEnd))}
+                        <span><span class="pos">+${formatNumber(sum(wk, 'in'))}</span> · <span class="neg">−${formatNumber(sum(wk, 'out'))}</span> Ar</span></div>`;
+                }
+                const dayReal = list.filter(m => !m.debt);
+                html += `
+                    <div class="journal-day">
+                        <div class="journal-day-head">
+                            <span>${WEEKDAYS[parseDate(date).getDay()]} ${formatDate(date)}</span>
+                            <span>${sum(dayReal, 'in') ? `<span class="pos">+${formatNumber(sum(dayReal, 'in'))}</span> ` : ''}${sum(dayReal, 'out') ? `<span class="neg">−${formatNumber(sum(dayReal, 'out'))}</span>` : ''}</span>
+                        </div>
+                        ${list.map(m => `
+                            <div class="journal-row ${m.kind}">
+                                <span class="journal-label">${escapeHtml(m.label)}<small>${escapeHtml(m.detail)}</small></span>
+                                <span class="journal-amount">${m.in ? `<span class="pos">+${formatNumber(m.in)}</span>` : m.out ? `<span class="neg">−${formatNumber(m.out)}</span>` : `<span class="muted">${formatNumber(m.neutral || 0)}</span>`} Ar</span>
+                            </div>`).join('')}
+                    </div>`;
+            });
+
+            box.innerHTML = `
+                <div class="kpi-grid">
+                    <div class="kpi"><div class="kpi-label">Reçu</div><div class="kpi-value" style="color:#4ECDC4">+${formatNumber(totalIn)} Ar</div></div>
+                    <div class="kpi"><div class="kpi-label">Dépensé</div><div class="kpi-value" style="color:#FF6B6B">−${formatNumber(totalOut)} Ar</div><div class="kpi-sub">${real.filter(m => m.kind === 'sortie').length} dépense(s)</div></div>
+                    <div class="kpi"><div class="kpi-label">Bilan</div><div class="kpi-value" style="color:${totalIn - totalOut >= 0 ? '#4CAF50' : '#E74C3C'}">${formatNumber(totalIn - totalOut)} Ar</div></div>
+                </div>
+                <div class="situation-card">
+                    <div class="situation-title">Ma situation le ${formatDate(end)} au soir</div>
+                    <div class="situation-total">${formatNumber(totalDispo)} Ar <small>disponibles</small>${totalEpargne ? ` <span class="situation-epargne">+ ${formatNumber(totalEpargne)} Ar d'épargne</span>` : ''}</div>
+                    <div class="situation-comptes">${comptes.map(c => `<span>${escapeHtml(c.nom)} <b>${formatNumber(balances[c.id] || 0)}</b></span>`).join('')}</div>
+                </div>
+                ${topCats.length ? `<div class="analyse-block"><h4>Où est parti l'argent sur la période</h4>${barRows(topCats)}</div>` : ''}
+                ${html || '<p class="empty-row">Aucune opération sur cette période.</p>'}`;
+        }
+
+        // ----- D'où vient l'argent (chaque dépense est payée par l'argent reçu) -----
+        function getProvenanceMode() {
+            try { return localStorage.getItem('porteMonnaie:provenance') || 'lifo'; } catch (e) { return 'lifo'; }
+        }
+
+        function setProvenanceMode(mode) {
+            try { localStorage.setItem('porteMonnaie:provenance', mode); } catch (e) {}
+            renderAll();
+        }
+
+        // lifo: les dépenses sont payées par le dernier argent reçu ("après ce revenu, c'est son argent")
+        // fifo: par le plus ancien argent reçu
+        function computeProvenance(mode = getProvenanceMode()) {
+            const comptes = getComptes(true);
+            const initial = comptes.reduce((s, c) => s + (Number(soldesInitiaux[c.id]) || 0), 0);
+            const buckets = [];
+            let deficit = 0;
+            if (initial > 0) buckets.push({ key: 'initial', label: 'Avant le suivi', date: '', montant: initial, reste: initial, spent: [] });
+            else deficit = -initial;
+
+            const events = [];
+            entrees.forEach(e => events.push({ date: e.date, order: e.id, sign: 1, label: e.source, key: 'e' + e.id, entree: e, montant: e.montant }));
+            sorties.forEach(s => events.push({ date: s.date, order: s.id, sign: -1, label: s.description, montant: s.montant }));
+            dettes.forEach(d => {
+                if (!d.compte) return;
+                const emprunt = d.sens === 'emprunt';
+                events.push({ date: d.date, order: d.id, sign: emprunt ? 1 : -1, label: emprunt ? `Emprunt à ${d.personne}` : `Prêt à ${d.personne}`, key: 'd' + d.id, montant: d.montant });
+                (d.paiements || []).forEach((p, i) => events.push({ date: p.date, order: d.id + i + 1, sign: emprunt ? -1 : 1, label: emprunt ? `Remboursement à ${d.personne}` : `Remboursement de ${d.personne}`, key: 'p' + d.id + i, montant: p.montant }));
+            });
+            // Dans une même journée: l'argent reçu d'abord
+            events.sort((a, b) => a.date.localeCompare(b.date) || b.sign - a.sign || a.order - b.order);
+
+            for (const ev of events) {
+                const montant = Number(ev.montant) || 0;
+                if (ev.sign > 0) {
+                    let amount = montant;
+                    const bucket = { key: ev.key, label: ev.label, date: ev.date, montant, reste: 0, spent: [], entree: ev.entree };
+                    if (deficit > 0) {
+                        const cover = Math.min(deficit, amount);
+                        deficit -= cover;
+                        amount -= cover;
+                        bucket.spent.push({ label: 'Dépenses déjà faites avant', date: ev.date, montant: cover });
+                    }
+                    bucket.reste = amount;
+                    buckets.push(bucket);
+                } else {
+                    let need = montant;
+                    const order = mode === 'fifo' ? buckets : [...buckets].reverse();
+                    for (const b of order) {
+                        if (need <= 0) break;
+                        if (b.reste <= 0) continue;
+                        const take = Math.min(b.reste, need);
+                        b.reste -= take;
+                        need -= take;
+                        b.spent.push({ label: ev.label, date: ev.date, montant: take });
+                    }
+                    if (need > 0) deficit += need;
+                }
+            }
+            return { buckets, deficit };
+        }
+
+        function provenanceSummary() {
+            const { buckets } = computeProvenance();
+            const bySource = {};
+            buckets.filter(b => b.reste > 0).forEach(b => {
+                const k = b.entree ? b.label.trim() : b.label;
+                bySource[k] = (bySource[k] || 0) + b.reste;
+            });
+            return Object.entries(bySource).sort((a, b) => b[1] - a[1]);
+        }
+
+        function renderProvenanceCard() {
+            const box = document.getElementById('provenance-card');
+            if (!box) return;
+            const parts = provenanceSummary();
+            const total = parts.reduce((s, [, v]) => s + v, 0);
+            box.innerHTML = total > 0 ? `
+                <div class="mini-card" onclick="showPage('analyse'); setTimeout(() => document.getElementById('revenus-section').scrollIntoView({ block: 'start' }), 50)">
+                    <svg class="ic"><use href="#i-spark"/></svg>
+                    <span>L'argent qui te reste vient de : ${parts.slice(0, 4).map(([k, v]) => `<b>${escapeHtml(k)}</b> ${formatNumber(v)} Ar`).join(' · ')}${parts.length > 4 ? ' · ...' : ''}</span>
+                </div>` : '';
+        }
+
+        // ----- Analyse des revenus -----
+        function getPeriodRange(value) {
+            const today = isoDate(new Date());
+            const dates = [...sorties.map(s => s.date), ...entrees.map(e => e.date)];
+            const last = dates.reduce((m, d) => d > m ? d : m, today);
+            const first = dates.reduce((m, d) => d < m ? d : m, last);
+            if (value === 'all') return { start: first, end: last };
+            if (value === '3m' || !value) {
+                const d = parseDate(last.slice(0, 7) + '-01');
+                d.setMonth(d.getMonth() - 2);
+                return { start: isoDate(d), end: last };
+            }
+            const d = parseDate(value + '-01');
+            const end = isoDate(new Date(d.getFullYear(), d.getMonth() + 1, 0, 12));
+            return { start: value + '-01', end: end > last ? last : end };
+        }
+
+        function renderRevenus() {
+            const box = document.getElementById('revenus-content');
+            if (!box) return;
+            const select = document.getElementById('analyse-period');
+            const { start, end } = getPeriodRange(select && select.value);
+            const list = entrees.filter(e => e.date >= start && e.date <= end);
+            if (!list.length) {
+                box.innerHTML = '<p class="empty-row">Aucun revenu sur cette période.</p>';
+                return;
+            }
+            const nbDays = Math.max(daysBetween(start, end), 1);
+            const perMonth = v => Math.round(v / nbDays * 30.4 / 100) * 100;
+            const total = sumMontant(list);
+            const depenses = sumMontant(sorties.filter(s => s.date >= start && s.date <= end));
+
+            // Par source (les variantes d'un même nom sont regroupées)
+            const sources = {};
+            list.forEach(e => {
+                const k = itemKey(e.source) || e.source;
+                const s = sources[k] = sources[k] || { label: e.source.trim(), total: 0, dates: [], montants: [] };
+                s.total += e.montant;
+                s.dates.push(e.date);
+                s.montants.push(e.montant);
+            });
+            const bySource = Object.values(sources).sort((a, b) => b.total - a.total);
+            const palette = ['#4ECDC4', '#9B59B6', '#FF9800', '#3498DB', '#E91E63', '#95A5A6'];
+            const top2 = bySource.slice(0, 2).reduce((s, x) => s + x.total, 0);
+
+            const insights = [];
+            if (bySource.length >= 2 && top2 / total >= 0.7) {
+                insights.push({ cls: 'bad', title: `${Math.round(top2 / total * 100)}% de ton argent vient de ${bySource.slice(0, 2).map(s => s.label).join(' et ')}`,
+                    text: 'Tu dépends beaucoup de deux personnes : un petit revenu à toi (job, vente, stage) te rendrait plus libre.' });
+            }
+            bySource.slice(0, 3).forEach(s => {
+                if (s.dates.length < 3) return;
+                const sorted = [...s.dates].sort();
+                const gap = daysBetween(sorted[0], sorted[sorted.length - 1]) / (sorted.length - 1);
+                insights.push({ cls: '', title: `${s.label} : environ tous les ${Math.max(1, Math.round(gap))} jours`,
+                    text: `${s.dates.length} versements, en moyenne ${formatNumber(Math.round(s.total / s.dates.length / 100) * 100)} Ar (dernier le ${formatDate(sorted[sorted.length - 1])}).` });
+            });
+            insights.push({ cls: total - depenses >= 0 ? 'good' : 'bad', title: total - depenses >= 0 ? `Il te reste ${formatNumber(total - depenses)} Ar sur la période` : `Tu as dépensé ${formatNumber(depenses - total)} Ar de plus que reçu`,
+                text: `Reçu ${formatNumber(total)} Ar · dépensé ${formatNumber(depenses)} Ar (${Math.round(depenses / total * 100)}%).` });
+
+            // Évolution par mois: reçu / dépensé / reste
+            const months = {};
+            list.forEach(e => (months[e.date.slice(0, 7)] = months[e.date.slice(0, 7)] || { in: 0, out: 0 }).in += e.montant);
+            sorties.filter(s => s.date >= start && s.date <= end).forEach(s => (months[s.date.slice(0, 7)] = months[s.date.slice(0, 7)] || { in: 0, out: 0 }).out += s.montant);
+
+            // Où est passé l'argent de chaque revenu
+            const { buckets } = computeProvenance();
+            const recent = buckets.filter(b => b.entree && b.date >= start && b.date <= end).reverse().slice(0, 12);
+            const mode = getProvenanceMode();
+
+            box.innerHTML = `
+                <div class="kpi-grid">
+                    <div class="kpi"><div class="kpi-label">Reçu</div><div class="kpi-value" style="color:#4ECDC4">${formatNumber(total)} Ar</div><div class="kpi-sub">${list.length} versement(s)</div></div>
+                    <div class="kpi"><div class="kpi-label">Moyenne par mois</div><div class="kpi-value" style="color:#4ECDC4">${formatNumber(perMonth(total))} Ar</div></div>
+                    <div class="kpi"><div class="kpi-label">Plus gros versement</div><div class="kpi-value" style="color:#9B59B6">${formatNumber(Math.max(...list.map(e => e.montant)))} Ar</div></div>
+                </div>
+                <div class="analyse-block">
+                    <h4>Ce qu'il faut retenir</h4>
+                    ${insights.map(i => `<div class="insight ${i.cls}">${insightIcon(i.cls)}<div><strong>${escapeHtml(i.title)}</strong>${escapeHtml(i.text)}</div></div>`).join('')}
+                </div>
+                <div class="analyse-block">
+                    <h4>D'où vient mon argent</h4>
+                    ${barRows(bySource.map((s, i) => ({ label: s.label, value: s.total, color: palette[i % palette.length], extra: `${Math.round(s.total / total * 100)}%` })))}
+                </div>
+                <div class="analyse-block">
+                    <h4>Reçu / dépensé par mois</h4>
+                    ${Object.entries(months).sort((a, b) => b[0].localeCompare(a[0])).map(([m, v]) => `
+                        <div class="month-row">
+                            <span>${formatPeriod(m)}</span>
+                            <span class="pos">+${formatNumber(v.in)}</span>
+                            <span class="neg">−${formatNumber(v.out)}</span>
+                            <b class="${v.in - v.out >= 0 ? 'pos' : 'neg'}">${v.in - v.out >= 0 ? '+' : ''}${formatNumber(v.in - v.out)}</b>
+                        </div>`).join('')}
+                </div>
+                <div class="analyse-block">
+                    <h4>Où est passé cet argent ?</h4>
+                    <div class="provenance-mode">
+                        <label><input type="radio" name="prov-mode" ${mode === 'lifo' ? 'checked' : ''} onchange="setProvenanceMode('lifo')"> le dernier argent reçu paie les dépenses suivantes</label>
+                        <label><input type="radio" name="prov-mode" ${mode === 'fifo' ? 'checked' : ''} onchange="setProvenanceMode('fifo')"> l'argent le plus ancien est utilisé d'abord</label>
+                    </div>
+                    ${recent.map(b => {
+                        const spent = b.montant - b.reste;
+                        const top = Object.values(b.spent.reduce((acc, x) => {
+                            const k = itemKey(x.label) || x.label;
+                            acc[k] = acc[k] || { label: x.label, montant: 0 };
+                            acc[k].montant += x.montant;
+                            return acc;
+                        }, {})).sort((x, y) => y.montant - x.montant).slice(0, 4);
+                        return `
+                        <details class="provenance-item">
+                            <summary>
+                                <span><b>${escapeHtml(b.label)}</b> · ${formatDate(b.date)} · ${formatNumber(b.montant)} Ar</span>
+                                <span>${b.reste > 0 ? `<span class="pos">reste ${formatNumber(b.reste)} Ar</span>` : '<span class="muted">tout dépensé</span>'}</span>
+                            </summary>
+                            <div class="bar-track"><div class="bar-fill" style="width:${(spent / b.montant * 100).toFixed(1)}%;background:#FF6B6B"></div></div>
+                            <div class="provenance-spent">${top.length ? 'Payé avec : ' + top.map(x => `${escapeHtml(x.label)} ${formatNumber(x.montant)} Ar`).join(' · ') : 'Pas encore utilisé.'}</div>
+                        </details>`;
+                    }).join('')}
+                </div>`;
+        }
+
+        // ----- Prix de base (remplace le prix calculé dans les suggestions) -----
+        function setPrixBase(key, label, value) {
+            reglages.prixPerso = reglages.prixPerso || {};
+            const v = parseFloat(value);
+            if (!v || v <= 0) delete reglages.prixPerso[key];
+            else reglages.prixPerso[key] = { label, montant: v };
+            touchReglages();
+            saveData();
+            renderReglages();
+        }
+
+        function addPrixBase() {
+            const label = document.getElementById('prix-new-label').value.trim();
+            const montant = document.getElementById('prix-new-montant').value;
+            if (!label || !montant) return alert('Indique l\'article et son prix.');
+            setPrixBase(itemKey(label), label, montant);
+        }
+
+        function renderReglages() {
+            const comptesBox = document.getElementById('reglages-comptes');
+            if (!comptesBox) return;
+            comptesBox.innerHTML = reglages.comptes.map(c => `
+                <div class="reglage-compte ${c.masque ? 'masque' : ''}">
+                    <input type="text" value="${escapeHtml(c.nom)}" onchange="updateCompte('${escapeHtml(c.id)}', 'nom', this.value)" aria-label="Nom du compte">
+                    <select onchange="updateCompte('${escapeHtml(c.id)}', 'type', this.value)">
+                        ${Object.entries(COMPTE_TYPES).map(([k, v]) => `<option value="${k}" ${c.type === k ? 'selected' : ''}>${v}</option>`).join('')}
+                    </select>
+                    <label class="reglage-check"><input type="checkbox" ${c.masque ? 'checked' : ''} onchange="updateCompte('${escapeHtml(c.id)}', 'masque', this.checked)"> masqué</label>
+                    <button class="plan-btn secondary" onclick="deleteCompte('${escapeHtml(c.id)}')" title="Supprimer"><svg class="ic"><use href="#i-trash"/></svg></button>
+                </div>`).join('');
+
+            const prixBox = document.getElementById('reglages-prix');
+            const q = itemKey(document.getElementById('prix-search').value || '');
+            const index = buildSuggestIndex(sorties, 'description', 'source');
+            const perso = reglages.prixPerso || {};
+            const rows = index
+                .filter(e => !q || e.key.includes(q))
+                .sort((a, b) => (perso[b.key] ? 1 : 0) - (perso[a.key] ? 1 : 0) || b.count - a.count)
+                .slice(0, q ? 30 : 20);
+            // Prix de base ajoutés pour des articles jamais achetés
+            Object.entries(perso).forEach(([key, p]) => {
+                if (!rows.some(r => r.key === key) && (!q || key.includes(q))) rows.unshift({ key, label: p.label, montant: 0, count: 0 });
+            });
+            prixBox.innerHTML = rows.map(r => `
+                <div class="prix-row">
+                    <span>${escapeHtml(r.label)}<small>${r.count ? `habituel ${formatNumber(r.montant)} Ar · ×${r.count}` : 'ajouté par toi'}</small></span>
+                    <input type="number" placeholder="${r.montant || ''}" value="${perso[r.key] ? perso[r.key].montant : ''}" data-key="${escapeHtml(r.key)}" data-label="${escapeHtml(r.label)}" onchange="setPrixBase(this.dataset.key, this.dataset.label, this.value)" aria-label="Prix de base">
+                </div>`).join('') || '<p class="empty-row">Aucun article trouvé.</p>';
+        }
+
+        // ----- Bouton retour (Android) et historique de navigation -----
+        const pageStack = [];
+        window.blessedBack = () => {
+            const modal = document.querySelector('.modal.active');
+            if (modal) {
+                if (modal.id === 'edit-modal') closeModal();
+                else modal.classList.remove('active');
+                return true;
+            }
+            if (suggestBox && suggestBox.style.display === 'block') {
+                suggestBox.style.display = 'none';
+                return true;
+            }
+            if (document.getElementById('app').classList.contains('hidden')) return false;
+            const current = (document.querySelector('.page.active') || {}).dataset?.page;
+            while (pageStack.length) {
+                const prev = pageStack.pop();
+                if (prev !== current) {
+                    showPage(prev, true);
+                    return true;
+                }
+            }
+            if (current && current !== 'accueil') {
+                showPage('accueil', true);
+                return true;
+            }
+            return false;
+        };
+        // Sur le web, le bouton retour du navigateur fait la même chose
+        window.addEventListener('popstate', () => {
+            if (IS_NATIVE) return;
+            window.blessedBack();
+        });
+
+
         // ===== Habitudes inhabituelles (détection automatique) =====
         // "Jean 5☺️", "jean" et "Jean🙆" deviennent la même clé "jean"
         function itemKey(desc) {
@@ -3444,7 +4401,7 @@ Mot de passe: ${password}`;
             return Object.values(index).map(e => ({
                 key: e.k,
                 label: top(e.labels),
-                montant: Number(top(e.montants)) || 0,
+                montant: usualAmount(e.montants),
                 extra: top(e.extras),
                 count: e.count,
                 score: e.score,
@@ -3470,6 +4427,23 @@ Mot de passe: ${password}`;
         }
 
         let suggestBox = null;
+
+        // Prix habituel: le montant le plus fréquent s'il revient vraiment, sinon la médiane
+        // (évite qu'un vieux prix isolé, ex. Indrive 2 500, soit proposé)
+        function usualAmount(montants) {
+            const entries = Object.entries(montants).map(([m, n]) => [Number(m), n]);
+            const count = entries.reduce((s, [, n]) => s + n, 0);
+            if (!count) return 0;
+            const [mode, modeCount] = entries.sort((a, b) => b[1] - a[1])[0];
+            if (modeCount >= 2 && modeCount / count >= 0.3) return mode;
+            const all = entries.flatMap(([m, n]) => Array(n).fill(m)).sort((a, b) => a - b);
+            return all[Math.floor((all.length - 1) / 2)];
+        }
+
+        function prixPerso(key) {
+            const p = (reglages.prixPerso || {})[key];
+            return p ? p.montant : null;
+        }
 
         // Place la liste sous le champ, ou au-dessus si le clavier ne laisse pas la place
         function placeSuggestBox(input) {
@@ -3539,10 +4513,15 @@ Mot de passe: ${password}`;
 
         let sortieIndexCache = null, entreeIndexCache = null, indexVersion = '';
         function getSortieIndex() {
-            const v = sorties.length + ':' + entrees.length + ':' + (reference && reference.updatedAt);
+            const v = sorties.length + ':' + entrees.length + ':' + (reference && reference.updatedAt) + ':' + syncMeta.majReglages;
             if (v !== indexVersion) { sortieIndexCache = entreeIndexCache = null; indexVersion = v; }
             if (!sortieIndexCache) {
                 sortieIndexCache = buildSuggestIndex(sorties, 'description', 'source');
+                // Prix de base choisis dans Réglages
+                sortieIndexCache.forEach(e => { const p = prixPerso(e.key); if (p) { e.montant = p; e.perso = true; } });
+                Object.entries(reglages.prixPerso || {}).forEach(([key, p]) => {
+                    if (!sortieIndexCache.some(e => e.key === key)) sortieIndexCache.push({ key, label: p.label, montant: p.montant, extra: 'Wallet', count: 0, score: 0.5, days: {}, perso: true });
+                });
                 const own = new Set(sortieIndexCache.map(e => e.key));
                 (reference && reference.items || []).forEach(i => {
                     const key = itemKey(i.label);
@@ -3555,7 +4534,7 @@ Mot de passe: ${password}`;
             getSortieIndex();
             return entreeIndexCache = entreeIndexCache || buildSuggestIndex(entrees, 'source', 'destinataire');
         }
-        const describeUsual = r => r.ref ? `~${formatNumber(r.montant)} Ar · repère` : `${formatNumber(r.montant)} Ar · ×${r.count}`;
+        const describeUsual = r => r.perso ? `${formatNumber(r.montant)} Ar · prix de base` : r.ref ? `~${formatNumber(r.montant)} Ar · repère` : `${formatNumber(r.montant)} Ar · ×${r.count}`;
 
         function setupAutocomplete() {
             attachAutocomplete(document.getElementById('sortie-desc'), getSortieIndex, r => {

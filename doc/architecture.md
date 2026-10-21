@@ -62,14 +62,25 @@ Elle tourne de deux façons :
     "objectifs": [ { "id": 1, "nom": "Bottes", "montant": 100000, "debut": "2026-10", "fin": "2026-10" } ],
     "activites": [ { "id": 2, "date": "2026-10-04", "nom": "Resto", "montant": 5000, "cat": "Repas" } ]
   },
+  "transferts": [ { "id": 1, "uid": "…", "maj": 0, "date": "2026-10-21", "de": "Chambre", "vers": "Mvola", "montant": 5000, "note": "" } ],
+  "dettes": [ { "id": 1, "uid": "…", "maj": 0, "date": "2026-10-21", "sens": "emprunt", "personne": "Aunty Favour",
+                "montant": 10000, "compte": "Wallet", "echeance": "", "note": "",
+                "paiements": [ { "date": "2026-10-25", "montant": 4000, "compte": "Wallet" } ] } ],
+  "reglages": {
+    "comptes": [ { "id": "Wallet", "nom": "Porte-feuille", "type": "especes" }, { "id": "c_9f2…", "nom": "Épargne", "type": "epargne", "masque": false } ],
+    "prixPerso": { "indrive": { "label": "Indrive", "montant": 6000 } }
+  },
   "majSoldes": 0,
   "majPlan": 0,
+  "majReglages": 0,
   "supprimes": [ { "uid": "…", "at": 1790328326122 } ]
 }
 ```
 
 - Sources : `Wallet` (porte-feuille), `Chambre`, `Mvola`, `Airtel`. Montants en ariary (entiers).
-- Solde d'une source = solde initial + entrées vers cette source − sorties depuis cette source.
+- Solde d'un compte = solde initial + entrées − sorties ± transferts ± dettes (emprunt : +montant puis
+  −remboursements ; prêt : l'inverse). `getBalances(date)` donne les soldes à la fin d'une date.
+- Comptes : `Wallet`, `Chambre`, `Mvola`, `Airtel` par défaut ; les comptes ajoutés ont un id `c_<aléatoire>`.
 - Sur le téléphone, clé `localStorage` : `porteMonnaie:v2026-08-03` pour le compte principal
   (l'ancienne clé `porteMonnaie` est relue si besoin), `porteMonnaie:v2026-08-03:<utilisateur>` pour les autres.
 
@@ -148,6 +159,12 @@ Pour ajouter un mot-clé : tableau `CATEGORIES` dans `index.html`.
 | `buildSuggestIndex()` / `attachAutocomplete()` | Autocomplétion (fréquence, récence, jour de la semaine) |
 | `buildReference()` / `syncReference()` | Repères anonymes pour les nouveaux utilisateurs |
 | `syncWithPC()` / `pushAndMerge()` | Synchro du téléphone |
+| `getBalances(date)` | Soldes de chaque compte (aujourd'hui ou à une date) |
+| `renderJournal()` / `getMovements()` | Journal : opérations par jour / semaine, situation à une date |
+| `computeProvenance()` | D'où vient l'argent (chaque dépense rattachée à un revenu) |
+| `renderRevenus()` | Analyse des revenus |
+| `renderDettes()`, `renderTransferts()`, `renderReglages()` | Dettes, transferts, comptes et prix de base |
+| `window.blessedBack()` | Bouton retour (appelé par `MainActivity.java`) |
 
 ## Android
 

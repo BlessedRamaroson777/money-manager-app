@@ -26,14 +26,44 @@ bouton **Synchroniser**.
 
 ## Les comptes d'argent
 
-Quatre « sources » : **Porte-feuille** (Wallet), **Argent Chambre**, **Mvola**, **Airtel Money**.
-Chaque dépense sort d'une source, chaque revenu arrive dans une source. Le bouton **Modifier** d'une
-carte de solde ajuste le solde initial (utile pour recaler l'app sur la réalité).
+Par défaut : **Porte-feuille**, **Argent Chambre**, **Mvola**, **Airtel Money**. On peut en ajouter
+autant qu'on veut (Épargne, Banque, Orange Money…) avec la carte **Ajouter un compte** de l'accueil ou
+dans **Réglages** (icône engrenage en haut) : renommer, changer le type (espèces, mobile money, banque,
+épargne), masquer, ou supprimer un compte qui n'a jamais servi.
+
+Chaque dépense sort d'un compte, chaque revenu arrive sur un compte. Sur une carte, saisir le **solde
+réel** puis **Modifier** recale le compte sur la réalité (l'app ajuste son solde de départ).
+
+## Transferts entre comptes
+
+**Opérations → Transferts** : déplacer de l'argent d'un compte à l'autre (ex. Chambre → Mvola).
+Ce n'est ni une dépense ni un revenu : les totaux et les analyses ne changent pas, seuls les soldes
+des deux comptes bougent. Les **frais** éventuels (retrait Mvola…) sont enregistrés comme une vraie
+dépense sur le compte de départ.
+
+## Dettes
+
+**Opérations → Dettes** : « J'ai emprunté » (je dois) ou « J'ai prêté » (on me doit), avec la personne,
+le montant, le compte par lequel l'argent est passé (ou « aucun compte » pour un achat à crédit), et une
+date pour rendre (en rouge si elle est dépassée). **Je rembourse / On me rembourse** enregistre un
+remboursement partiel ou total. Un emprunt n'est pas un revenu et un remboursement n'est pas une
+dépense : ils bougent seulement le solde du compte. Un rappel « je dois / on me doit » s'affiche sur l'accueil.
+
+## Journal et situation à une date
+
+**Opérations → Journal** (ou « Voir ma situation à une date » sur l'accueil) : tout ce qui s'est passé
+sur un **jour**, une **semaine**, un **mois** ou une **période** au choix, avec les flèches ‹ › pour
+passer à la période précédente / suivante. Pour la période : reçu, dépensé, bilan, les catégories où
+l'argent est parti, puis les opérations regroupées **par jour** (et **par semaine** sur un mois), avec
+les totaux. La carte **Ma situation le … au soir** donne l'argent qu'il y avait sur chaque compte à la
+fin de la période (disponible et épargne séparés).
 
 ## Noter une dépense ou un revenu
 
 1. Page **Opérations** (ou **+ Dépense** sur l'accueil).
 2. Tape le début de la description : l'app propose tes dépenses habituelles avec leur prix
+   habituel (le montant qui revient le plus souvent, sinon le prix médian) ou ton **prix de base**
+   s'il est défini dans **Réglages → Prix de base** (ex. Indrive 6 000 Ar)
    (ex. « frais » → Frais de livraison · 4 000 Ar, Frais retrait · 500 Ar…). Choisir une suggestion
    remplit aussi le montant et la source habituels.
 3. Champ vide : l'app propose ce que tu achètes d'habitude ce jour de la semaine.
@@ -56,6 +86,23 @@ Choisir la période (3 derniers mois, depuis le début, ou un mois précis). L'a
 - **Évolution par mois** et **grosses dépenses** (20 000 Ar et plus).
 
 Les catégories sont devinées à partir de la description (voir [architecture](architecture.md#catégories)).
+
+### Analyse des revenus
+
+Même période que l'analyse des dépenses : total reçu, moyenne par mois, plus gros versement, part de
+chaque personne (« D'où vient mon argent »), rythme des versements (« Mum : environ tous les 4 jours »),
+dépendance à une ou deux personnes, et reçu / dépensé / reste mois par mois.
+
+### Où est passé cet argent ?
+
+Pour chaque revenu : combien a déjà été dépensé, avec quoi, et ce qu'il en reste. Sur l'accueil :
+« L'argent qui te reste vient de : Mum …, Aunty … ». Deux façons de compter, au choix :
+
+- **le dernier argent reçu paie les dépenses suivantes** (par défaut) : après un versement de Mum,
+  les dépenses sont payées avec l'argent de Mum ;
+- **l'argent le plus ancien est utilisé d'abord**.
+
+C'est un calcul global (tous comptes confondus) ; les transferts n'y changent rien.
 
 ### Alertes d'habitudes
 
@@ -108,6 +155,11 @@ Pour chaque compte :
 Un utilisateur créé sur le web se connecte sur le téléphone avec le PC allumé : l'écran de connexion de
 l'app contient le champ **Adresse du PC** (déjà rempli avec l'adresse mise dans l'APK). Après cette
 première connexion, ça marche aussi hors ligne.
+
+## Bouton retour (téléphone)
+
+Le bouton retour d'Android ferme d'abord la fenêtre ouverte (modifier, mon compte…), puis revient à la
+page précédente, puis à l'accueil ; depuis l'accueil, l'app passe en arrière-plan.
 
 ## Différences téléphone / web
 
