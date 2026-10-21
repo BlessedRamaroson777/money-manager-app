@@ -976,11 +976,24 @@
         .icon-btn { line-height: 0; }
         .is-native .web-only, .is-web .native-only { display: none !important; }
         body:not(.can-sync) .sync-only { display: none !important; }
-        .period-filter { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; flex-wrap: wrap; }
+        .period-filter { display: flex; align-items: center; gap: 6px; margin: 0 0 10px; flex-wrap: nowrap; }
         .period-filter select { padding: 9px 12px; border: 2px solid #EEE; border-radius: 12px; font-family: inherit; background: white; }
-        .period-arrow { width: 38px; height: 38px; border: none; border-radius: 50%; background: white; font-size: 1.3em; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+        .period-arrow { flex: 0 0 38px; width: 38px; height: 38px; border: none; border-radius: 50%; background: white; font-size: 1.3em; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
         .period-arrow:disabled { opacity: 0.35; cursor: default; }
-        .period-label { flex: 1; text-align: center; font-weight: 600; color: #555; text-transform: capitalize; min-width: 140px; }
+        .period-label { flex: 1 1 auto; min-width: 0; text-align: center; font-weight: 600; color: #555; text-transform: capitalize; font-size: 0.88em; line-height: 1.2; }
+        .period-filter select { flex: 0 0 auto; }
+        .ops-menu { position: relative; max-width: 420px; margin: 0 auto 16px; }
+        .ops-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 13px 18px; border: none; border-radius: 16px; font-family: inherit; font-size: 1em; font-weight: 600; color: white; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+        .ops-caret { font-size: 0.9em; opacity: 0.9; }
+        .ops-list { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 60; background: white; border-radius: 18px; padding: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.18); display: flex; flex-direction: column; gap: 4px; }
+        .ops-item { border: none; border-radius: 12px; padding: 12px 14px; text-align: left; font-family: inherit; font-size: 0.95em; font-weight: 600; background: transparent; cursor: pointer; }
+        .ops-btn.sortie { background: #FF6B6B; } .ops-item.sortie { color: #FF6B6B; }
+        .ops-btn.entree { background: #4ECDC4; } .ops-item.entree { color: #26A69A; }
+        .ops-btn.transfert { background: #3498DB; } .ops-item.transfert { color: #3498DB; }
+        .ops-btn.dette { background: #9B59B6; } .ops-item.dette { color: #9B59B6; }
+        .ops-btn.journal { background: #FF9800; } .ops-item.journal { color: #FF9800; }
+        .ops-item:active { background: #F7F2F5; }
+        .ops-select { width: 100%; max-width: 420px; padding: 12px 16px; border: 2px solid #E91E63; border-radius: 14px; font-family: inherit; font-size: 1em; font-weight: 600; color: #E91E63; background: white; }
         .cloud .login-pc { display: none !important; }
         /* Pas de rectangle gris au toucher sur mobile; contour arrondi au clavier */
         * { -webkit-tap-highlight-color: transparent; }
@@ -1036,7 +1049,10 @@
         .dettes-soldees summary { cursor: pointer; color: #888; margin: 10px 0; }
 
         /* Journal */
-        .journal-controls { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 14px; }
+        .journal-controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+        .journal-top, .journal-nav { display: flex; gap: 6px; align-items: center; flex-wrap: nowrap; }
+        .journal-top select { flex: 1 1 auto; min-width: 0; }
+        .journal-nav input { flex: 1 1 auto; min-width: 0; text-align: center; }
         .journal-controls select, .journal-controls input { padding: 8px 10px; border: 2px solid #EEE; border-radius: 10px; font-family: inherit; }
         .journal-week { display: flex; justify-content: space-between; gap: 8px; background: #FFF3E0; color: #E67E22; border-radius: 10px; padding: 8px 12px; margin: 16px 0 6px; font-size: 0.85em; font-weight: 600; }
         .journal-day { margin-bottom: 10px; }
@@ -1249,7 +1265,9 @@
         <!-- Section Revenus -->
         <div class="stats-section revenus-section" id="revenus-section">
             <h2 class="stats-title">Analyse de mes revenus</h2>
-            <p class="analyse-note" style="text-align:center;margin:-8px 0 14px">Même période que l'analyse des dépenses</p>
+            <div class="stats-tabs">
+                <select id="revenus-period" class="analyse-select" onchange="renderRevenus()"></select>
+            </div>
             <div id="revenus-content"></div>
         </div>
 
@@ -1271,12 +1289,17 @@
         <!-- ===== Page Opérations ===== -->
         <section class="page" data-page="operations">
         <!-- Tabs -->
-        <div class="tabs">
-            <button class="tab-btn sortie active" data-tab="sortie" onclick="showTab('sortie')">Dépenses</button>
-            <button class="tab-btn entree" data-tab="entree" onclick="showTab('entree')">Revenus</button>
-            <button class="tab-btn transfert" data-tab="transfert" onclick="showTab('transfert')">Transferts</button>
-            <button class="tab-btn dette" data-tab="dette" onclick="showTab('dette')">Dettes</button>
-            <button class="tab-btn journal" data-tab="journal" onclick="showTab('journal')">Journal</button>
+        <div class="ops-menu">
+            <button type="button" id="ops-btn" class="ops-btn sortie" onclick="toggleOpsMenu()" aria-haspopup="true">
+                <span id="ops-label">Dépenses</span><span class="ops-caret">▾</span>
+            </button>
+            <div id="ops-list" class="ops-list hidden">
+                <button type="button" class="ops-item sortie" onclick="showTab('sortie')">Dépenses</button>
+                <button type="button" class="ops-item entree" onclick="showTab('entree')">Revenus</button>
+                <button type="button" class="ops-item transfert" onclick="showTab('transfert')">Transferts entre comptes</button>
+                <button type="button" class="ops-item dette" onclick="showTab('dette')">Dettes</button>
+                <button type="button" class="ops-item journal" onclick="showTab('journal')">Journal (tout par date)</button>
+            </div>
         </div>
 
         <!-- Formulaire Sortie -->
@@ -1463,17 +1486,21 @@
             <div class="form-container journal-box">
                 <h2 class="form-title journal">Journal</h2>
                 <div class="journal-controls">
-                    <select id="journal-mode" onchange="journalNav(0)">
-                        <option value="day">Jour</option>
-                        <option value="week" selected>Semaine</option>
-                        <option value="month">Mois</option>
-                        <option value="range">Période</option>
-                    </select>
-                    <button type="button" class="plan-btn secondary" onclick="journalNav(-1)" aria-label="Précédent">‹</button>
-                    <input type="date" id="journal-date" onchange="renderJournal()">
-                    <input type="date" id="journal-end" class="hidden" onchange="renderJournal()">
-                    <button type="button" class="plan-btn secondary" onclick="journalNav(1)" aria-label="Suivant">›</button>
-                    <button type="button" class="plan-btn secondary" onclick="journalToday()">Aujourd'hui</button>
+                    <div class="journal-top">
+                        <select id="journal-mode" onchange="journalNav(0)" aria-label="Période">
+                            <option value="day">Jour</option>
+                            <option value="week" selected>Semaine</option>
+                            <option value="month">Mois</option>
+                            <option value="range">Période</option>
+                        </select>
+                        <button type="button" class="plan-btn secondary" onclick="journalToday()">Aujourd'hui</button>
+                    </div>
+                    <div class="journal-nav">
+                        <button type="button" class="period-arrow" onclick="journalNav(-1)" aria-label="Précédent">‹</button>
+                        <input type="date" id="journal-date" onchange="renderJournal()">
+                        <input type="date" id="journal-end" class="hidden" onchange="renderJournal()">
+                        <button type="button" class="period-arrow" onclick="journalNav(1)" aria-label="Suivant">›</button>
+                    </div>
                 </div>
                 <div id="journal-content"></div>
             </div>
@@ -1868,20 +1895,21 @@
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('app').classList.remove('hidden');
             document.getElementById('current-user').textContent = currentUser.username;
-            document.getElementById('nav-users').classList.toggle('hidden', !((IS_SERVER || CLOUD) && currentUser.role === 'admin'));
+            document.getElementById('nav-users').classList.toggle('hidden', !((IS_SERVER || CLOUD) && !IS_NATIVE && currentUser.role === 'admin'));
             let page = 'accueil';
             try { page = localStorage.getItem('porteMonnaie:page') || 'accueil'; } catch (e) {}
             showPage(page);
             await loadData();
             syncReference();
-            if (CLOUD) cloudSync();
+            // Firebase: synchro automatique seulement sur un appareil encore vide (première connexion)
+            if (CLOUD) { if (!sorties.length && !entrees.length) cloudSync(); }
             else if (IS_NATIVE) syncWithPC({ silent: true });
         }
 
         // Retour sur l'app: récupérer ce que l'autre appareil a synchronisé entre-temps
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState !== 'visible' || !currentUser) return;
-            if (CLOUD) return cloudSync();
+            if (CLOUD) return;
             if (IS_SERVER) {
                 apiFetch('/api/load').then(d => applyMerged(d)).catch(err => handleAuthError(err));
             } else if (IS_NATIVE) {
@@ -2199,17 +2227,23 @@
 
         async function cloudSync({ silent = true } = {}) {
             if (!CLOUD || !currentUser) return;
-            if (!currentUser.dataId) {
-                if (!silent) alert('Connecte-toi une fois avec internet pour activer la synchronisation.');
-                return;
-            }
             if (cloudSyncRunning) { cloudSyncAgain = true; return; }
             cloudInit();
             if (!fbAuth.currentUser) await cloudAuthReady();
-            if (!fbAuth.currentUser || fbAuth.currentUser.uid !== currentUser.uid) {
-                setSyncStatus('Reconnecte-toi');
-                if (!silent) alert('Ta session Firebase a expiré : déconnecte-toi puis reconnecte-toi avec internet.');
-                return;
+            if (!currentUser.dataId || !fbAuth.currentUser || fbAuth.currentUser.uid !== currentUser.uid) {
+                if (silent) return;
+                // Connecté hors ligne jusqu'ici: on ouvre la session Firebase avec le mot de passe
+                const password = prompt(`Mot de passe de « ${currentUser.username} » pour synchroniser :`);
+                if (!password) return;
+                try {
+                    const profile = await cloudLogin(currentUser.username, password);
+                    await rememberLocalAccount(profile.username, password, profile.role, profile.primary);
+                    rememberCloudProfile(profile);
+                    writeSession({ ...currentUser, ...cloudSession(profile) });
+                } catch (e) {
+                    alert('Synchro impossible : ' + cloudErrorMessage(e));
+                    return;
+                }
             }
             cloudSyncRunning = true;
             setSyncStatus('Synchro...');
@@ -2222,7 +2256,6 @@
                 else cloudSyncAgain = true; // modifié pendant la synchro: on refait un tour
                 const after = sorties.length + entrees.length + transferts.length + dettes.length;
                 setSyncStatus('Synchronisé');
-                startCloudListener();
                 if (!silent) alert(`Synchronisé\n\n${Math.max(0, after - before)} opération(s) reçue(s)\n${result.stats.envoyees} opération(s) envoyée(s)`);
             } catch (e) {
                 console.log('Synchro Firebase impossible', e);
@@ -2238,7 +2271,7 @@
             }
         }
 
-        window.addEventListener('online', () => { if (CLOUD && currentUser) scheduleCloudSync(500); });
+
 
         // ----- Repères partagés -----
         async function cloudSyncReference() {
@@ -2709,7 +2742,7 @@ Mot de passe: ${password}`;
         let syncRunning = false;
 
         function scheduleSync() {
-            if (CLOUD) return scheduleCloudSync();
+            if (CLOUD) return; // Firebase: la synchro se fait avec le bouton "Synchroniser"
             if (!IS_NATIVE || !currentUser || !currentUser.token) return;
             clearTimeout(syncTimer);
             syncTimer = setTimeout(() => syncWithPC({ silent: true }), 4000);
@@ -2840,13 +2873,23 @@ Mot de passe: ${password}`;
                 const el = document.getElementById(t + '-section');
                 if (el) el.classList.toggle('hidden', t !== tab);
             });
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.tab === tab);
-                // L'onglet choisi reste visible dans la barre (elle défile sur téléphone)
-                if (btn.dataset.tab === tab) btn.scrollIntoView({ block: 'nearest', inline: 'center' });
-            });
+            const labels = { sortie: 'Dépenses', entree: 'Revenus', transfert: 'Transferts entre comptes', dette: 'Dettes', journal: 'Journal (tout par date)' };
+            const btn = document.getElementById('ops-btn');
+            if (btn) {
+                btn.className = 'ops-btn ' + tab;
+                document.getElementById('ops-label').textContent = labels[tab];
+                document.getElementById('ops-list').classList.add('hidden');
+            }
             if (tab === 'journal') renderJournal();
         }
+
+        function toggleOpsMenu() {
+            document.getElementById('ops-list').classList.toggle('hidden');
+        }
+        document.addEventListener('click', e => {
+            const list = document.getElementById('ops-list');
+            if (list && !e.target.closest('.ops-menu')) list.classList.add('hidden');
+        });
 
         function showStats(view) {
             currentStatsView = view;
@@ -4571,8 +4614,16 @@ Mot de passe: ${password}`;
         function renderRevenus() {
             const box = document.getElementById('revenus-content');
             if (!box) return;
-            const select = document.getElementById('analyse-period');
-            const { start, end } = getPeriodRange(select && select.value);
+            const select = document.getElementById('revenus-period');
+            const incomeMonths = [...new Set(entrees.map(e => e.date.slice(0, 7)))].sort().reverse();
+            const previous = select.value || '3m';
+            select.innerHTML = [
+                '<option value="3m">3 derniers mois</option>',
+                '<option value="all">Depuis le début</option>',
+                ...incomeMonths.map(m => `<option value="${m}">${formatPeriod(m)}</option>`)
+            ].join('');
+            select.value = [...select.options].some(o => o.value === previous) ? previous : '3m';
+            const { start, end } = getPeriodRange(select.value);
             const list = entrees.filter(e => e.date >= start && e.date <= end);
             if (!list.length) {
                 box.innerHTML = '<p class="empty-row">Aucun revenu sur cette période.</p>';
